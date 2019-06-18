@@ -1,0 +1,20 @@
+卷 软件 的文件夹 PATH 列表
+卷序列号为 0002-CF1D
+D:.
+├─assets
+├─common
+│  └─styles
+├─components
+│  └─load-more
+└─pages
+    ├─address-edit
+    ├─address-list
+    ├─cart
+    ├─goods-detail
+    ├─goods-reputation
+    ├─home
+    ├─login
+    ├─order-detail
+    ├─order-list
+    ├─order-submit
+    └─user
