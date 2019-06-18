@@ -160,6 +160,7 @@
       <van-goods-action-icon icon="cart-o"
         text="购物车"
         to="/cart"
+        :info="cartCount"
         replace />
       <van-goods-action-button type="warning"
         text="加入购物车"
@@ -193,6 +194,7 @@ export default {
   },
   data() {
     return {
+      cartCount:'',
       backTop:false,
       banner: [],
       rateList: [],
@@ -251,6 +253,8 @@ export default {
     console.dir(this.$router.currentRoute.fullPath)
     this.checkGoodsFav(this.$route.query.id) 
     // console.log(this.formatPoints(500))
+    this.getCartCount()
+    
   },
   mounted() {
     window.addEventListener('scroll', this.onPageScroll, false)
@@ -259,6 +263,10 @@ export default {
     window.removeEventListener('scroll', this.onPageScroll, false);
   },
   methods: {
+    getCartCount(){
+      const cartInfo = storage.get('cartInfo') || []
+      this.cartCount = cartInfo.length || ''
+    },
     onPageScroll(){ 
       const sTop = document.documentElement.scrollTop || document.body.scrollTop
       this.backTop = sTop >= 500

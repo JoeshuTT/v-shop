@@ -12,15 +12,24 @@
             <van-panel class="panel" :title="'订单编号：'+item.orderNumber" :status="item.statusStr">
               <template slot="default">
                 <router-link :to="'/order-detail?id='+item.id">
-                  <van-card v-for="(good,index) in goodsMap[item.id]" :key="index" :num="good.number" :price="good.amount" :desc="good.property" :title="good.goodsName" :thumb="good.pic" />
+                  <van-card
+                    :num="goodsMap[item.id][0].number"
+                    :price="goodsMap[item.id][0].amount"
+                    :desc="goodsMap[item.id][0].property"
+                    :title="goodsMap[item.id][0].name"
+                    :thumb="goodsMap[item.id][0].pic" />
+                  <div class="card-load-more van-hairline--bottom" v-if="goodsMap[item.id].length>1">查看全部{{goodsMap[item.id].length}}件商品</div>
                 </router-link>
-                <div class="panel-money">共{{item.goodsNumber}}件商品 合计：
+                <div class="panel-money">共{{goodsMap[item.id].length}}件商品 合计：
                   <span class="fz12">￥</span>
                   <span class="ui-c-red fz16">{{item.amount}}</span>
                 </div>
               </template>
               <div slot="footer" class="panel-actions">
-                <router-link :to="'/refund-apply?orderId='+item.id+'&amount='+item.amount">
+                <router-link :to="'/refund-apply?orderId='+item.id+'&amount='+item.amount" v-if="item.status < 2">
+                  <div class="panel-button panel-button-danger">退款</div>
+                </router-link>
+                <router-link :to="'/refund-apply?orderId='+item.id+'&amount='+item.amount" v-else>
                   <div class="panel-button panel-button-danger">申请售后</div>
                 </router-link>
               </div>
@@ -142,6 +151,13 @@ export default {
 <style lang="less" scoped>
 .list-item {
   margin-bottom: 10px;
+}
+.card-load-more{
+  font-size: 14px;
+  color:#f44;
+  padding:5px;
+  line-height:28px;
+  text-align:center;
 }
 .panel {
   .van-panel__header-value {

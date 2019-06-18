@@ -1,23 +1,21 @@
-<template>
+ <template>
   <div class="contaienr">
-    <div class="header">
+    <div class="header" v-if="refundApplyInfo.baseInfo">
       <div class="header-title" v-if="refundApplyInfo.baseInfo.status === 0">已申请，等待处理</div>
       <div class="header-title" v-if="refundApplyInfo.baseInfo.status === 2">本次申请已拒绝，请联系客服</div>
       <div class="header-title" v-if="refundApplyInfo.baseInfo.status === 3">正在处理中</div>
       <div class="header-title" v-if="refundApplyInfo.baseInfo.status === 4">已成功退换货</div>
     </div>
     <div class="main">
-      <van-radio-group class="mb20" v-model="type" >
-        <van-cell-group>
-          <van-cell title="选择服务类型" />
+      <van-radio-group v-model="type" >
+        <van-cell-group title="选择服务类型"> 
           <van-cell :title="item.name" @click="onChangeType(item.value)" v-for="(item,index ) in typeItems" :key="index">
             <van-radio :name="item.value" checked-color="#ff703d" />
           </van-cell>
         </van-cell-group>
       </van-radio-group>
-      <van-radio-group class="mb20" v-model="logisticsStatus" v-if="type===0">
-        <van-cell-group>
-          <van-cell title="选择货物状态" />
+      <van-radio-group class="mb20" v-model="logisticsStatus">
+        <van-cell-group title="选择货物状态">
           <van-cell :title="item.name" @click="onChangeType(item.value)" v-for="(item,index ) in logisticsStatusItems" :key="index">
             <van-radio :name="item.value" checked-color="#ff703d" />
           </van-cell>
@@ -28,6 +26,7 @@
         clickable
         label="售后原因"
         :value="reason"
+        placeholder="退换货原因"
         @click="showPicker = true"
       />
       <van-field
@@ -43,15 +42,19 @@
         placeholder="请输入退款说明"
         rows="1"
         autosize
-      />
-      <!-- placeholder="退换货原因" -->
+      /> 
       <!-- 上传图片(空间有限省略) -->
     <div class="affix-bar">
       <div class="affix-bar__bar">
-        <van-button v-if="refundApplyInfo.baseInfo.status == 0" square size="large" type="danger" @click="refundApplyCancel">撤回本次申请</van-button> 
-        <van-button v-if="refundApplyInfo.baseInfo.status == 4" square size="large" type="info" disabled>等待处理</van-button>
-        <van-button v-if="refundApplyInfo.baseInfo.status == 0" square size="large" type="primary" disabled>处理完毕</van-button>
-        <van-button v-else square size="large" type="danger">立即申请售后</van-button>
+        <template v-if="refundApplyInfo.baseInfo">
+          <van-button v-if="refundApplyInfo.baseInfo.status === 0" square size="large" type="danger" @click="onRefundApplyCancel">撤回本次申请</van-button> 
+          <van-button v-if="refundApplyInfo.baseInfo.status === 2" square size="large" type="danger" @click="onRefundApplyCancel">本次申请已拒绝，请联系客服</van-button> 
+          <van-button v-if="refundApplyInfo.baseInfo.status === 3" square size="large" type="info" disabled>等待处理</van-button>
+          <van-button v-if="refundApplyInfo.baseInfo.status === 4" square size="large" type="primary" disabled>处理完毕</van-button>
+        </template>
+        <template v-else>
+          <van-button square size="large" type="danger" @click="onRefundApplySubmit">立即申请售后</van-button>
+        </template>
       </div>
     </div>
       <van-popup v-model="showPicker" position="bottom">
@@ -108,24 +111,38 @@ export default {
       showPicker:false,
       amount:'',
       remark:'',
-      refundApplyInfo:{
-        baseInfo:{
-          status:0
-        }
+      refundApplyInfo:{}
+    }
+  },
+  watch:{
+    type(val){
+      if(val>0){
+        this.logisticsStatus = 1 
+      }
+    },
+    logisticsStatus(val){
+      if(val>0){
+        this.type = 0
       }
     }
   },
   created() {
     this.amount = this.$route.query.amount
-    this.getRefundApplyInfo(this.$route.query.orderId)
+    this.getRefundApplyInfo()
   },
   methods: {
-    getRefundApplyInfo(orderId) {
-      this.$request.get('/order/refundApply/info', {orderId,token: storage.get('token')}).then(res => {
+    getRefundApplyInfo() {
+      this.$request.get('/order/refundApply/info', {orderId:this.$route.query.orderId,token: storage.get('token')}).then(res => {
         if (res.code !== 0) { 
           return;
         }
         this.refundApplyInfo = res.data[0]  // baseInfo, pics
+        const baseInfo = res.data[0].baseInfo
+        this.amount = baseInfo.amount
+        this.logisticsStatus = baseInfo.logisticsStatus
+        this.type = baseInfo.type
+        this.reason = baseInfo.reason
+        this.remark = baseInfo.remark
       })
     },
     onChangeType(value){
@@ -134,12 +151,58 @@ export default {
     onConfirm(value) {
       this.reason = value
       this.showPicker = false
+    },
+    onRefundApplyCancel(){
+      this.$request.post('/order/refundApply/cance', {orderId:this.$route.query.orderId,token: storage.get('token')}).then(res => {
+        if (res.code !== 0) { 
+          this.$toast(res.msg)
+          return;
+        }
+        this.$toast('撤销申请成功')
+        this.$router.go(-1)
+      })
+    },
+    onRefundApplySubmit(){
+      if(!this.reason){
+        this.$toast('请选择退换货原因')
+        return;
+      }
+      const params = {
+        orderId:this.$route.query.orderId,
+        token: storage.get('token'),
+        amount:this.typ === 2 ? 0 :this.amount,
+        type:this.type,
+        logisticsStatus:this.logisticsStatus,
+        reason:this.reason,
+        remark:this.remark,
+      }
+      this.$request.post('/order/refundApply/apply', params).then(res => {
+        if (res.code !== 0) { 
+          this.$toast(res.msg)
+          return;
+        }
+        this.$dialog.confirm({
+          title: '提示',
+          message: '提交成功，请耐心等待我们处理！',
+          showCancelButton: false,
+          confirmButtonText: '我知道了',
+        }).then(() => {
+          // on confirm
+          this.$router.go(-1)
+        })
+        
+      })
     }
   }
 }
 </script>
 
-<style lang="less" scoped> 
+<style lang="less" scoped>
+  .van-radio{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
   .header{
     box-sizing: border-box;
     // height:140px;

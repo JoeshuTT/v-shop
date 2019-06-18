@@ -1,6 +1,6 @@
 <template>
     <div class="container pd50">
-        <form action="/">
+        <!-- <form action="/">
             <van-search
                 v-model="value"
                 placeholder="请输入搜索关键词"
@@ -8,7 +8,7 @@
                 @search="onSearch"
                 @cancel="onCancel"
             />
-        </form>
+        </form> -->
         <van-swipe :autoplay="3000" indicator-color="white" class="home-swiper">
             <van-swipe-item v-for="item in banner" :key="item.id">
                 <img :src="item.picUrl" :alt="item.title" />

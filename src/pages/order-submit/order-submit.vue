@@ -1,5 +1,5 @@
 <template>
-  <div class="contaienr">
+  <div class="container">
     <template v-if="isNeedLogistics">  
     <div class="address-box mb10" v-if="defaultAddress.linkMan" @click="onAddressChoose">
       <div class="address-box-hd">
@@ -15,7 +15,7 @@
     <van-cell v-else class="address-card mb10" title="新增收货地址" icon="add-square" is-link @click="onAddressChoose"></van-cell>
     </template> 
     <div class="order-info">
-
+<van-cell-group>
   <van-cell title="商品列表"></van-cell>
 
       <!-- <van-card
@@ -45,7 +45,8 @@
 />
 
   <van-cell v-if="isNeedLogistics" title="配送方式" value="快递"></van-cell>
-
+</van-cell-group>
+<van-cell-group>
   <van-field
     class="mb10"
     v-model="remark"
@@ -55,6 +56,20 @@
     rows="1"
     autosize
   />
+</van-cell-group>
+<van-cell-group class="mb20">
+   <van-cell title="支付工具"></van-cell> 
+   <van-cell title="余额" :label="'账户余额：￥'+balance+'元'" size="large">
+       <template slot="default">
+<van-switch
+  v-model="isOrderPay"
+  active-color="#f44"
+  inactive-color="#d7d7d7"
+/>
+  </template>
+   </van-cell>
+
+</van-cell-group>
   <van-cell title="商品金额" :value="'¥'+goodsPrice"></van-cell>
   <van-cell v-if="isNeedLogistics" title="运费" value="+0.00"></van-cell>
   <van-cell v-if="hasDiscount" title="优惠" :value="'-'+youhui"></van-cell>
@@ -84,7 +99,7 @@
 
 <script>
 
-import { Card,Field ,CouponCell, CouponList,SubmitBar } from 'vant'
+import { Card,Field ,CouponCell, CouponList, SubmitBar, Switch } from 'vant'
 import { storage, sessionStorage } from '@/common/util'
 import { mapState, mapMutations } from 'vuex'
 
@@ -95,6 +110,7 @@ export default {
     [CouponCell.name]: CouponCell,
     [CouponList.name]: CouponList,
     [SubmitBar.name]: SubmitBar,
+    [Switch.name]: Switch,
   },
   data() {
     return {
@@ -106,6 +122,8 @@ export default {
       isNeedLogistics:true, // 是否需要物流信息
       hasDiscount:false,
       goodsInfo:[],
+      isOrderPay:true, // 钱包支付订单
+      balance:0,
     }
   },
   computed:{
@@ -132,24 +150,15 @@ export default {
       this.goodsInfo = sessionStorage.get('buyInfo')
     }else{
       let cartInfo = storage.get('cartInfo'),checkedGoods=this.$route.query.checkedGoods || []
-      console.log(cartInfo)
       cartInfo = checkedGoods.length ? cartInfo.filter(item => checkedGoods.indexOf(item.id) !== -1) : cartInfo
       this.goodsInfo = cartInfo
     }
-    // this. = 
-    // this.$bus.$on('defaultAddress',address=>{
-    //   console.log(address)
-    //   console.log(this)
-  
-    //      this.$nextTick(()=>{
-    //                 this.address=1
-    //             })
-    // })
-    console.log(this.defaultAddress)
+    // 默认地址
     if(!this.defaultAddress.linkMan){
       this.getDefaultAddress()
     }
-    
+    // 账户余额
+    this.getUserAmount()
   },
   methods: {
     ...mapMutations(['updateDefaultAddress']),
@@ -172,7 +181,6 @@ export default {
       }
     },
     onExchange(code) {
-      console.log(code)
       this.$toast.loading({
         mask: true,
         message: '兑换中...',
@@ -234,17 +242,42 @@ export default {
           this.$toast(res.msg)
           return;
         }
+        const orderId = res.data.id
+        const amountReal = res.data.amountReal
         this.$toast.clear()
         // 移除已勾选的商品信息
         if(this.$route.query.type === 'buy'){
           sessionStorage.remove('buyInfo')
         }else{
-          let cartInfo = storage.get('cartInfo'),checkedGoods=this.$route.query.checkedGoods || []
-          cartInfo = checkedGoods.length ? cartInfo.filter(item => checkedGoods.indexOf(item.id) === -1) : cartInfo
+          let cartInfo = storage.get('cartInfo')
+          let checkedGoods=this.$route.query.checkedGoods || []
+          cartInfo = checkedGoods.length ? cartInfo.filter(item => !(checkedGoods.indexOf(item.id) !== -1)) : cartInfo
           storage.set('cartInfo')
         }
-        // 
-        this.$router.replace({path:'/order-list?status=0'})
+        // 支付方式(系统钱包支付,公众号支付未接入)
+        if(this.isOrderPay){
+          this.$request.post('/order/pay',{orderId,token:storage.get('token')}).then(res=>{
+            if(res.code === 0){
+              this.$dialog.confirm({
+                  title: '支付成功',
+                  message: `实付￥${amountReal}`,
+                  cancelButtonText:'返回首页',
+                  confirmButtonText:'查看订单'
+              }).then(() => {
+                  this.$router.replace({path:'/order-list'})
+                  // on confirm
+              }).catch(() => {
+                  // on cancel
+                  this.$router.replace({path:'/order-list?status=0'})
+              })
+            }else{
+              this.$toast(res.msg)
+            }
+          })
+        }else{
+          this.$router.replace({path:'/order-list?status=0'})
+        }
+        
 
       })
     },
@@ -285,14 +318,22 @@ export default {
           reason:item.statusStr
         }))
       })
-    }
+    },
+    getUserAmount(){
+      this.$request.get('/user/amount',{token:storage.get('token')}).then(res=>{
+        if (res.code !== 0) {
+          return;
+        }
+        this.balance = res.data.balance
+      })
+    },
   }
 }
 </script>
 
 <style lang="less" scoped>
-  .color-red{
-    color:#f44!important;
+  .container{
+    padding-bottom:100px;
   }
   .address-box{
     position: relative;

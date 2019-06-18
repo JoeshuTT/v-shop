@@ -148,8 +148,8 @@ export default {
     },
     onShowAbout(){
       this.$dialog.alert({
-        title: '标题',
-        message: '前端基于vue,后端使用api工厂供的免费接口和云后台,实现一个商城'
+        // title: '标题',
+        message: '前端基于vue,后端使用api工厂供的免费接口和云后台开发的一个耐用的商城!'
       }).then(() => {
         // on close
       });
@@ -165,10 +165,9 @@ export default {
     justify-content: flex-start;
     align-items: center;
     height:180px;
-    color: #fff;
-    // background: #1989fa;
+    color: #fff; 
     padding: 0 15px;
-    background-color: #fe4140;
+    // background-color: #fe4140;
     background:linear-gradient(309deg,rgba(255,112,61,1) 0%,rgba(255,70,57,1) 100%);
 
   }

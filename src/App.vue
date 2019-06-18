@@ -8,12 +8,11 @@
 import { storage } from "@/common/util";
 export default {
   created(){
-    console.log(this.$route)
-    console.log(this.$root)
+
   },
   mounted(){
     const token = storage.get('token')
-    // this.checkToken(token)
+    this.checkToken(token)
     // console.log(typeof token)
   },
   methods:{

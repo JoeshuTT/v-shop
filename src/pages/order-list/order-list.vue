@@ -12,7 +12,7 @@
           <div class="list-item" v-for="item in list" :key="item.id">
             <van-panel class="panel" :title="'订单编号：'+item.orderNumber" :status="item.statusStr">
               <template slot="default">
-                <router-link :to="'/order-detail?id='+item.id">
+                <!-- <router-link :to="'/order-detail?id='+item.id">
                   <van-card v-for="(good,index) in goodsMap[item.id]"
                     :key="index"
                     :num="good.number"
@@ -20,8 +20,17 @@
                     :desc="good.property"
                     :title="good.goodsName"
                     :thumb="good.pic" />
+                </router-link> -->
+                <router-link :to="'/order-detail?id='+item.id">
+                  <van-card
+                    :num="goodsMap[item.id][0].number"
+                    :price="goodsMap[item.id][0].amount"
+                    :desc="goodsMap[item.id][0].property"
+                    :title="goodsMap[item.id][0].name"
+                    :thumb="goodsMap[item.id][0].pic" />
+                  <div class="card-load-more van-hairline--bottom" v-if="goodsMap[item.id].length>1">查看全部{{goodsMap[item.id].length}}件商品</div>
                 </router-link>
-                <div class="panel-money">共{{item.goodsNumber}}件商品 合计：
+                <div class="panel-money">共{{goodsMap[item.id].length}}件商品 合计：
                   <span class="fz12">￥</span>
                   <span class="ui-c-red fz16">{{item.amount}}</span>
                 </div>
@@ -131,7 +140,7 @@ export default {
           duration: 0,
         })
         this.$request.post('/order/close', { orderId: id, token: storage.get('token') }).then(res => {
-          this.getOrderList(this.tabs[index].status)
+          this.getOrderList(this.tabs[this.active].status)
           this.$toast({ message: '取消订单成功', duration: 1500 })
         })
       }).catch(() => {
@@ -156,6 +165,13 @@ export default {
 <style lang="less" scoped>
 .list-item {
   margin-bottom: 10px;
+}
+.card-load-more{
+  font-size: 14px;
+  color:#f44;
+  padding:5px;
+  line-height:28px;
+  text-align:center;
 }
 .panel {
   .van-panel__header-value {

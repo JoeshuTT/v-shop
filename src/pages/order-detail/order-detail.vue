@@ -226,7 +226,7 @@ export default {
             this.$toast(res.msg)
             return;
           }
-          this.$router.go(0)  // 刷新路由
+          this.$router.go(-1)
           this.$toast({ message: '收货成功!', duration: 1500 })
         })
       }).catch(() => {
@@ -252,7 +252,7 @@ export default {
           this.$toast(res.msg)
           return;
         }
-        this.$router.go(0)  // 刷新路由
+        this.$router.go(-1)
         this.$toast({ message: '评价成功!', duration: 1500 })
         this.onShowPopup()
       })

@@ -129,7 +129,10 @@ export default {
   },
   created() {
     this.goods = util.storage.get('cartInfo') || []
-
+  },
+  beforeDestroy(){
+    const goodsInfo = this.goods
+    util.storage.set('cartInfo', goodsInfo)
   },
   methods: {
     formatPrice(price) {
@@ -145,15 +148,13 @@ export default {
       this.$dialog.confirm({
         message: `确定要删除这${this.checkedGoods.length}个商品吗?`
       }).then(() => {
-        let goodsInfo = this.goods.filter(item => this.checkedGoods.indexOf(item.id) == -1)
-        this.goods = goodsInfo
-        util.storage.set('cartInfo', goodsInfo)
+        this.goods = this.goods.filter(item => !(this.checkedGoods.indexOf(item.id) !== -1))
+        this.checkedGoods = []
+        
       })
-
     },
-    onNumberChange() {
-      let goodsInfo = this.goods
-      util.storage.set('cartInfo', goodsInfo)
+    onNumberChange() { 
+
     },
     onSubmit() {
       this.$router.push({ path: '/order-submit', query: { type: 'cart', checkedGoods: this.checkedGoods } })
