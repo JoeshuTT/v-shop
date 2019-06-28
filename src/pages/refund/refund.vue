@@ -126,7 +126,7 @@ export default {
           duration: 0,
         })
         this.$request.post('/order/close', { orderId: id, token: storage.get('token') }).then(res => {
-          this.getOrderList(this.tabs[index].status)
+          this.getOrderList(this.tabs[this.active].status)
           this.$toast({ message: '取消订单成功', duration: 1500 })
         })
       }).catch(() => {

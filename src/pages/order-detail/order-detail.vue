@@ -1,12 +1,14 @@
 <template>
-  <div class="contaienr">
+  <div class="container">
     <div class="header mb10"
       v-if="orderInfo.status > 0">
       <div class="header-hd">
         <div class="header-media">
           <van-icon name="description" />
         </div>
-        <div class="header-title">{{orderInfo.statusStr}}</div>
+        <div class="header-inner">
+          <div class="header-title">{{orderInfo.statusStr}}</div>
+        </div>
       </div>
       <van-steps :active="active">
         <van-step>买家付款</van-step>
@@ -20,7 +22,10 @@
         <div class="header-media header-media-gray">
           <van-icon name="description" />
         </div>
-        <div class="header-title">{{orderInfo.statusStr}}</div>
+        <div class="header-inner">
+          <div class="header-title">{{orderInfo.statusStr}}</div>
+        <div class="header-txt" v-if="orderInfo.status === 0&&closeTime">剩余{{closeTime}}分钟自动关闭</div>
+        </div>
       </div>
     </div>
     <div class="address-box mb10"
@@ -51,12 +56,6 @@
       </template>
       <div slot="footer"
         class="panel-actions">
-        <van-button v-if="orderInfo.status === 2"
-          plain
-          round
-          size="small"
-          type="danger"
-          @click="onDeliveryOrder()">确认收货</van-button>
         <van-button v-if="orderInfo.status === 3"
           plain
           round
@@ -74,20 +73,24 @@
     <van-cell title="配送方式"
       value="快递发货" />
     <van-cell title="买家留言"
-      :value="orderInfo.remark" />
+      :value="orderInfo.remark || '无'" />
     <van-cell class="ui-right mb10">
       <template slot="title">商品小计：
         <span class="ui-c-red">￥{{formatPrice(orderInfo.amount)}}</span>
       </template>
     </van-cell>
-    <div class="cell-group">
+    <div class="cell-group mb10">
       <div class="cell">
         <div class="cell-hd">商品金额</div>
         <div class="cell-bd">￥{{formatPrice(orderInfo.amount)}}</div>
       </div>
       <div class="cell">
         <div class="cell-hd">运费</div>
-        <div class="cell-bd">+{{formatPrice(orderInfo.amountLogistics)}}</div>
+        <div class="cell-bd">+{{formatPrice(orderInfo.amountLogistics || 0)}}</div>
+      </div>
+      <div class="cell">
+        <div class="cell-hd">优惠</div>
+        <div class="cell-bd">-{{formatPrice(extJson.discount || 0)}}</div>
       </div>
       <van-cell class="ui-right">
         <template slot="title">实付款：
@@ -100,6 +103,22 @@
       <div class="footer-p">创建时间：{{orderInfo.dateAdd}} </div>
       <div class="footer-p"
         v-if="orderInfo.dateUpdate">更新时间：{{orderInfo.dateUpdate}} </div>
+    </div>
+    <!--  -->
+    <div class="affix-bar">
+      <div class="affix-bar__bar">
+        <van-cell icon="service-o" value="联系客服" class="affix-bar__left" />
+<div class="affix-bar__inner" v-if="orderInfo.status === 0 || orderInfo.status === 2">
+            <van-button v-if="orderInfo.status === 0" class="ml5" plain round size="small" type="default" @click="onCancelOrder">取消订单</van-button> 
+          <van-button v-if="orderInfo.status === 0" class="ml5" round size="small" type="danger" @click="onPayOrder">立即付款</van-button> 
+          <van-button v-if="orderInfo.status === 2" class="ml5"
+          round
+          size="small"
+          type="danger"
+          @click="onDeliveryOrder()">确认收货</van-button>
+
+</div>
+      </div>
     </div>
     <!-- 领券弹层 -->
     <van-popup v-model="visible"
@@ -140,7 +159,7 @@
 <script>
 import { Tab, Tabs, Card, Panel, List, Step, Steps, Rate, Field } from 'vant'
 import { storage } from '@/common/util'
-
+import { pay_balance } from '@/common/pay'
 export default {
   components: {
     [Tab.name]: Tab,
@@ -155,6 +174,7 @@ export default {
   },
   data() {
     return {
+      extJson:{},  // 扩展对象
       orderInfo: {},
       goods: [],
       logistics: {},
@@ -164,6 +184,7 @@ export default {
       rateValue: 5,
       // reputation:2,   // 0 差评 1 中评 2 好评
       rateRemark: '',  // 评价备注，限200字符
+      closeTime:0,
     }
   },
   computed: {
@@ -234,6 +255,45 @@ export default {
       })
 
     },
+    onCancelOrder() {
+      const orderId = this.orderInfo.id
+      this.$dialog.confirm({
+        // title: '提示',
+        message: '订单还未付款,确定要取消吗?',
+        cancelButtonText: '在考虑下',
+        confirmButtonText: '取消订单'
+      }).then(() => {
+        // on confirm
+        this.$toast.loading({
+          mask: true,
+          message: '加载中...',
+          duration: 0,
+        })
+        this.$request.post('/order/close', { orderId, token: storage.get('token') }).then(res => {
+          this.$toast({ message: '取消订单成功', duration: 1500 })
+          this.$router.go(-1)
+        })
+      }).catch(() => {
+        // on cancel
+      });
+    },
+    onPayOrder() { 
+      const orderId = this.orderInfo.id
+      // const amountReal = this.orderInfo.amountReal
+      this.$toast.loading({
+        mask: true,
+        message: '支付提交中',
+        duration:0,
+      })
+      pay_balance(orderId, storage.get('token')).then(res=>{
+        if(res.code === 0){
+          this.$toast.clear()
+          this.$router.replace({path:'/order-detail',query:{id:this.orderInfo.id}})
+        }else{
+          this.$toast(res.msg)
+        }
+      })
+    },
     onSubmitRate() {
       let rateArray = this.goods.map(item => ({ id: item.id, reputation: this.reputation, remark: this.rateRemark }))
       const params = {
@@ -263,16 +323,24 @@ export default {
           this.$toast(res.msg)
           return;
         }
+        this.extJson = res.data.extJson
         this.orderInfo = res.data.orderInfo
         this.goods = res.data.goods
         // 商品设置了物流模板才会有地址信息
         if (this.orderInfo.isNeedLogistics) {
           this.logistics = res.data.logistics
         }
+        // 订单状态，-1 已关闭 0 待支付 1 已支付待发货 2 已发货待确认 3 确认收货待评价 4 已评价
         if (this.orderInfo.status > 0) {
-          // 订单状态，-1 已关闭 0 待支付 1 已支付待发货 2 已发货待确认 3 确认收货待评价 4 已评价
           this.hasSteps = true
           this.active = this.orderInfo.status - 1
+        }
+        if (this.orderInfo.status === 0 && this.orderInfo.dateClose) {
+          let last = new Date().getTime()
+          let close = new Date(this.orderInfo.dateClose.replace(/-/g, '/')).getTime()
+          if(close>last){
+            this.closeTime = Math.floor((close-last)/1000/60)
+          }
         }
       })
     },
@@ -284,6 +352,9 @@ export default {
 .color-red {
   color: #f44 !important;
 }
+.container{
+  padding-bottom:100px;
+}
 //
 .header {
   min-height: 80px;
@@ -293,19 +364,21 @@ export default {
     font-size: 14px;
     color: #333;
   }
+  &-txt {
+    font-size: 12px;
+    color: #979797;
+  }
   &-hd {
     display: flex;
     align-items: center;
     padding: 10px 10px 0;
-  }
-  &-title {
-    margin-left: 10px;
   }
   &-media {
     display: inline-block;
     padding: 5px 5px;
     background: #00c062;
     border-radius: 4px;
+    margin-right:10px;
     /deep/ .van-icon {
       font-size: 32px;
       vertical-align: top;
@@ -520,6 +593,38 @@ export default {
     text-align:right;
     .van-button{
       margin-left:10px;
+    }
+  }
+  .affix-bar{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    background-color: #fff;
+    user-select: none;
+    &__bar{
+      // padding:0 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 50px;
+      font-size: 14px;
+    }
+    &__button{
+      // width: 100%;
+      // height: 50px;
+      // line-height: 48px;
+    }
+    &__left{
+      max-width:110px;
+    }
+    &__inner{
+      padding-right:15px;
+      flex:1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
     }
   }
 </style>

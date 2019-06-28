@@ -57,7 +57,7 @@ const routes = [
     name: 'order-submit',
     component: () => import('@/pages/order-submit/order-submit'),
     meta: {
-      title: '待付款的订单'
+      title: '提交订单'
     }
   },
   {
@@ -134,18 +134,28 @@ const routes = [
 
 // add route path
 routes.forEach(route => {
-  route.path = route.path || '/' + (route.name || '');
+  route.path = route.path || '/' + (route.name || '')
 })
 
-const router = new Router({routes})
+const router = new Router({
+  routes,
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
+})
 
 // add route title
 router.beforeEach((to, from, next) => {
-  const title = to.meta && to.meta.title;
+  const title = to.meta && to.meta.title
   if (title) {
-    document.title = title;
+    document.title = title
   }
-  next();
-});
+  next()
+})
+
 
 export default router

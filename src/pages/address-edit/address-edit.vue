@@ -49,6 +49,7 @@ export default {
   },
   methods: {
     onSave(form) {
+      console.log(form)
       if (isEmpty(form.postalCode)) {
         this.$toast('请填写邮政编码')
         return;

@@ -149,7 +149,7 @@ export default {
     onShowAbout(){
       this.$dialog.alert({
         // title: '标题',
-        message: '前端基于vue,后端使用api工厂供的免费接口和云后台开发的一个耐用的商城!'
+        message: this.$store.state.globalData.desc
       }).then(() => {
         // on close
       });

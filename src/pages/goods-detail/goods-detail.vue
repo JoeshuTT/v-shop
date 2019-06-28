@@ -182,6 +182,10 @@ import { Swipe, SwipeItem, Sku, GoodsAction, GoodsActionIcon, GoodsActionButton,
 import { storage, sessionStorage } from '@/common/util'
 import { scrollTo } from '@/common/scroll-to'
 import { mapState, mapMutations } from 'vuex'
+const LIMIT_TYPE = {
+  QUOTA_LIMIT: 0,
+  STOCK_LIMIT: 1
+}
 export default {
   components: {
     [Swipe.name]: Swipe,
@@ -227,6 +231,7 @@ export default {
         quotaText: '单次限购100件',
         stockFormatter: (stock) => `剩余${stock}件`,
         handleOverLimit: (data) => {
+          console.log(data)
           const { action, limitType, quota } = data;
           if (action === 'minus') {
             this.$toast('至少选择一件商品');
@@ -387,7 +392,6 @@ export default {
         goodsInfo.push({
           id: `${new Date().getTime()}`,
           goodsId: data.goodsId,
-          logisticsId:this.basicInfo.logisticsId,  // 不使用物流则为0
           propertyChildIds: data.selectedSkuComb.propertyChildIds,
           propTitle: this.skuTitle.replace('已选 ', ''),
           price: data.selectedSkuComb.price,
@@ -401,7 +405,6 @@ export default {
         goodsInfo.push({
           id: `${new Date().getTime()}`,
           goodsId: data.goodsId,
-          logisticsId:this.basicInfo.logisticsId,  // 不使用物流则为0
           propertyChildIds: '',
           propTitle: this.skuTitle.replace('已选 ', ''),
           price: parseFloat((this.basicInfo.minPrice * 100).toFixed(2)),
@@ -430,7 +433,6 @@ export default {
           goodsInfo.push({
             id: `${new Date().getTime()}`,
             goodsId: data.goodsId,
-            logisticsId:this.basicInfo.logisticsId,  // 不使用物流则为0
             propertyChildIds: data.selectedSkuComb.propertyChildIds,
             propTitle: this.skuTitle.replace('已选 ', ''),
             price: data.selectedSkuComb.price,
@@ -451,7 +453,6 @@ export default {
           goodsInfo.push({
             id: `${new Date().getTime()}`,
             goodsId: data.goodsId,
-            logisticsId:this.basicInfo.logisticsId,  // 不使用物流则为0
             propertyChildIds: '',
             propTitle: this.skuTitle.replace('已选 ', ''),
             price: parseFloat((this.basicInfo.minPrice * 100).toFixed(2)),
@@ -501,7 +502,7 @@ export default {
       })
     },
     getGoodsDetail(id) {
-      this.$request.get("/shop/goods/detail", { id }).then(res => {
+      this.$request.get('/shop/goods/detail', { id }).then(res => {
         // this.goodsDetail = res.data
         this.banner = res.data.pics
         this.basicInfo = res.data.basicInfo
@@ -513,6 +514,9 @@ export default {
         //   this.skuTitle = ''
         //   return;
         // }
+        if(this.basicInfo === 1){
+          this.$toast(this.basicInfo.statusStr)
+        }
         console.log(properties)
         this.skuTitle = `选择 ${properties.reduce((total, item) => total + ' ' + item.name, '')}`
         // 商品规格sku数据
@@ -540,59 +544,70 @@ export default {
           // this.skuData.collection_id= 2261
           return;
         }
-        if (properties.length === 1) {
-          let newArr = []
-          let arr0 = properties[0].v
+        // if (properties.length === 1) {
+        //   let newArr = []
+        //   let arr0 = properties[0].v
 
-          for (let i = 0; i < arr0.length; i++) {
-            newArr.push({ id: `${arr0[i].id}`, price: this.formatPoints(this.basicInfo.minPrice), s1: arr0[i].id, propertyChildIds: `${arr0[i].propertyId}:${arr0[i].id}`, stock_num: this.skuData.sku.stock_num, })
-          }
-          // console.log(newArr)
-          this.skuData.sku.list = newArr
-        }
-        if (properties.length === 2) {
-          let newArr = []
-          let arr0 = properties[0].v
-          let arr1 = properties[1].v
-
-          for (let i = 0; i < arr0.length; i++) {
-            for (let j = 0; j < arr1.length; j++) {
-              newArr.push({ id: `${arr0[i].id}${arr1[j].id}`, price: this.formatPoints(this.basicInfo.minPrice), s1: arr0[i].id, s2: arr1[j].id, propertyChildIds: `${arr0[i].propertyId}:${arr0[i].id},${arr1[j].propertyId}:${arr1[j].id}`, stock_num: this.skuData.sku.stock_num, })
-            }
-          }
-          // console.log(newArr)
-          this.skuData.sku.list = newArr
-        }
-
-
-        // function cartesianProduct(arr) {
-        //     return arr.reduce(function (a, b) {
-        //         return a.map(function (x) {
-        //             return b.map(function (y) {
-        //                 return x.concat(y);
-        //             })
-        //         }).reduce(function (a, b) { return a.concat(b) }, [])
-        //     }, [[]])
+        //   for (let i = 0; i < arr0.length; i++) {
+        //     newArr.push({ id: `${arr0[i].id}`, price: this.formatPoints(this.basicInfo.minPrice), s1: arr0[i].id, propertyChildIds: `${arr0[i].propertyId}:${arr0[i].id}`, stock_num: this.skuData.sku.stock_num, })
+        //   }
+        //   // console.log(newArr)
+        //   this.skuData.sku.list = newArr
+        //   return;
         // }
-        // console.log(cartesianProduct(list))
+        if (properties.length >0) {
+          // let newArr = []
+          // let arr0 = properties[0].v
+          // let arr1 = properties[1].v
 
-        //   this.skuData.sku.list = [{
-        //   id: 2259,
-        //   price: 100,
-        //   s1: '49809',
-        //   s2: '49820',
-        //   stock_num: 110, 
-        //   propertyChildIds:'13090:49809,13093:49820'
-        // },
-        // {
-        //   id: 2260,
-        //   price: 120,
-        //   s1: '49809',
-        //   s2: '51416',
-        //   stock_num: 110,
-        // },]
+          // for (let i = 0; i < arr0.length; i++) {
+          //   for (let j = 0; j < arr1.length; j++) {
+          //     newArr.push({ id: `${arr0[i].id}${arr1[j].id}`, price: this.formatPoints(this.basicInfo.minPrice), s1: arr0[i].id, s2: arr1[j].id, propertyChildIds: `${arr0[i].propertyId}:${arr0[i].id},${arr1[j].propertyId}:${arr1[j].id}`, stock_num: this.skuData.sku.stock_num, })
+          //   }
+          // }
+          // console.log(newArr)
+          // this.skuData.sku.list = newArr
+          /**
+           * 生成笛卡尔积
+           * @returns {*}
+           */
+          const descartes = function (array){
+            if( array.length < 2 ) return array[0] || [];
 
+            return [].reduce.call(array, function(col, set) {
+              var res = [];
+              col.forEach(function(c) {
+                set.forEach(function(s) {
+                    var t = [].concat( Array.isArray(c) ? c : [c] );
+                    t.push(s);
+                    res.push(t);
+              })});
+              return res;
+            });
+          } 
+          const calc = descartes(Array.prototype.concat.apply([], properties.map(item => [item.v])))
+          this.skuData.sku.list = calc.map(item =>{
+            let obj = {
+              price: this.formatPoints(this.basicInfo.minPrice),
+              stock_num: this.skuData.sku.stock_num,
+            }
+            if(Array.isArray(item)){
+              item.forEach((v, i) =>{
+                obj[`s${i + 1}`] = v.id
+                obj.propertyChildIds = `${obj.propertyChildIds||''}${v.propertyId}:${v.id},`
+                obj.id = `${obj.id||''}${v.propertyId}${v.id}`
+              })
+              return obj
 
+            }else{
+                // 一种规格的情况下 
+                obj['s1'] = item.id
+                obj.propertyChildIds = `${item.propertyId}:${item.id},`
+                obj.id = `${item.propertyId}${item.id}`
+              return obj
+            }
+          })
+        }
       })
     }
   }

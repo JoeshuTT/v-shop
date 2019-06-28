@@ -1,6 +1,8 @@
 <template>
   <div id="app">
+    <keep-alive include="index,cart,user">
     <router-view />
+    </keep-alive>
   </div>
 </template>
 
@@ -32,10 +34,11 @@ export default {
 
 <style lang="less">
 @import '~@/common/styles/index.css';
-
+@import '~@/common/styles/variables.less';
 body {
   font-size: 16px;
   background-color: #f8f8f8;
+  // background-color: @ui-color;
   color: #333;
   font-family: 'PingFang SC', Helvetica, 'STHeiti STXihei', 'Microsoft YaHei', Tohoma, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

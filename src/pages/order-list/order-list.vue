@@ -22,11 +22,11 @@
                     :thumb="good.pic" />
                 </router-link> -->
                 <router-link :to="'/order-detail?id='+item.id">
-                  <van-card
+                  <van-card 
                     :num="goodsMap[item.id][0].number"
                     :price="goodsMap[item.id][0].amount"
                     :desc="goodsMap[item.id][0].property"
-                    :title="goodsMap[item.id][0].name"
+                    :title="goodsMap[item.id][0].goodsName"
                     :thumb="goodsMap[item.id][0].pic" />
                   <div class="card-load-more van-hairline--bottom" v-if="goodsMap[item.id].length>1">查看全部{{goodsMap[item.id].length}}件商品</div>
                 </router-link>
@@ -37,7 +37,7 @@
               </template>
               <div slot="footer" class="panel-actions" v-if="item.status === 0">
                 <div class="panel-button" @click="onCancelOrder(item.id)">取消订单</div>
-                <div class="panel-button panel-button-danger" @click="onPayOrder">确认付款</div>
+                <div class="panel-button panel-button-danger" @click="onPayOrder(item)">确认付款</div>
               </div>
               <div slot="footer" class="panel-actions" v-if="item.status === 2">
                 <router-link :to="'/order-detail?id='+item.id">
@@ -62,7 +62,8 @@
 
 <script>
 import { Tab, Tabs, Card, Panel, List, Loading } from 'vant'
-import { storage, debounce, throttle } from '@/common/util'
+import { storage, debounce,  } from '@/common/util'
+import { pay_balance } from '@/common/pay'
 
 export default {
   components: {
@@ -127,6 +128,7 @@ export default {
       })
     },
     onCancelOrder(id) {
+      const orderId = id
       this.$dialog.confirm({
         // title: '提示',
         message: '订单还未付款,确定要取消吗?',
@@ -139,24 +141,50 @@ export default {
           message: '加载中...',
           duration: 0,
         })
-        this.$request.post('/order/close', { orderId: id, token: storage.get('token') }).then(res => {
-          this.getOrderList(this.tabs[this.active].status)
+        this.$request.post('/order/close', { orderId, token: storage.get('token') }).then(res => {
           this.$toast({ message: '取消订单成功', duration: 1500 })
+          this.getOrderList(this.tabs[this.active].status)
         })
       }).catch(() => {
         // on cancel
       });
     },
-    onPayOrder() {
-      this.$dialog.confirm({
-        title: '提示',
-        message: `没有接入支付,请联系管理员改单`,
-        confirmButtonText: '我知道了'
-      }).then(() => {
-        // on confirm
-      }).catch(() => {
-        // on cancel
+    onPayOrder(data) { 
+      const orderId = data.id
+      const amountReal = data.amountReal
+      this.$toast.loading({
+        mask: true,
+        message: '支付提交中',
+        duration:0,
       })
+      pay_balance(orderId, storage.get('token')).then(res=>{
+        if(res.code === 0){
+          this.$toast.clear()
+          this.$dialog.confirm({
+              title: '支付成功',
+              message: `实付￥${amountReal}`,
+              cancelButtonText:'返回首页',
+              confirmButtonText:'查看订单'
+          }).then(() => {
+            this.$router.replace({path:'/order-detail',query:{id:orderId}})
+              // on confirm
+          }).catch(() => { 
+            // on cancel
+              this.$router.replace({path:'/home'})
+          })
+        }else{
+          this.$toast(res.msg)
+        }
+      })
+      // this.$dialog.confirm({
+      //   title: '提示',
+      //   message: `没有接入支付,请联系管理员改单`,
+      //   confirmButtonText: '我知道了'
+      // }).then(() => {
+      //   // on confirm
+      // }).catch(() => {
+      //   // on cancel
+      // })
     }
   }
 }

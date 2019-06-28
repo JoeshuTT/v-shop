@@ -32,28 +32,16 @@ export default {
       isChoose:false,
     }
   },
-  beforeRouteEnter(to, from, next){
-    next(vm => {
-      if(from.path === '/order-submit'){
-        vm.isChoose = true
-      }else{
-        vm.isChoose = false
-        
-      }
-    })
-
-       
-  },
-  created() {
-    console.log(this.$router)
+  created() { 
+    this.isChoose = this.$route.query.isChoose ? this.$route.query.isChoose : false
     flag=false
     this.$request.get('/user/shipping-address/list',{token:storage.get('token')}).then(res=>{
       const list = res.data || []
       list.forEach(item => {
-          item.id= item.id
+          // item.id= item.id
           item.name= item.linkMan
           item.tel= item.mobile
-          item.address = item.provinceStr + item.cityStr + item.areaStr + item.address
+          item.address = item.provinceStr + item.cityStr + item.address
       })  
       this.list = list
     })

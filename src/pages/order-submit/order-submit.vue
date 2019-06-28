@@ -8,7 +8,7 @@
           <div class="address-box-inner-title">收货人：{{defaultAddress.linkMan}}</div>
           <div class="address-box-inner-title">{{defaultAddress.mobile}}</div>
         </div>  
-        <div class="address-box-inner-bottom">收货地址：{{defaultAddress.provinceStr}}{{defaultAddress.cityStr}}{{defaultAddress.areaStr}}{{defaultAddress.address}}</div>
+        <div class="address-box-inner-bottom">收货地址：{{defaultAddress.provinceStr}}{{defaultAddress.cityStr}}{{defaultAddress.address}}</div>
       </div>
       <div class="address-box-bd"><van-icon name="arrow" /></div>
     </div> 
@@ -62,7 +62,7 @@
    <van-cell title="余额" :label="'账户余额：￥'+balance+'元'" size="large">
        <template slot="default">
 <van-switch
-  v-model="isOrderPay"
+  v-model="isBalancePay"
   active-color="#f44"
   inactive-color="#d7d7d7"
 />
@@ -84,6 +84,7 @@
    </div>
   </van-submit-bar>
 
+
     <!-- 优惠券弹层 -->
   <van-popup v-model="showList" position="bottom">
     <van-coupon-list
@@ -102,6 +103,7 @@
 import { Card,Field ,CouponCell, CouponList, SubmitBar, Switch } from 'vant'
 import { storage, sessionStorage } from '@/common/util'
 import { mapState, mapMutations } from 'vuex'
+import { pay_balance } from '@/common/pay'
 
 export default {
   components: {
@@ -122,7 +124,7 @@ export default {
       isNeedLogistics:true, // 是否需要物流信息
       hasDiscount:false,
       goodsInfo:[],
-      isOrderPay:true, // 钱包支付订单
+      isBalancePay:true, //  钱包支付
       balance:0,
     }
   },
@@ -166,7 +168,7 @@ export default {
       return (price / 100).toFixed(2);
     },
     onAddressChoose(){
-      this.$router.push({path:'/address-list'})
+      this.$router.push({path:'/address-list',query:{isChoose:true}})
     },
     onShowCoupons(){
       this.showList = !this.showList;
@@ -216,7 +218,7 @@ export default {
       // 提交订单
       this.$toast.loading({
         mask: true,
-        message: '提交订单中...',
+        message: '订单创建中',
         duration:0,
       })
       const goods = this.goodsInfo.map(item=>({goodsId:item.goodsId,number:item.selectedNum,propertyChildIds:item.propertyChildIds,logisticsType:0}))
@@ -225,7 +227,7 @@ export default {
         token:storage.get('token'),
         goodsJsonStr:JSON.stringify(goods),
         calculate:false,  // true 不实际下单，而是返回价格计算
-        expireMinutes:0,  // 多少分钟未支付自动关闭本订单，传0不自动关闭订单
+        expireMinutes:60,  // 多少分钟未支付自动关闭本订单，传0不自动关闭订单
         peisongType:'kd',  // 配送类型，kd 代表快递；zq代表到店自取
         couponId:this.chosenCoupon !== -1 ? this.coupons[this.chosenCoupon].id : '',  // 优惠券编号
         remark:this.remark,
@@ -235,6 +237,9 @@ export default {
         code:this.defaultAddress.code,
         linkMan:this.defaultAddress.linkMan,
         mobile:this.defaultAddress.mobile,
+        extJsonStr:JSON.stringify({
+          discount:parseFloat((this.coupons[this.chosenCoupon].value/100).toFixed(2))  // 优惠券抵扣金额
+        })
 
       }
       this.$request.post('/order/create',params).then(res=>{
@@ -242,9 +247,10 @@ export default {
           this.$toast(res.msg)
           return;
         }
-        const orderId = res.data.id
-        const amountReal = res.data.amountReal
         this.$toast.clear()
+        const orderResult = res.data
+        // 钱包支付订单
+        this.onPay(orderResult)
         // 移除已勾选的商品信息
         if(this.$route.query.type === 'buy'){
           sessionStorage.remove('buyInfo')
@@ -252,34 +258,42 @@ export default {
           let cartInfo = storage.get('cartInfo')
           let checkedGoods=this.$route.query.checkedGoods || []
           cartInfo = checkedGoods.length ? cartInfo.filter(item => !(checkedGoods.indexOf(item.id) !== -1)) : cartInfo
-          storage.set('cartInfo')
+          storage.set('cartInfo',cartInfo)
         }
-        // 支付方式(系统钱包支付,公众号支付未接入)
-        if(this.isOrderPay){
-          this.$request.post('/order/pay',{orderId,token:storage.get('token')}).then(res=>{
-            if(res.code === 0){
-              this.$dialog.confirm({
-                  title: '支付成功',
-                  message: `实付￥${amountReal}`,
-                  cancelButtonText:'返回首页',
-                  confirmButtonText:'查看订单'
-              }).then(() => {
-                  this.$router.replace({path:'/order-list'})
-                  // on confirm
-              }).catch(() => {
-                  // on cancel
-                  this.$router.replace({path:'/order-list?status=0'})
-              })
-            }else{
-              this.$toast(res.msg)
-            }
-          })
-        }else{
-          this.$router.replace({path:'/order-list?status=0'})
-        }
-        
-
       })
+    },
+    onPay(orderResult){
+      // 支付方式(系统钱包支付,公众号支付未接入)
+      const orderId = orderResult.id
+      const amountReal = orderResult.amountReal
+      if(this.isBalancePay){
+        this.$toast.loading({
+          mask: true,
+          message: '支付提交中',
+          duration:0,
+        })
+        pay_balance(orderId, storage.get('token')).then(res=>{
+          if(res.code === 0){
+            this.$toast.clear()
+            this.$dialog.confirm({
+                title: '支付成功',
+                message: `实付￥${amountReal}`,
+                cancelButtonText:'返回首页',
+                confirmButtonText:'查看订单'
+            }).then(() => {
+              this.$router.replace({path:'/order-detail',query:{id:orderId}})
+                // on confirm
+            }).catch(() => { 
+              // on cancel
+                this.$router.replace({path:'/home'})
+            })
+          }else{
+            this.$toast(res.msg)
+          }
+        })
+      }else{
+        this.$router.replace({path:'/order-list?status=0'})
+      }
     },
     getDefaultAddress(){
       this.$request.get('/user/shipping-address/default/',{token:storage.get('token')}).then(res=>{
@@ -292,6 +306,9 @@ export default {
     },
     getMyDiscounts(){
       this.$request.get('/discounts/my',{token:storage.get('token'),status:'0'}).then(res=>{
+        if(res.code !== 0){
+          return;
+        }
         this.coupons = res.data.map(item=>({
           id:item.id,
           name:item.name,
@@ -305,6 +322,9 @@ export default {
         }))
       })
       this.$request.get('/discounts/my',{token:storage.get('token'),status:'1,2,3'}).then(res=>{
+        if(res.code !== 0){
+          return;
+        }
         // this.updateDefaultAddress(res.data)
         this.disabledCoupons = res.data.map(item=>({
           id:item.id,

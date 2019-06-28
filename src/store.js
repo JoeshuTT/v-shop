@@ -7,7 +7,8 @@ const store = new Vuex.Store({
   state: {
     count: 0,
     globalData: {
-      comment: 'v-shop'
+      comment: 'v-shop',
+      desc: '一个前端基于vue,后端使用api工厂供的免费接口和云后台实现的实用商城!'
     },
     defaultAddress: {},
     userInfo:{

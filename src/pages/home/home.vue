@@ -22,7 +22,7 @@
                     <van-col span="12" v-for="item in list" :key="item.id" style="padding-left:5px;padding-right:5px;">
                         <router-link :to="'/goods-detail?id='+item.id" class="goods-list-item">
                             <img  class="goods-list-img" :src="item.pic" :alt="item.name">
-                        <div class="goods-list-hd">{{item.name}}</div>
+                        <div class="goods-list-hd van-ellipsis">{{item.name}}</div>
                         <div class="goods-list-bd"><span class="ui-c-red">￥{{item.minPrice}}</span><span class="ui-c-dark ui-text-deleted">￥{{item.originalPrice}}</span></div>
                         </router-link>
                     </van-col>
@@ -30,7 +30,7 @@
             </div>
         </div>
         </div>
-        <load-more tip="暂无数据" :loading="false"/>
+        <!-- <load-more tip="暂无数据" :loading="false"/> -->
         <!-- 底部导航栏 -->
       <van-tabbar route v-model="active" active-color="#f44">
   <van-tabbar-item
@@ -82,7 +82,6 @@ export default {
     };
   },
   created(){
-    console.dir(this.$router)
     this.getGoodsList()
     this.getBannerList()
     // this.$request.get('/shop_api/shop/goods/category/all').then(res=>{
@@ -109,7 +108,7 @@ onCancel(){},
       })
     },
     getBannerList(){
-      this.$request.get('/banner/list',{type:'index_banner'}).then(res=>{
+      this.$request.get('/banner/list',{type:'indexBanner'}).then(res=>{
         this.banner = res.data
       })
     },
@@ -120,7 +119,7 @@ onCancel(){},
 @import '~@/common/styles/variables.less';
 .home-swiper{
     width:100%;
-    height:200px;
+    height:188px;
 }
 .section{
     // margin: 0 15px;
