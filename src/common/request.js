@@ -2,8 +2,7 @@ import Axios from 'axios'
 import Qs from 'qs'
 import router from '@/router'
 // import { Dialog } from 'vant';
-// const API_BASE_URL = 'https://api.it120.cc'
-// const API_BASE_URL = 'http://wx.lohike.net'
+
 // 默认请求地址
 Axios.defaults.baseURL = process.env.VUE_APP_BASE_API // url = base url + request url
 Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -31,13 +30,11 @@ Axios.interceptors.response.use(res => {
   }
   return res
 })
-class request {
-  // static get(url,params){
-  //     return Axios.get(url,{params})
-  // }
-  static get(url, data = {}, config = {}) {
+
+const request = {
+  get(url, data = {}, config = {}) {
     return new Promise((resolve, reject) => {
-      Axios.get(url, { params:data, ...config })
+      Axios.get(url, { params: data, ...config })
         .then(res => {
           if (res.status === 200) {
             resolve(res.data)
@@ -51,10 +48,10 @@ class request {
           reject(err)
         })
     })
-  }
-  static post(url, data = {}, config  = {}) {
+  },
+  post(url, data = {}, config = {}) {
     return new Promise((resolve, reject) => {
-      Axios.post(url, Qs.stringify(data), config )
+      Axios.post(url, Qs.stringify(data), config)
         .then(res => {
           if (res.status === 200) {
             resolve(res.data)
@@ -68,10 +65,10 @@ class request {
           reject(err)
         })
     })
-  }
-  static uploadFile(url, data = {}, config  = {}) {
+  },
+  uploadFile(url, data = {}, config = {}) {
     return new Promise((resolve, reject) => {
-      Axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } ,...config} )
+      Axios.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' }, ...config })
         .then(res => {
           if (res.status === 200) {
             resolve(res.data)
@@ -87,4 +84,5 @@ class request {
     })
   }
 }
+
 export default request

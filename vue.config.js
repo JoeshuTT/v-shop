@@ -10,7 +10,6 @@ module.exports = {
   productionSourceMap: false,  // 去掉打包后js中，会自动生成的一些map文件
   devServer: {
     proxy: { 
-      // https://segmentfault.com/a/1190000011007043?utm_source=tag-newest
       '/api': {
         target: 'http://wx.lohike.net',
         changeOrigin: true,     // target是域名的话，需要这个参数，
@@ -29,7 +28,7 @@ module.exports = {
     config.resolve.alias
       .set('@', resolve('src'))
       .set('@assets',resolve('src/assets'))
-      // 这里只写了两个个，你可以自己再加，按这种格式.set('', resolve(''))
+      .set('@styles', resolve('src/styles'))
   }
   // css: {
   //   loaderOptions: {

@@ -33,25 +33,25 @@ export default {
 </script>
 
 <style lang="less">
-@import '~@/common/styles/index.css';
-@import '~@/common/styles/variables.less';
+@import '~@styles/index.css';
+// @import '~@styles/variables.less';
+
 body {
-  font-size: 16px;
-  background-color: #f8f8f8;
-  // background-color: @ui-color;
-  color: #333;
   font-family: 'PingFang SC', Helvetica, 'STHeiti STXihei', 'Microsoft YaHei', Tohoma, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  background-color: #f8f8f8;
+  font-size: 14px;
+  color: #333;
   line-height: 1.4;
+  min-width:320px;
+  max-width:640px;
+  margin-left:auto;
+  margin-right:auto;
 }
 img{
   display: block;
   max-width:100%;
   background:#eee;
-}
-p{
-  margin: 0;
-  padding: 0;
+  border:0 none;
 }
 a{
   color: inherit;
@@ -65,6 +65,9 @@ a{
 }
 .fz16{
   font-size: 16px;
+}
+.fz18{
+  font-size: 18px;
 }
 .fz24{
   font-size: 24px;
@@ -135,13 +138,5 @@ a{
     color: #666;
   }
 }
-/* #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-} */
 
 </style>
