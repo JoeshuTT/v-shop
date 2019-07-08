@@ -1,136 +1,120 @@
 <template>
   <div id="app">
-    <keep-alive include="index,cart,user">
     <router-view />
-    </keep-alive>
   </div>
 </template>
 
-<script>
-import { storage } from "@/common/util";
-export default {
-  created(){
-
-  },
-  mounted(){
-    const token = storage.get('token')
-    this.checkToken(token)
-    // console.log(typeof token)
-  },
-  methods:{
-    checkToken(token){
-      this.$request.post('/user/check-token', {token}).then(res => {
-        if(res.code === 0){
-          console.log('有效token')
-        }else{
-          console.log(res.msg) 
-        }
-        
-      })
-    },
-  }
-}
-</script>
-
 <style lang="less">
-@import '~@styles/index.css';
+@import "~@styles/index.css";
 // @import '~@styles/variables.less';
 
 body {
-  font-family: 'PingFang SC', Helvetica, 'STHeiti STXihei', 'Microsoft YaHei', Tohoma, Arial, sans-serif;
+  font-family: "PingFang SC", Helvetica, "STHeiti STXihei", "Microsoft YaHei",
+    Tohoma, Arial, sans-serif;
   background-color: #f8f8f8;
   font-size: 14px;
   color: #333;
   line-height: 1.4;
-  min-width:320px;
-  max-width:640px;
-  margin-left:auto;
-  margin-right:auto;
+  min-width: 320px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
 }
-img{
+img {
   display: block;
-  max-width:100%;
-  background:#eee;
-  border:0 none;
+  max-width: 100%;
+  background: #eee;
+  border: 0 none;
 }
-a{
+p {
+  margin: 0;
+}
+a {
   color: inherit;
 }
 /* */
-.fz12{
+.fz12 {
   font-size: 12px;
 }
-.fz14{
+.fz14 {
   font-size: 14px;
 }
-.fz16{
+.fz16 {
   font-size: 16px;
 }
-.fz18{
+.fz18 {
   font-size: 18px;
 }
-.fz24{
+.fz24 {
   font-size: 24px;
 }
-.ml5{
+.ml5 {
   margin-left: 5px;
 }
-.mr5{
+.mr5 {
   margin-right: 5px;
 }
-.mb10{
+.mb10 {
   margin-bottom: 10px;
 }
-.mb20{
+.mb20 {
   margin-bottom: 20px;
 }
-.pd50{
+.pd50 {
   padding-bottom: 50px;
 }
-.bgf{
+.pd100 {
+  padding-bottom: 100px;
+}
+.bgf {
   background: #fff;
 }
-.container-padding{
-  margin:15px;
+.container-padding {
+  margin: 15px;
   position: relative;
 }
 // .disabled{
 //   pointer-events: none;
 // }
 /* common */
-.common-h2{
+.copyright{
+  color:#999;
+  font-size: 14px;
+  text-align:center;
+}
+.common-h2 {
   text-align: center;
   height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #fff;
-  &-title{
+  &-title {
     position: relative;
-    height:100%;
+    height: 100%;
     display: flex;
     align-items: center;
     font-size: 16px;
     color: #333;
   }
-  &-title::before{
-    content:"";
+  &-title::before {
+    content: "";
     background: url(./assets/line_askew.png);
     background-size: cover;
     width: 20px;
-    height:6px;
+    height: 6px;
     position: absolute;
     left: -30px;
     top: 25px;
     font-size: 12px;
     color: #666;
   }
-  &-title::after{
-    content:"";
+  &-title::after {
+    content: "";
     background: url(./assets/line_askew.png);
     background-size: cover;
     width: 20px;
-    height:6px;
+    height: 6px;
     position: absolute;
     right: -30px;
     top: 25px;
@@ -138,5 +122,4 @@ a{
     color: #666;
   }
 }
-
 </style>

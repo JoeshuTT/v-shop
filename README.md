@@ -14,8 +14,7 @@ npm run serve
 ```
 npm run build
 ```
-#### 功能清单
-- [x] 骨架屏
+## 功能清单
 - [x] 订单管理
   - [x] 创建订单
   - [x] 订单列表
@@ -46,10 +45,71 @@ npm run build
   - [ ] 微信分享给朋友
   - [ ] 微信支付
 
-#### 项目截图
+## 项目截图
 
+## 项目结构
+```
+src -- 源码目录
+├── assets -- 静态图片资源文件
+├── commmon -- 公用js
+    ├── area.js -- 全国城市区数据JSON
+    ├── flexible.js -- 可伸缩布局方案
+    ├── request.js -- axios网络请求封装
+    ├── util.js -- 工具类
+    ├── validate.js -- 正则效验函数
+    ├── validator.js -- 表单验证集合
+├── components -- 通用组件封装 
+├── router.js -- vue-router路由配置
+├── store.js -- vuex的状态管理
+├── styles -- 全局css样式
+└── pages -- 前端页面
+    ├── login -- 登录页
+    ├── home -- 首页
+    ├── user -- 用户中心
+    ├── cart -- 购物车
+    └── ... -- 其他页面
+```
+## 商品数据来源
+```
+https://m.mi.com/
+```
+## Rem 适配
+项目编写过程中样式直接使用 `px`作为单位 ，然后再用工具转化
 
-### 商品数据来源
+1. 引入`flexible` 用于设置 rem 基准值
+```
+// main.js
+import './common/flexible'
+```
+2. 安装 `postcss-pxtorem` 用于将单位转化为 rem
+
+`$ npm install postcss-pxtorem --save-dev`
+```
+// vue.config.js
+const autoprefixer = require('autoprefixer')
+const pxtorem = require('postcss-pxtorem')
+
+css: {
+  loaderOptions: {
+    postcss: {
+      plugins: [
+        autoprefixer({
+          browsers: ['Android >= 4.0', 'iOS >= 7']
+        }),
+        pxtorem({
+          rootValue: 50,
+          unitPrecision: 3,
+          propList: ['*', '!font*'],
+          selectorBlackList: ['.ignore ', '.hairlines', 'van-circle__layer', '.van-hairline'],
+          minPixelValue: 2,
+        })
+      ]
+    }
+  }
+}
+```
+## Histosy 配置
+
 ```
 https://m.mi.com/
 ```

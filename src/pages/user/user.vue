@@ -78,7 +78,7 @@
 </template>
 <script>
 import { Tabbar, TabbarItem,} from 'vant'
-import { storage} from '@/common/util'
+import util from '@/common/util'
 import { mapState,mapMutations} from 'vuex'
 export default {
   components: {
@@ -109,7 +109,7 @@ export default {
   methods: {
     ...mapMutations(['updateUserInfo']),
     getUserInfo(){
-      this.$request.get('/user/detail',{token:storage.get('token')}).then(res=>{
+      this.$request.get('/user/detail',{token:util.storage.get('token')}).then(res=>{
         if (res.code !== 0) {
           return;
         }
@@ -125,7 +125,7 @@ export default {
       
     },
     getOrderCount(){
-      this.$request.get('/order/statistics',{token:storage.get('token')}).then(res=>{
+      this.$request.get('/order/statistics',{token:util.storage.get('token')}).then(res=>{
         if (res.code !== 0) {
           return;
         }
@@ -136,7 +136,7 @@ export default {
       })
     },
     getUserAmount(){
-      this.$request.get('/user/amount',{token:storage.get('token')}).then(res=>{
+      this.$request.get('/user/amount',{token:util.storage.get('token')}).then(res=>{
         if (res.code !== 0) {
           return;
         }

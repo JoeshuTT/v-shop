@@ -6,7 +6,7 @@ import router from '@/router'
 // 默认请求地址
 Axios.defaults.baseURL = process.env.VUE_APP_BASE_API // url = base url + request url
 Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-// console.log(Qs)
+
 // 请求(http request)拦截器 提前处理
 
 // 响应(http response)拦截器 处理异常
@@ -26,7 +26,7 @@ Axios.interceptors.response.use(res => {
         path: '/login',
         query: { redirect: router.currentRoute.fullPath }
       })
-    }, 1500);
+    }, 200);
   }
   return res
 })

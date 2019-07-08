@@ -1,6 +1,5 @@
 <template>
-  <div class="container"
-    style="padding-bottom:100px;">
+  <div class="container pd100">
     <div class="goods-box"
       v-if="goods.length">
       <van-cell title="v-shop"
@@ -121,18 +120,11 @@ export default {
     checkedGoods() {
       if (this.checkedGoods.length === this.goods.length) {
         this.checkedAll = true
-      } else {
-        this.checkedAll = false
       }
-
     }
   },
   created() {
     this.goods = util.storage.get('cartInfo') || []
-  },
-  beforeDestroy(){
-    const goodsInfo = this.goods
-    util.storage.set('cartInfo', goodsInfo)
   },
   methods: {
     formatPrice(price) {
@@ -149,14 +141,16 @@ export default {
         message: `确定要删除这${this.checkedGoods.length}个商品吗?`
       }).then(() => {
         this.goods = this.goods.filter(item => !(this.checkedGoods.indexOf(item.id) !== -1))
-        this.checkedGoods = []
-        
+        this.checkedGoods = [] 
+        util.storage.set('cartInfo', this.goods)
       })
     },
-    onNumberChange() { 
-
+    onNumberChange(val) { 
+      console.log('onNumberChange',val)
+      util.storage.set('cartInfo', this.goods)
     },
-    onSubmit() {
+    onSubmit() {  
+      util.storage.set('cartInfo', this.goods)
       this.$router.push({ path: '/order-submit', query: { type: 'cart', checkedGoods: this.checkedGoods } })
     }
   }

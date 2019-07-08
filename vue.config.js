@@ -1,9 +1,9 @@
-// const autoprefixer = require('autoprefixer');
-// const pxtorem = require('postcss-pxtorem');
+const autoprefixer = require('autoprefixer')
+const pxtorem = require('postcss-pxtorem')
 const path = require('path')
 
 function resolve(dir) {
-  return path.join(__dirname, dir);
+  return path.join(__dirname, dir)
 }
 module.exports = {
   lintOnSave: true,
@@ -29,21 +29,23 @@ module.exports = {
       .set('@', resolve('src'))
       .set('@assets',resolve('src/assets'))
       .set('@styles', resolve('src/styles'))
+  },
+  css: {
+    loaderOptions: {
+      postcss: {
+        plugins: [
+          autoprefixer({
+            browsers: ['Android >= 4.0', 'iOS >= 7']
+          }),
+          pxtorem({
+            rootValue: 50,
+            unitPrecision: 3,
+            propList: ['*', '!font*'],
+            selectorBlackList: ['.ignore ', '.hairlines', 'van-circle__layer', '.van-hairline'],
+            minPixelValue: 2,
+          })
+        ]
+      }
+    }
   }
-  // css: {
-  //   loaderOptions: {
-  //     postcss: {
-  //       plugins: [
-  //         autoprefixer(),
-  //         pxtorem({
-  //           rootValue: 37.5,
-  //           propList: ['*'],
-  //           // 该项仅在使用 Circle 组件时需要
-  //           // 原因参见 https://github.com/youzan/vant/issues/1948
-  //           selectorBlackList: ['van-circle__layer']
-  //         })
-  //       ]
-  //     }
-  //   }
-  // }
 }

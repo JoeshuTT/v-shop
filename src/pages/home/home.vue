@@ -83,6 +83,7 @@ export default {
     };
   },
   created() {
+    console.log(this)
     this.getGoodsList()
     this.getBannerList()
   },

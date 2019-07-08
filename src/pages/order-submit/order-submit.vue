@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container pd100">
     <template v-if="isNeedLogistics">  
     <div class="address-box mb10" v-if="defaultAddress.linkMan" @click="onAddressChoose">
       <div class="address-box-hd">
@@ -238,7 +238,7 @@ export default {
         linkMan:this.defaultAddress.linkMan,
         mobile:this.defaultAddress.mobile,
         extJsonStr:JSON.stringify({
-          discount:parseFloat((this.coupons[this.chosenCoupon].value/100).toFixed(2))  // 优惠券抵扣金额
+          discount:this.chosenCoupon !== -1 ? parseFloat((this.coupons[this.chosenCoupon].value/100).toFixed(2)) : 0 // 优惠券抵扣金额
         })
 
       }
@@ -249,17 +249,17 @@ export default {
         }
         this.$toast.clear()
         const orderResult = res.data
-        // 钱包支付订单
-        this.onPay(orderResult)
         // 移除已勾选的商品信息
         if(this.$route.query.type === 'buy'){
           sessionStorage.remove('buyInfo')
-        }else{
+        }else{ 
           let cartInfo = storage.get('cartInfo')
           let checkedGoods=this.$route.query.checkedGoods || []
           cartInfo = checkedGoods.length ? cartInfo.filter(item => !(checkedGoods.indexOf(item.id) !== -1)) : cartInfo
           storage.set('cartInfo',cartInfo)
         }
+        // 钱包支付订单
+        this.onPay(orderResult)
       })
     },
     onPay(orderResult){
@@ -352,9 +352,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .container{
-    padding-bottom:100px;
-  }
   .address-box{
     position: relative;
     box-sizing: border-box;

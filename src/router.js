@@ -5,7 +5,7 @@ Vue.use(Router)
 
 const routes = [
   {
-    path: '',
+    path: '/',
     redirect: '/home'
   },
   {
@@ -20,10 +20,7 @@ const routes = [
     component: () => import('@/pages/user/user'),
     meta: {
       title: '会员中心'
-    },
-    children:[
-      
-    ]
+    }
   },
   {
     name: 'cart',
@@ -36,7 +33,7 @@ const routes = [
     name: 'login',
     component: () => import('@/pages/login/login'),
     meta: {
-      title: '登录'
+      title: '登录/注册'
     }
   },
   {
