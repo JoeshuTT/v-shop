@@ -12,8 +12,8 @@
     <div class="goods-desc mb10">
       <div class="goods-desc-hd">
         <span class="goods-desc-name">{{basicInfo.name}}</span>
-        <van-button plain size="mini" round type="default"  v-if="hasFav" @click="onFavDelete($route.query.id)">已收藏</van-button>
-        <van-button plain size="mini" round type="danger" v-else @click="onFavAdd($route.query.id)">收藏</van-button>
+        <div class="btn-fav" v-if="hasFav" @click="onFavDelete($route.query.id)">已收藏</div>
+        <div class="btn-fav btn-fav-danger"  v-else @click="onFavAdd($route.query.id)">收藏</div>
       </div>
       <div class="goods-desc-brief"
         v-if="basicInfo.characteristic">{{basicInfo.characteristic}}</div>
@@ -177,11 +177,11 @@
   </div>
 </template>
 <script>
-import { Swipe, SwipeItem, Sku, GoodsAction, GoodsActionIcon, GoodsActionButton, Rate } from 'vant'
-// import { isString,isArray } from '@/common/validate'
+import { Swipe, SwipeItem, Sku, GoodsAction, GoodsActionIcon, GoodsActionButton, Rate, Tag } from 'vant'
+
 import { storage, sessionStorage } from '@/common/util'
 import { scrollTo } from '@/common/scroll-to'
-import { mapState, mapMutations } from 'vuex'
+
 const LIMIT_TYPE = {
   QUOTA_LIMIT: 0,
   STOCK_LIMIT: 1
@@ -195,6 +195,7 @@ export default {
     [GoodsActionIcon.name]: GoodsActionIcon,
     [GoodsActionButton.name]: GoodsActionButton,
     [Rate.name]: Rate,
+    [Tag.name]: Tag,
   },
   data() {
     return {
@@ -283,7 +284,6 @@ export default {
       // window.scrollTo(0,0)
       scrollTo(0,800)
     },
-    // ...mapMutations(['updateBuyInfo']),
     formatPoints(money) {
       return parseFloat((money * 100).toFixed(2))
     },
@@ -666,6 +666,22 @@ export default {
       color: #999;
     }
   }
+  .btn-fav{
+    box-sizing: border-box;
+    display: inline-block;
+    font-size: 12px;
+    width:60px;
+    text-align: center;
+    padding:2px 10px;
+    border-radius:10em;
+    background-color: #fff;
+    color: #666;
+    border: 1px solid #ebedf0;
+  }
+  .btn-fav-danger{
+    color: #f44;
+    border: 1px solid #f44;
+  }
 }
 
 .goods-content /deep/ img {
@@ -838,6 +854,7 @@ export default {
     justify-content: center;
   }
 }
+
 .anim-scale {
     animation-name: anim-scale;
     animation-duration: .3s;

@@ -83,7 +83,6 @@ export default {
     };
   },
   created() {
-    console.log(this)
     this.getGoodsList()
     this.getBannerList()
   },
@@ -101,9 +100,9 @@ export default {
       })
     },
   }
-};
+}
 </script>
-<style lang="less">
+<style lang="less" scopde>
 .home-swiper {
   width: 100%;
   height: 188px;

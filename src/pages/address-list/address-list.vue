@@ -51,10 +51,10 @@ export default {
     onAdd() { 
       this.$router.push({path:'address-edit'})
     },
-    onEdit(item, index) {
+    onEdit(item ) {
       this.$router.push({path:'address-edit',query:{id:item.id}})
     },
-    onSelect(item, index) {
+    onSelect(item ) {
       if(!this.isChoose)return;
       // ?会触发2次方法
       if(!flag){

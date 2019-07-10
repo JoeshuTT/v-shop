@@ -79,7 +79,7 @@
 <script>
 import { Tabbar, TabbarItem,} from 'vant'
 import util from '@/common/util'
-import { mapState,mapMutations} from 'vuex'
+
 export default {
   components: {
     [Tabbar.name]: Tabbar,
@@ -107,7 +107,6 @@ export default {
     this.getOrderCount()
   },
   methods: {
-    ...mapMutations(['updateUserInfo']),
     getUserInfo(){
       this.$request.get('/user/detail',{token:util.storage.get('token')}).then(res=>{
         if (res.code !== 0) {
@@ -119,8 +118,8 @@ export default {
           avatarUrl:baseInfo.avatarUrl || `${require('@/assets/avatar_default.png')}`,
           nick:baseInfo.nick || `${baseInfo.sourceStr}${baseInfo.id}`,
           mobile:baseInfo.mobile||'',
-        }
-        this.updateUserInfo(this.userInfo)
+        } 
+        this.$store.commit('updateUserInfo',this.userInfo)
       })
       
     },

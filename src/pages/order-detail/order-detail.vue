@@ -270,6 +270,7 @@ export default {
           duration: 0,
         })
         this.$request.post('/order/close', { orderId, token: storage.get('token') }).then(res => {
+          console.log(`/order/close：${JSON.stringify(res)}`)
           this.$toast({ message: '取消订单成功', duration: 1500 })
           this.$router.go(-1)
         })

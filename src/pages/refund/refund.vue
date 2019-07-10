@@ -48,7 +48,7 @@
 
 <script>
 import { Tab, Tabs, Card, Panel, List, Loading } from 'vant'
-import { storage, debounce, throttle } from '@/common/util'
+import { storage, debounce  } from '@/common/util'
 
 export default {
   components: {
@@ -87,7 +87,7 @@ export default {
     onListLoad() {
       // console.log(11)
     },
-    onClick: debounce(function (index, title) {
+    onClick: debounce(function (index ) {
       this.getOrderList(this.tabs[index].status)
     }, 1000),
     getOrderList(status = '', page = this.page, pageSize = this.pageSize) {
@@ -126,6 +126,7 @@ export default {
           duration: 0,
         })
         this.$request.post('/order/close', { orderId: id, token: storage.get('token') }).then(res => {
+          console.log(`/order/close：${JSON.stringify(res)}`)
           this.getOrderList(this.tabs[this.active].status)
           this.$toast({ message: '取消订单成功', duration: 1500 })
         })

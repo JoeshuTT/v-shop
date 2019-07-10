@@ -33,7 +33,7 @@
 
 <script>
 import { Tab, Tabs, Loading } from 'vant'
-import { storage, debounce, throttle } from '@/common/util'
+import { storage, debounce } from '@/common/util'
 
 export default {
   components: {

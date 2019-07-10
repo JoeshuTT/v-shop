@@ -71,7 +71,7 @@
 
 <script>
 import { RadioGroup, Radio , Picker , Field } from 'vant'
-import { storage, debounce, throttle } from '@/common/util'
+import { storage } from '@/common/util'
 
 export default {
   components: {

@@ -30,7 +30,7 @@ import { Field, Uploader, Area } from 'vant'
 import areaList from '@/common/area'
 import { storage } from '@/common/util'
 import { isEmpty } from '@/common/validate'
-import { mapState,mapMutations} from 'vuex'
+import { mapState } from 'vuex'
 export default {
   components: {
     [Field.name]: Field,
@@ -113,7 +113,7 @@ export default {
   }
 }
 </script>
-<style lang="less" scopde>
+<style lang="less" scoped>
   .header{
     height:180px;
     // background:#FF7871;

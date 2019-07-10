@@ -9,8 +9,7 @@
 // @import '~@styles/variables.less';
 
 body {
-  font-family: "PingFang SC", Helvetica, "STHeiti STXihei", "Microsoft YaHei",
-    Tohoma, Arial, sans-serif;
+  font-family: "PingFang SC", Helvetica, "STHeiti STXihei", "Microsoft YaHei", Tohoma, Arial, sans-serif;
   background-color: #f8f8f8;
   font-size: 14px;
   color: #333;

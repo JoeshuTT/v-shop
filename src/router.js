@@ -93,7 +93,7 @@ const routes = [
     }
   },
   {
-    name: 'setting',
+    name: 'setting', 
     component: () => import('@/pages/user/setting'),
     meta: {
       title: '我的资料'
@@ -127,6 +127,14 @@ const routes = [
       title: '申请售后'
     }
   },
+  {
+    name: '404',
+    component: () => import('@/pages/error-page/404'),
+    meta: {
+      title: '404'
+    }
+  },
+  { path: '*', redirect: '/404', hidden: true }
 ]
 
 // add route path
@@ -135,6 +143,7 @@ routes.forEach(route => {
 })
 
 const router = new Router({
+  mode: 'history',
   routes,
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {
