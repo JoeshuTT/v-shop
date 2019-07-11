@@ -50,7 +50,6 @@
       </van-tab>
     </van-tabs>
     <div class="copyright">copyright@<a href="https://github.com/JoeshuTT/v-shop">JoeshuT.T v-shop</a></div>
-    <van-button type="danger"  @click="handleMoniClick">模拟账号</van-button>
   </div>
 </template>
 <script>
@@ -175,10 +174,6 @@ export default {
         console.log(`/verification/sms/get：${JSON.stringify(res)}`)
         this.$toast('验证码发送成功')
       })
-    },
-    handleMoniClick(){
-      util.storage.set('token', "62a65f7b-5e94-4d7e-9aba-eb92c4078cad")
-      util.storage.set('uid', '869081')
     }
   }
 }
