@@ -104,7 +104,7 @@
         <div class="coupon-list-header van-hairline--bottom">可用优惠券</div>
         <div class="coupon-list">
           <div class="coupon-list-item"
-            v-for="coupon in coupons"
+            v-for="(coupon, i) in coupons"
             :key="coupon.id">
             <div class="coupon-list-item-hd">
               <div class="coupon-list-item-money">
@@ -114,11 +114,9 @@
             <div class="coupon-list-item-bd">
               <div class="coupon-list-item-name">{{coupon.moneyMin}}元券</div>
               <div class="coupon-list-item-dateEndDays">领取后{{coupon.dateEndDays}}天有效</div>
-            </div>
-            <!-- :class="[couponStatus==='立即领取' ? '' : 'coupon-list-item-btn-clicked']" -->
-            <div class="coupon-list-item-btn"
-              :class="[couponStatus==='领取成功' ? 'coupon-list-item-btn-clicked' : '']"
-              @click="handleCouponClicked(coupon.id)">{{couponStatus}}</div>
+            </div> 
+            <div v-if="coupon.status === 0" class="coupon-list-item-btn" @click="handleCouponClicked(coupon,i)">立即领取</div> 
+            <div v-else class="coupon-list-item-btn coupon-list-item-btn-clicked">领取成功</div>
           </div>
         </div>
         <van-icon name="close"
@@ -210,7 +208,6 @@ export default {
       showCoupon: false,
       hasFav:false,
       coupons: [],
-      couponStatus: '立即领取',
       showService: false,
       showSku: false,
       skuTitle: '选择',
@@ -280,8 +277,7 @@ export default {
     goShare(){ 
       this.$toast('未开放')
     },
-    goBackTop(){
-      // window.scrollTo(0,0)
+    goBackTop(){ 
       scrollTo(0,800)
     },
     formatPoints(money) {
@@ -330,16 +326,20 @@ export default {
         }
       })
     },
-    handleCouponClicked(id) {
-      this.$request.post('/discounts/fetch', { id, token: storage.get('token') }).then(res => {
+    handleCouponClicked(coupon,index) {
+      if(coupon.pwd){
+        this.$toast({ message: '本券需要使用口令才能领取', duration: 1500 })
+        return;
+      }
+      this.$request.post('/discounts/fetch', { id:coupon.id, token: storage.get('token') }).then(res => {
         if (res.code === 0) {
           // this.$toast('领取成功') 
           this.$toast({ message: '恭喜,抢到了~', duration: 1500 })
-          this.couponStatus = '继续领取'
+          this.coupons[index].status = 0
         } else if (res.code === 20001 || res.code === 20002 || res.code === 20003) {
           // this.$toast(res.msg)
           this.$toast({ message: '很遗憾,没抢到~', duration: 1500 })
-          this.couponStatus = '领取成功'
+          this.coupons[index].status = 1
         } else {
           this.$toast(res.msg)
         }
@@ -487,7 +487,8 @@ export default {
     },
     getDiscountsCoupons() {
       this.$request.get('/discounts/coupons', { token: storage.get('token') }).then(res => {
-        this.coupons = res.data || []
+        const data = res.data || []
+        this.coupons = data.filter(item => !item.pwd)
       })
     },
     getGoodsPrice(goodsId, propertyChildIds, callback) {

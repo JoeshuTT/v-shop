@@ -1,16 +1,18 @@
 # v-shop 商城(H5端)
 一个前端基于vue,后端使用api工厂供的免费接口和云后台实现的实用商城
-## Project setup
+项目地址：[http://wx.shuzp.top](http//:wx.shuzp.top)
+
+## 项目设置
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 项目本地调试和热更新
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 项目本地打包用于发布线上
 ```
 npm run build
 ```
@@ -46,7 +48,7 @@ npm run build
   - [ ] 微信支付
 
 ## 项目截图
-
+![项目截图](http://shuzp.top/tuchuang/项目截图.jpg)
 ## 项目结构
 ```
 src -- 源码目录
@@ -110,6 +112,17 @@ css: {
 ```
 ## Histosy 配置
 
+路由模式修改
 ```
-https://m.mi.com/
+// router.js
+const router = new VueRouter({
+  mode: 'history',
+  routes: [...]
+})
+```
+nginx 加上
+```
+location / {
+  try_files $uri $uri/ /index.html;
+}
 ```

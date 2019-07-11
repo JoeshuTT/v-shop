@@ -68,6 +68,7 @@ export default {
   border-radius: 8px;
   background: #fff;
   box-shadow: 0px 2px 4px 2px rgba(228, 228, 228, 0.5);
+  margin-bottom: 10px;
   &-title {
     padding:0 15px;
     font-size: 14px;
