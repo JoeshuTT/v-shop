@@ -53,12 +53,13 @@ npm run build
   - [ ] 微信支付
 
 ## 项目截图
-**页面截图**
-![项目截图](http://shuzp.top/tuchuang/项目截图_vshop.jpg)
-**拼团截图**
-![拼团截图](http://shuzp.top/tuchuang/拼团截图_vshop.jpg)
-**砍价截图**
-![砍价截图](http://shuzp.top/tuchuang/砍价截图_vshop.jpg)
+上传图片会被截掉,换成点链接查看
+
+[项目截图](http://shuzp.top/tuchuang/项目截图_vshop.jpg)  
+
+[拼团截图](http://shuzp.top/tuchuang/拼团截图_vshop.jpg)  
+
+[砍价截图](http://shuzp.top/tuchuang/砍价截图_vshop.jpg)  
 ## 项目结构
 ```
 src -- 源码目录
