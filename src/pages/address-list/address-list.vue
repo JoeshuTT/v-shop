@@ -41,7 +41,7 @@ export default {
           // item.id= item.id
           item.name= item.linkMan
           item.tel= item.mobile
-          item.address = item.provinceStr + item.cityStr + item.address
+          // item.address = item.address
       })  
       this.list = list
     })

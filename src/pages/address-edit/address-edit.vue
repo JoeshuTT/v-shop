@@ -36,9 +36,9 @@ export default {
           id: res.data.id,
           name: res.data.linkMan,
           tel: res.data.mobile,
-          province: res.provinceStr,
-          city: res.cityStr,
-          county: res.areaStr,
+          province: res.data.provinceStr,
+          city: res.data.cityStr,
+          county: res.data.areaStr,
           addressDetail: res.data.address,
           postalCode: res.data.code,
           areaCode: res.data.districtId,
@@ -65,7 +65,7 @@ export default {
         linkMan: form.name,
         mobile: form.tel,
         isDefault: form.isDefault,
-        address: form.addressDetail,
+        address: form.province + (form.city === form.province ? '' : form.city) + (form.county === form.city ? '' : form.county) + form.addressDetail,
         provinceId: form.areaCode.slice(0, 2) + '0000',
         cityId: form.areaCode.slice(0, 4) + '00',
         districtId: form.areaCode,
@@ -77,6 +77,7 @@ export default {
         duration: 0
       })
       this.$request.post(`/user/shipping-address/${addressAction}`, params).then(res => {
+        // 已参团不做处理，提交订单时后端会提示
         if (res.code !== 0) {
           this.$toast(res.msg)
           return;

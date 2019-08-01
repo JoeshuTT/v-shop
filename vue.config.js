@@ -2,9 +2,12 @@ const autoprefixer = require('autoprefixer')
 const pxtorem = require('postcss-pxtorem')
 const path = require('path')
 
+console.log(process.env.NODE_ENV)
+
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
+
 module.exports = {
   lintOnSave: true,
   productionSourceMap: false,  // 去掉打包后js中，会自动生成的一些map文件

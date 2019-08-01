@@ -13,12 +13,12 @@
       <van-field readonly
         clickable
         label="所在地"
-        :value="this.userInfo.province+this.userInfo.city"
+        :value="address"
         placeholder="选择城市"
         @click="showPicker = true" />
 
     </van-cell-group>
-    <van-button type="primary" size="large" @click="onSubmit">提交修改</van-button>
+    <van-button type="danger" size="large" @click="onSubmit">提交修改</van-button>
     </div>
     <van-popup v-model="showPicker" position="bottom">
       <van-area :area-list="areaList" :columns-num="2" @cancel="showPicker=false" @confirm="onAreaConfirm" />
@@ -30,7 +30,7 @@ import { Field, Uploader, Area } from 'vant'
 import areaList from '@/common/area'
 import { storage } from '@/common/util'
 import { isEmpty } from '@/common/validate'
-import { mapState } from 'vuex'
+
 export default {
   components: {
     [Field.name]: Field,
@@ -40,16 +40,37 @@ export default {
   data() {
     return {
       areaList,
+      userInfo:{},
       showPicker: false,
     }
   },
   computed:{
-    ...mapState(['userInfo'])
+    address(){
+      if(this.userInfo.province === this.userInfo.city){
+        return this.userInfo.city
+      }
+      return this.userInfo.province+this.userInfo.city
+    }
   },
   created() {
-    
+    this.getUserInfo()
   },
   methods: {
+    getUserInfo() {
+      this.$request.get('/user/detail', { token: storage.get('token') }).then(res => {
+        if (res.code !== 0) {
+          return;
+        }
+        const baseInfo = res.data.base
+        this.userInfo = {
+          ...res.data.base,
+          avatarUrl: baseInfo.avatarUrl || `${require('@/assets/avatar_default.png')}`,
+          nick: baseInfo.nick || `${baseInfo.sourceStr}${baseInfo.id}`,
+          mobile: baseInfo.mobile || '',
+        }
+      })
+
+    },
     onSubmit(){
       let avatarUrl = this.userInfo.avatarUrl
       if(isEmpty(this.userInfo.nick)){
@@ -83,6 +104,7 @@ export default {
           this.$toast(res.msg)
           return;
         }
+        this.$store.commit('updateUserInfo', this.userInfo)
         this.$toast('资料修改成功')
         this.$router.go(-1)
       })

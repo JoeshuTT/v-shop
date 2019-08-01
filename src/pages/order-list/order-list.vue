@@ -3,60 +3,42 @@
     <van-tabs v-model="active" class="mb10" @click="onClick">
       <van-tab :title="item.name" v-for="(item,index) in tabs" :key="index" />
     </van-tabs>
-    <template v-if="loadingSpinner">
-      <van-loading type="spinner" size="24px" class="ui-center">加载中...</van-loading>
-    </template>
-    <template v-else>
-      <div class="list" v-if="list.length">
-        <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onListLoad">
-          <div class="list-item" v-for="item in list" :key="item.id">
-            <van-panel class="panel" :title="'订单编号：'+item.orderNumber" :status="item.statusStr">
-              <template slot="default">
-                <!-- <router-link :to="'/order-detail?id='+item.id">
-                  <van-card v-for="(good,index) in goodsMap[item.id]"
-                    :key="index"
-                    :num="good.number"
-                    :price="good.amount"
-                    :desc="good.property"
-                    :title="good.goodsName"
-                    :thumb="good.pic" />
-                </router-link> -->
-                <router-link :to="'/order-detail?id='+item.id">
-                  <van-card 
-                    :num="goodsMap[item.id][0].number"
-                    :price="goodsMap[item.id][0].amount"
-                    :desc="goodsMap[item.id][0].property"
-                    :title="goodsMap[item.id][0].goodsName"
-                    :thumb="goodsMap[item.id][0].pic" />
-                  <div class="card-load-more van-hairline--bottom" v-if="goodsMap[item.id].length>1">查看全部{{goodsMap[item.id].length}}件商品</div>
-                </router-link>
-                <div class="panel-money">共{{goodsMap[item.id].length}}件商品 合计：
-                  <span class="fz12">￥</span>
-                  <span class="ui-c-red fz16">{{item.amount}}</span>
-                </div>
-              </template>
-              <div slot="footer" class="panel-actions" v-if="item.status === 0">
-                <div class="panel-button" @click="onCancelOrder(item.id)">取消订单</div>
-                <div class="panel-button panel-button-danger" @click="onPayOrder(item)">确认付款</div>
-              </div>
-              <div slot="footer" class="panel-actions" v-if="item.status === 2">
-                <router-link :to="'/order-detail?id='+item.id">
-                  <div class="panel-button panel-button-danger">确认收货</div>
-                </router-link>
-              </div>
-              <div slot="footer" class="panel-actions" v-if="item.status === 3">
-                <router-link :to="'/order-detail?id='+item.id">
-                  <div class="panel-button panel-button-danger">评价</div>
-                </router-link>
-              </div>
-            </van-panel>
+    <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onListLoad">
+      <div class="list-item" v-for="item in list" :key="item.id">
+        <van-panel class="panel" :title="'订单编号：'+item.orderNumber" :status="item.statusStr">
+          <div>
+            <router-link :to="'/order-detail?id='+item.id">
+              <van-card 
+                :num="goodsMap[item.id][0].number"
+                :tag="item.pingtuanOpenId > 0 ? '拼团' : ''"
+                :price="goodsMap[item.id][0].amount"
+                :desc="goodsMap[item.id][0].property"
+                :title="goodsMap[item.id][0].goodsName"
+                :thumb="goodsMap[item.id][0].pic" />
+              <div class="card-load-more van-hairline--bottom" v-if="goodsMap[item.id].length>1">查看全部{{goodsMap[item.id].length}}件商品</div>
+            </router-link>
+            <div class="panel-money">共{{goodsMap[item.id].length}}件商品 合计：
+              <span class="fz12">￥</span>
+              <span class="ui-c-red fz16">{{item.amount}}</span>
+            </div>
           </div>
-        </van-list>
+          <div slot="footer" class="panel-actions" v-if="item.status === 0">
+            <div class="panel-button" @click="onCancelOrder(item.id)">取消订单</div>
+            <div class="panel-button panel-button-danger" @click="onPayOrder(item)">确认付款</div>
+          </div>
+          <div slot="footer" class="panel-actions" v-if="item.status === 2">
+            <router-link :to="'/order-detail?id='+item.id">
+              <div class="panel-button panel-button-danger">确认收货</div>
+            </router-link>
+          </div>
+          <div slot="footer" class="panel-actions" v-if="item.status === 3">
+            <router-link :to="'/order-detail?id='+item.id">
+              <div class="panel-button panel-button-danger">评价</div>
+            </router-link>
+          </div>
+        </van-panel>
       </div>
-      <div class="no-data" v-else>
-        <van-loading text-size="16" class="ui-center">暂无订单</van-loading>
-      </div>
-    </template>
+    </van-list>
   </div>
 </template>
 
@@ -87,27 +69,27 @@ export default {
       goodsMap: {},
       list: [],
       page: 1,
-      pageSize: 50,
-      loadingSpinner: true,
+      pageSize: 10,
       loading: false,
-      finished: true,
+      finished: false,
+      finishedTxt:'没有更多了'
     }
   },
   created() {
     let status = this.$route.query.status === undefined ? '' : this.$route.query.status
     this.active = this.tabs.findIndex(item => item.status === status)
-    this.getOrderList(status)
   },
   methods: {
     onListLoad() {
-      // console.log(11)
+      this.getOrderList(this.tabs[this.active].status,this.page++,this.pageSize)
     },
     onClick: debounce(function (index ) {
-      this.getOrderList(this.tabs[index].status)
+      this.loading = true
+      this.finished = false
+      this.getOrderList(this.tabs[index].status,1,this.pageSize,true)
     }, 1000),
-    getOrderList(status = '', page = this.page, pageSize = this.pageSize) {
+    getOrderList(status = '', page = this.page, pageSize = this.pageSize,isTab=false) {
       // 订单状态，-1 已关闭 0 待支付 1 已支付待发货 2 已发货待确认 3 确认收货待评价 4 已评价
-      this.loadingSpinner = true
       const params = {
         token: storage.get('token'),
         status,
@@ -116,15 +98,34 @@ export default {
 
       }
       this.$request.post('/order/list', params).then(res => {
-        this.loadingSpinner = false
-        if (res.code !== 0) {
-          this.list = []
-          this.goodsMap = []
-          // this.$toast(res.msg)
+        if(res.code === 404){
+          this.loading = false
+          this.finished = true
+          this.finishedTxt = page > 1 ? '没有更多了' : '您还没有任何订单哦~'
+          if(isTab&&page===1){
+            this.list = []
+            this.goodsMap = {}
+          }
+          
+          return;
+        } 
+        if (res.code !== 0) { 
+          this.$toast(res.msg)
           return;
         }
-        this.list = res.data.orderList
-        this.goodsMap = res.data.goodsMap
+        if(isTab){
+          this.list = res.data.orderList
+          this.goodsMap = res.data.goodsMap
+          this.loading = false
+          this.finishedTxt = '没有更多了'
+          return;
+        }
+
+        let list = res.data.orderList
+        list.forEach(item => this.goodsMap[item.id] = res.data.goodsMap[item.id] )
+        this.list = this.list.concat(list)
+        this.loading = false
+        this.finishedTxt = '没有更多了'
       })
     },
     onCancelOrder(id) {
@@ -144,7 +145,8 @@ export default {
         this.$request.post('/order/close', { orderId, token: storage.get('token') }).then(res => {
           console.log(`/order/close：${JSON.stringify(res)}`)
           this.$toast({ message: '取消订单成功', duration: 1500 })
-          this.getOrderList(this.tabs[this.active].status)
+          // this.getOrderList(this.tabs[this.active].status)
+          this.list.splice(this.list.findIndex(item => item.id === id),1)
         })
       }).catch(() => {
         // on cancel

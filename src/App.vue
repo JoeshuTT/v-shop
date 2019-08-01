@@ -14,8 +14,8 @@ body {
   font-size: 14px;
   color: #333;
   line-height: 1.4;
-  min-width: 320px;
-  max-width: 640px;
+  min-width: 320PX;
+  max-width: 750PX;
   margin-left: auto;
   margin-right: auto;
 }
@@ -30,6 +30,13 @@ p {
 }
 a {
   color: inherit;
+}
+// 只适用于页面里只含有一种类型的按钮的情况下
+// [class^="btn"]:active{
+//   opacity: .8;
+// }
+.btn-area:active,.btn-fav:active,.btn-danger:active,.btn-warning:active,.btn-gray:active{
+  opacity: .8;
 }
 /* */
 .fz12 {
@@ -49,6 +56,12 @@ a {
 }
 .ml5 {
   margin-left: 5px;
+}
+.ml10 {
+  margin-left: 10px;
+}
+.ml20 {
+  margin-left: 20px;
 }
 .mr5 {
   margin-right: 5px;
@@ -79,6 +92,7 @@ a {
 .copyright{
   color:#999;
   font-size: 14px;
+  line-height:2;
   text-align:center;
 }
 .common-h2 {

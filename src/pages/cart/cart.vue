@@ -18,7 +18,7 @@
           label-disabled>
           <van-card :title="item.name"
             :desc="item.propTitle"
-            :price="formatPrice(item.price)"
+            :price="item.price"
             :thumb="item.pic">
             <div slot="num">
               <van-stepper v-model="item.selectedNum"
@@ -31,7 +31,7 @@
       <!-- 结算栏 -->
       <van-submit-bar v-if="statusTip === '管理'"
         class="submit-bar"
-        :price="totalPrice"
+        :price="totalPrice | formatPoint"
         :button-text="submitBarText"
         :disabled="!checkedGoods.length"
         @submit="onSubmit">
@@ -113,6 +113,11 @@ export default {
       return parseFloat(price.toFixed(2))
     }
   },
+  filters:{
+    formatPoint(val) {
+      return parseFloat((val*100).toFixed(2))
+    }
+  },
   watch: {
     checkedAll() {
       this.checkedAll ? this.checkedGoods = this.goods.map(item => item.id) : this.checkedGoods = []
@@ -127,9 +132,6 @@ export default {
     this.goods = util.storage.get('cartInfo') || []
   },
   methods: {
-    formatPrice(price) {
-      return (price / 100).toFixed(2)
-    },
     handleHomePage() {
       this.$router.replace({ path: '/home' })
     },

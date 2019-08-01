@@ -8,12 +8,11 @@
         </div>
         <div class="header-inner">
           <div class="header-title">{{orderInfo.statusStr}}</div>
+          <div class="header-txt" v-if="orderInfo.isSuccessPingtuan">拼团成功</div>
         </div>
       </div>
       <van-steps :active="active">
-        <van-step>买家付款</van-step>
-        <van-step>商家发货</van-step>
-        <van-step>交易完成</van-step>
+        <van-step v-for="(v,i) in steps" :key="i">{{v}}</van-step> 
       </van-steps>
     </div>
     <div class="header van-hairline--bottom"
@@ -24,7 +23,7 @@
         </div>
         <div class="header-inner">
           <div class="header-title">{{orderInfo.statusStr}}</div>
-        <div class="header-txt" v-if="orderInfo.status === 0&&closeTime">剩余{{closeTime}}分钟自动关闭</div>
+          <div class="header-txt" v-if="orderInfo.status === 0&&closeTime">剩余{{closeTime}}分钟自动关闭</div>
         </div>
       </div>
     </div>
@@ -37,8 +36,7 @@
           <div class="address-box-inner-title">收货人：{{logistics.linkMan}}</div>
           <div class="address-box-inner-title">{{logistics.mobile}}</div>
         </div>
-        <div class="address-box-inner-bottom">收货地址：{{logistics.provinceStr}} {{logistics.cityStr}}
-          {{logistics.areaStr}} {{logistics.address}}</div>
+        <div class="address-box-inner-bottom">收货地址：{{logistics.address}}</div>
       </div>
       <div class="address-box-bd van-hairline--top" v-if="logistics.trackingNumber">物流信息：{{logistics.shipperName}} {{logistics.trackingNumber}}</div>
     </div>
@@ -47,6 +45,7 @@
       <template slot="default">
         <van-card v-for="(good,index) in goods"
           :key="index"
+          :tag="marketing.typeStr"
           :num="good.number"
           :price="formatPrice(good.amount)"
           :desc="good.property"
@@ -88,7 +87,7 @@
         <div class="cell-hd">运费</div>
         <div class="cell-bd">+{{formatPrice(orderInfo.amountLogistics || 0)}}</div>
       </div>
-      <div class="cell">
+      <div class="cell" v-if="!marketing.type">
         <div class="cell-hd">优惠</div>
         <div class="cell-bd">-{{formatPrice(extJson.discount || 0)}}</div>
       </div>
@@ -99,7 +98,7 @@
       </van-cell>
     </div>
     <div class="footer">
-      <div class="footer-p">订单编号：{{orderInfo.orderNumber}} </div>
+      <div class="footer-p">订单编号：{{orderInfo.orderNumber}} <van-button plain type="default" size="mini" @click="handleClipboard(orderInfo.orderNumber,$event)">复制</van-button></div>
       <div class="footer-p">创建时间：{{orderInfo.dateAdd}} </div>
       <div class="footer-p"
         v-if="orderInfo.dateUpdate">更新时间：{{orderInfo.dateUpdate}} </div>
@@ -160,6 +159,8 @@
 import { Tab, Tabs, Card, Panel, List, Step, Steps, Rate, Field } from 'vant'
 import { storage } from '@/common/util'
 import { pay_balance } from '@/common/pay'
+import clipboard from '@/common/clipboard'
+
 export default {
   components: {
     [Tab.name]: Tab,
@@ -175,6 +176,8 @@ export default {
   data() {
     return {
       extJson:{},  // 扩展对象
+      marketing:{},
+      steps:['买家付款','商家发货','交易完成'],
       orderInfo: {},
       goods: [],
       logistics: {},
@@ -215,7 +218,7 @@ export default {
       set() {
         this.rateValue = 3
       }
-    }
+    },
   },
   created() {
     this.getOrderDetail(this.$route.query.id)
@@ -325,6 +328,7 @@ export default {
           return;
         }
         this.extJson = res.data.extJson
+        this.marketing = res.data.extJson.marketing  || {}  // 兼容旧代码未增商品营销活动
         this.orderInfo = res.data.orderInfo
         this.goods = res.data.goods
         // 商品设置了物流模板才会有地址信息
@@ -337,14 +341,27 @@ export default {
           this.active = this.orderInfo.status - 1
         }
         if (this.orderInfo.status === 0 && this.orderInfo.dateClose) {
-          let last = new Date().getTime()
+          let last = Date.now()
           let close = new Date(this.orderInfo.dateClose.replace(/-/g, '/')).getTime()
           if(close>last){
             this.closeTime = Math.floor((close-last)/1000/60)
           }
         }
+        // 拼团
+        if(this.orderInfo.pingtuanOpenId){
+          this.steps = ['买家付款','已成团','商家发货','交易完成']
+          if(this.orderInfo.status > 1){
+              this.active = this.orderInfo.status
+            }else{
+              this.active = this.orderInfo.isSuccessPingtuan ? 1 : 0
+          }
+        }
+        
       })
     },
+    handleClipboard(text,event){
+      clipboard(text,event)
+    }
   }
 }
 </script>
@@ -553,7 +570,7 @@ export default {
   color: #f44;
   border: 1px solid #f44;
 }
-.card-button::active {
+.card-button:active {
   opacity: 0.8;
 }
 //

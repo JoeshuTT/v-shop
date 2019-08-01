@@ -10,7 +10,7 @@
         <div class="list-item" >
           <router-link :to="'/goods-detail?id='+item.goodsId">
             <div class="list-item-thumb"><img :src="item.pic" alt=""></div>
-            <div class="list-item-title">{{item.goodsName}}</div>
+            <div class="list-item-title mb10">{{item.goodsName}}</div>
             <div class="list-item-actions"><van-button plain size="mini" round type="danger" >去购买</van-button></div>
           </router-link>
         </div>
@@ -69,6 +69,7 @@ export default {
   background: #fff;
   box-shadow: 0px 2px 4px 2px rgba(228, 228, 228, 0.5);
   margin-bottom: 10px;
+  padding:10px 0;
   &-title {
     padding:0 15px;
     font-size: 14px;

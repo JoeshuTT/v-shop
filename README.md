@@ -1,6 +1,11 @@
 # v-shop 商城(H5端)
 一个前端基于vue，后端使用api工厂供的免费接口和云后台实现的移动端商城
-项目地址：[http://wx.shuzp.top](http//:wx.shuzp.top)
+
+- 项目地址  
+[http://wx.shuzp.top](http//:wx.shuzp.top)
+
+- 项目二维码(手机扫码)  
+![项目二维码](http://shuzp.top/tuchuang/二维码_vshop.png)
 
 ## 项目设置
 ```
@@ -34,12 +39,12 @@ npm run build
 - [x] 商城模块
   - [x] 商品列表
   - [x] 商品详情
-    - [x] 商品规格(支持无规格，做多支持3种规格)
+    - [x] 商品规格(支持无规格，最多支持3种规格)
     - [x] 商品收藏
     - [x] 商品评价
-    - [ ] 商品分享海报
+    - [ ] 商品分享海报(普通商品,砍价,拼团商品等海报)
 - [ ] 积分模块
-- [ ] 拼团/砍价
+- [x] 拼团/砍价
 - [ ] 微信开发(公众号)
   - [ ] 微信支付
   - [ ] 用户注册/登录(微信公众号-快速注册/登录)
@@ -48,7 +53,12 @@ npm run build
   - [ ] 微信支付
 
 ## 项目截图
-![项目截图](http://shuzp.top/tuchuang/项目截图.jpg)
+**页面截图**
+![项目截图](http://shuzp.top/tuchuang/项目截图_vshop.jpg)
+**拼团截图**
+![拼团截图](http://shuzp.top/tuchuang/拼团截图_vshop.jpg)
+**砍价截图**
+![砍价截图](http://shuzp.top/tuchuang/砍价截图_vshop.jpg)
 ## 项目结构
 ```
 src -- 源码目录

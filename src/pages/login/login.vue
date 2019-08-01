@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-import { Field, Tab, Tabs } from 'vant'
+import { Field, Tab, Tabs, Notify  } from 'vant'
 import { isPhone, isEmpty } from '@/common/validate'
 import util from '@/common/util'
 var vcodeTimer;
@@ -62,12 +62,13 @@ export default {
     [Field.name]: Field,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
+    [Notify.name]: Notify,
   },
   data() {
     return {
       current:0,  // 0登录,1注册
       mobile: '',
-      pwd: '',
+      pwd: '123456',
       code: '',
       vcodeSend: 0, // 0获取验证码,1验证码倒计时,
       vcodeText: '获取验证码',
@@ -75,7 +76,11 @@ export default {
     };
   },
   created() {
-
+    console.log(this.__protro__)
+    Notify({
+      message: '密码默认123456，新用户请自行完成[手机号]注册',
+      duration: 10000
+    })
   },
   methods: {
     formSubmit() {
@@ -108,6 +113,7 @@ export default {
         pwd: this.pwd,
         code: this.code,
         autoLogin: true,  //该参数可以自动完成登录并返回token
+        nick:`用户${(new Date()).format('MM-dd')}`
       }
       this.$request.post('/user/m/register', params).then(res => {
         if (res.code !== 0) {
@@ -118,7 +124,11 @@ export default {
         util.storage.set('token', res.data.token)
         util.storage.set('uid', res.data.uid)
         this.$route.query.redirect ? this.$router.replace({ path: this.$route.query.redirect }) : this.$router.replace({ path: '/home' })
-        this.$toast.clear()
+        // this.$toast.clear()
+        this.$toast.success({
+          message:'注册成功',
+          duration:1500
+        })
       })
     },
     mobileLogin() {
@@ -137,18 +147,12 @@ export default {
         util.storage.set('token', res.data.token)
         util.storage.set('uid', res.data.uid)
         this.$route.query.redirect ? this.$router.replace({ path: this.$route.query.redirect }) : this.$router.replace({ path: '/home' })
-        this.$toast.clear()
+        // this.$toast.clear()
+        this.$toast.success({
+          message:'登录成功',
+          duration:1500
+        })
       })
-      // 登陆成功返回JSON
-      //       {
-      //   "code": 0,
-      //   "data": {
-      //     "uid": 869081,
-      //     "token": "1423e09c-2329-4d48-ab19-fb3543312d65"
-      //   },
-      //   "msg": "success"
-      // }
-      // 50274412-f43b-4a35-a09e-a935e25556d2
     },
     handleCodeSend() {
       if (!isPhone(this.mobile)) {
@@ -171,8 +175,8 @@ export default {
         }
       }, 1000)
       this.$request.get('/verification/sms/get', { mobile: this.mobile }).then(res => {
-        console.log(`/verification/sms/get：${JSON.stringify(res)}`)
         this.$toast('验证码发送成功')
+        console.log(`/verification/sms/get：${JSON.stringify(res)}`)
       })
     }
   }
@@ -182,10 +186,11 @@ export default {
 <style lang="less" scoped>
 .container {
   height: 100vh;
+  padding:50px 0 20px 0;
   box-sizing: border-box;
   display:flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .logo {
   width: 100px;
@@ -198,7 +203,7 @@ export default {
   margin: 30px auto;
 }
 .my-tab .van-tab__pane{
-  padding:20px 30px;
+  padding:20px 15px;
 }
 </style>
 

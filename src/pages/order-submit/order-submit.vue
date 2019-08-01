@@ -1,22 +1,22 @@
 <template>
   <div class="container pd100">
     <template v-if="isNeedLogistics">  
-    <div class="address-box mb10" v-if="defaultAddress.linkMan" @click="onAddressChoose">
-      <div class="address-box-hd">
-        <div class="address-box-inner">
-          <van-icon name="location-o" class="address-box-inner-icon"/>
-          <div class="address-box-inner-title">收货人：{{defaultAddress.linkMan}}</div>
-          <div class="address-box-inner-title">{{defaultAddress.mobile}}</div>
-        </div>  
-        <div class="address-box-inner-bottom">收货地址：{{defaultAddress.provinceStr}}{{defaultAddress.cityStr}}{{defaultAddress.address}}</div>
-      </div>
-      <div class="address-box-bd"><van-icon name="arrow" /></div>
-    </div> 
-    <van-cell v-else class="address-card mb10" title="新增收货地址" icon="add-square" is-link @click="onAddressChoose"></van-cell>
+      <div class="address-box mb10" v-if="defaultAddress.linkMan" @click="onAddressChoose">
+        <div class="address-box-hd">
+          <div class="address-box-inner">
+            <van-icon name="location-o" class="address-box-inner-icon"/>
+            <div class="address-box-inner-title">收货人：{{defaultAddress.linkMan}}</div>
+            <div class="address-box-inner-title">{{defaultAddress.mobile}}</div>
+          </div>  
+          <div class="address-box-inner-bottom">收货地址：{{defaultAddress.address}}</div>
+        </div>
+        <div class="address-box-bd"><van-icon name="arrow" /></div>
+      </div> 
+      <van-cell v-else class="address-card mb10" title="新增收货地址" icon="add-square" is-link @click="onAddressChoose"></van-cell>
     </template> 
     <div class="order-info">
-<van-cell-group>
-  <van-cell title="商品列表"></van-cell>
+      <van-cell-group>
+        <van-cell title="商品列表"></van-cell>
 
       <!-- <van-card
   :num="buyInfo.selectedNum"
@@ -27,10 +27,11 @@
 /> -->
 <van-card
   v-for="(item,index) in goodsInfo"
+  :tag="marketing.typeStr"
   :key="index"
   :num="item.selectedNum"
   :desc="item.propTitle"
-  :price="formatPrice(item.price)"
+  :price="item.price.toFixed(2)"
   :title="item.name"
   :thumb="item.pic"
 >
@@ -126,30 +127,32 @@ export default {
       goodsInfo:[],
       isBalancePay:true, //  钱包支付
       balance:0,
+      expireMinutes:60,
+      marketing:{}
     }
   },
   computed:{
     ...mapState(['defaultAddress']),
     goodsPrice(){
       let price = this.goodsInfo.reduce((total,item)=> total+item.selectedNum*item.price,0)
-      return (price/100).toFixed(2)
+      return parseFloat(price).toFixed(2)
     },
     youhui(){
-      let youhui = this.chosenCoupon !== -1 ? this.coupons[this.chosenCoupon].value : 0
-      return (youhui/100).toFixed(2)
+      let youhui = this.chosenCoupon !== -1 ? parseFloat((this.coupons[this.chosenCoupon].value/100).toFixed(2)) : 0
+      return parseFloat(youhui).toFixed(2)
     },
     totalPrice(){
-      let youhui = this.chosenCoupon !== -1 ? this.coupons[this.chosenCoupon].value : 0
+      let youhui = this.chosenCoupon !== -1 ? parseFloat((this.coupons[this.chosenCoupon].value/100).toFixed(2)) : 0
       let price = this.goodsInfo.reduce((total,item)=> total+item.selectedNum*item.price,0) - youhui
-      return (price/100).toFixed(2)
+      return price > 0 ? parseFloat(price).toFixed(2) : '0.00'
     },
   },
   created() {
-    // 
-    this.getMyDiscounts()
+
     // 立即购买buy,加入购物车cart,
     if(this.$route.query.type === 'buy'){
-      this.goodsInfo = sessionStorage.get('buyInfo')
+      this.goodsInfo = sessionStorage.get('buyInfo') || []
+      this.marketing = this.goodsInfo[0].marketing
     }else{
       let cartInfo = storage.get('cartInfo'),checkedGoods=this.$route.query.checkedGoods || []
       cartInfo = checkedGoods.length ? cartInfo.filter(item => checkedGoods.indexOf(item.id) !== -1) : cartInfo
@@ -161,12 +164,16 @@ export default {
     }
     // 账户余额
     this.getUserAmount()
+
+    if(this.marketing.type){
+      this.expireMinutes = 0
+    }
+    if(!this.marketing.type){
+      this.getMyDiscounts()
+    }
   },
   methods: {
     ...mapMutations(['updateDefaultAddress']),
-    formatPrice(price) {
-      return (price / 100).toFixed(2);
-    },
     onAddressChoose(){
       this.$router.push({path:'/address-list',query:{isChoose:true}})
     },
@@ -222,12 +229,11 @@ export default {
         duration:0,
       })
       const goods = this.goodsInfo.map(item=>({goodsId:item.goodsId,number:item.selectedNum,propertyChildIds:item.propertyChildIds,logisticsType:0}))
-      // 拼团,砍价模块未加入
       const params = {
         token:storage.get('token'),
         goodsJsonStr:JSON.stringify(goods),
         calculate:false,  // true 不实际下单，而是返回价格计算
-        expireMinutes:60,  // 多少分钟未支付自动关闭本订单，传0不自动关闭订单
+        expireMinutes:this.expireMinutes,  // 多少分钟未支付自动关闭本订单，传0不自动关闭订单
         peisongType:'kd',  // 配送类型，kd 代表快递；zq代表到店自取
         couponId:this.chosenCoupon !== -1 ? this.coupons[this.chosenCoupon].id : '',  // 优惠券编号
         remark:this.remark,
@@ -237,11 +243,34 @@ export default {
         code:this.defaultAddress.code,
         linkMan:this.defaultAddress.linkMan,
         mobile:this.defaultAddress.mobile,
+        kjid:this.marketing.kjid || '',  // 砍价编号，可直接购买砍价商品
+        pingtuanOpenId:this.marketing.pingtuanOpenId,  // 拼团购买的团号,不是拼团id
         extJsonStr:JSON.stringify({
-          discount:this.chosenCoupon !== -1 ? parseFloat((this.coupons[this.chosenCoupon].value/100).toFixed(2)) : 0 // 优惠券抵扣金额
+          discount:this.chosenCoupon !== -1 ? parseFloat((this.coupons[this.chosenCoupon].value/100).toFixed(2)) : 0, // 优惠券抵扣金额
+          marketing:this.marketing,  // 商品营销活动相关数据
         })
 
       }
+
+      // 发起拼团
+      if(this.marketing.type === 'pintuan' && !this.marketing.pingtuanOpenId){
+        this.$request.post('/shop/goods/pingtuan/open',{goodsId:this.goodsInfo[0].goodsId,token:storage.get('token')}).then(res=>{
+          if(res.code !== 0){
+            this.$toast(res.msg)
+            return;
+          }
+          // 开团成功并创建订单
+          params.pingtuanOpenId = res.data.id
+          this.marketing.pingtuanOpenId = res.data.id
+          this.createOrder(params)
+        })
+        return;
+        
+      }
+      // 创建订单
+      this.createOrder(params)
+    },
+    createOrder(params){
       this.$request.post('/order/create',params).then(res=>{
         if(res.code !== 0){
           this.$toast(res.msg)
@@ -249,23 +278,19 @@ export default {
         }
         this.$toast.clear()
         const orderResult = res.data
-        // 移除已勾选的商品信息
-        if(this.$route.query.type === 'buy'){
-          sessionStorage.remove('buyInfo')
-        }else{ 
-          let cartInfo = storage.get('cartInfo')
-          let checkedGoods=this.$route.query.checkedGoods || []
-          cartInfo = checkedGoods.length ? cartInfo.filter(item => !(checkedGoods.indexOf(item.id) !== -1)) : cartInfo
-          storage.set('cartInfo',cartInfo)
-        }
         // 钱包支付订单
         this.onPay(orderResult)
+
       })
+    },
+    pintuanOrderAction(){
+
     },
     onPay(orderResult){
       // 支付方式(系统钱包支付,公众号支付未接入)
       const orderId = orderResult.id
       const amountReal = orderResult.amountReal
+      const goodsId = this.goodsInfo[0].goodsId  // 拼团详情页需要用到
       if(this.isBalancePay){
         this.$toast.loading({
           mask: true,
@@ -273,30 +298,51 @@ export default {
           duration:0,
         })
         pay_balance(orderId, storage.get('token')).then(res=>{
-          if(res.code === 0){
-            this.$toast.clear()
-            this.$dialog.confirm({
-                title: '支付成功',
-                message: `实付￥${amountReal}`,
-                cancelButtonText:'返回首页',
-                confirmButtonText:'查看订单'
-            }).then(() => {
-              this.$router.replace({path:'/order-detail',query:{id:orderId}})
-                // on confirm
-            }).catch(() => { 
-              // on cancel
-                this.$router.replace({path:'/home'})
-            })
-          }else{
+          if(res.code !== 0){
             this.$toast(res.msg)
+            return;
           }
+          this.$toast.clear()
+          this.removeStorageGoods()
+          
+          this.$dialog.confirm({
+              title: '支付成功',
+              message: `实付￥${amountReal}`,
+              cancelButtonText:'返回首页',
+              confirmButtonText:'查看详情'
+          }).then(() => {
+
+            if(this.marketing.type === 'pintuan'){
+              this.$router.replace({path:'/pintuan/pintuan',query:{ tuanId:this.marketing.pingtuanOpenId, goodsId}})
+              return;
+            }
+            this.$router.replace({path:'/order-detail',query:{id:orderId}})
+              // on confirm
+          }).catch(() => { 
+            // on cancel
+              this.$router.replace({path:'/home'})
+          })
+          
         })
       }else{
+        this.removeStorageGoods()
         this.$router.replace({path:'/order-list?status=0'})
       }
     },
+    removeStorageGoods(){
+
+      // 支付成功后移除已勾选的商品信息
+      if(this.$route.query.type === 'buy'){
+        sessionStorage.remove('buyInfo') 
+      }else{ 
+        let cartInfo = storage.get('cartInfo')
+        let checkedGoods = this.$route.query.checkedGoods || []
+        cartInfo = checkedGoods.length ? cartInfo.filter(item => !(checkedGoods.indexOf(item.id) !== -1)) : cartInfo 
+        storage.set('cartInfo',cartInfo) 
+      }
+    },
     getDefaultAddress(){
-      this.$request.get('/user/shipping-address/default/',{token:storage.get('token')}).then(res=>{
+      this.$request.get('/user/shipping-address/default',{token:storage.get('token')}).then(res=>{
         this.updateDefaultAddress(res.data||{})
       })
     },
