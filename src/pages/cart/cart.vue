@@ -91,15 +91,15 @@ export default {
     [CheckboxGroup.name]: CheckboxGroup,
     [Card.name]: Card,
     [Stepper.name]: Stepper,
-    [SubmitBar.name]: SubmitBar,
+    [SubmitBar.name]: SubmitBar
   },
   data() {
     return {
       active: 0,
-      statusTip: '管理',  // 管理,完成
+      statusTip: '管理', // 管理,完成
       checkedAll: false,
       checkedGoods: [],
-      goods: [],
+      goods: []
 
     }
   },
@@ -109,13 +109,13 @@ export default {
       return '结算' + (count ? `(${count})` : '')
     },
     totalPrice() {
-      let price = this.goods.reduce((total, item) => total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price * item.selectedNum : 0), 0)
+      const price = this.goods.reduce((total, item) => total + (this.checkedGoods.indexOf(item.id) !== -1 ? item.price * item.selectedNum : 0), 0)
       return parseFloat(price.toFixed(2))
     }
   },
-  filters:{
+  filters: {
     formatPoint(val) {
-      return parseFloat((val*100).toFixed(2))
+      return parseFloat((val * 100).toFixed(2))
     }
   },
   watch: {
@@ -143,20 +143,20 @@ export default {
         message: `确定要删除这${this.checkedGoods.length}个商品吗?`
       }).then(() => {
         this.goods = this.goods.filter(item => !(this.checkedGoods.indexOf(item.id) !== -1))
-        this.checkedGoods = [] 
+        this.checkedGoods = []
         util.storage.set('cartInfo', this.goods)
       })
     },
-    onNumberChange(val) { 
-      console.log('onNumberChange',val)
+    onNumberChange(val) {
+      console.log('onNumberChange', val)
       util.storage.set('cartInfo', this.goods)
     },
-    onSubmit() {  
+    onSubmit() {
       util.storage.set('cartInfo', this.goods)
-      this.$router.push({ path: '/order-submit', query: { type: 'cart', checkedGoods: this.checkedGoods } })
+      this.$router.push({ path: '/order-submit', query: { type: 'cart', checkedGoods: this.checkedGoods }})
     }
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .status-tip {
@@ -245,6 +245,4 @@ export default {
   }
 }
 </style>
-
-
 

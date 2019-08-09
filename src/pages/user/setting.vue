@@ -35,21 +35,21 @@ export default {
   components: {
     [Field.name]: Field,
     [Uploader.name]: Uploader,
-    [Area.name]: Area,
+    [Area.name]: Area
   },
   data() {
     return {
       areaList,
-      userInfo:{},
-      showPicker: false,
+      userInfo: {},
+      showPicker: false
     }
   },
-  computed:{
-    address(){
-      if(this.userInfo.province === this.userInfo.city){
+  computed: {
+    address() {
+      if (this.userInfo.province === this.userInfo.city) {
         return this.userInfo.city
       }
-      return this.userInfo.province+this.userInfo.city
+      return this.userInfo.province + this.userInfo.city
     }
   },
   created() {
@@ -59,23 +59,22 @@ export default {
     getUserInfo() {
       this.$request.get('/user/detail', { token: storage.get('token') }).then(res => {
         if (res.code !== 0) {
-          return;
+          return
         }
         const baseInfo = res.data.base
         this.userInfo = {
           ...res.data.base,
           avatarUrl: baseInfo.avatarUrl || `${require('@/assets/avatar_default.png')}`,
           nick: baseInfo.nick || `${baseInfo.sourceStr}${baseInfo.id}`,
-          mobile: baseInfo.mobile || '',
+          mobile: baseInfo.mobile || ''
         }
       })
-
     },
-    onSubmit(){
+    onSubmit() {
       let avatarUrl = this.userInfo.avatarUrl
-      if(isEmpty(this.userInfo.nick)){
+      if (isEmpty(this.userInfo.nick)) {
         this.$toast('昵称不能为空')
-        return;
+        return
       }
       // if(isEmpty(this.userInfo.province)){
       //   this.$toast('省份不能为空')
@@ -85,51 +84,51 @@ export default {
       //   this.$toast('城市不能为空')
       //   return;
       // }
-      if(avatarUrl.includes('avatar_default') || avatarUrl.includes('base64')){
+      if (avatarUrl.includes('avatar_default') || avatarUrl.includes('base64')) {
         console.log('默认头像')
         avatarUrl = ''
       }
-      
+
       this.$toast.loading({
         mask: true,
         message: '提交中...',
         duration: 0
       })
-      
+
       this.updateUserInfo(avatarUrl, this.userInfo.city, this.userInfo.nick, this.userInfo.province)
     },
     updateUserInfo(avatarUrl, city, nick, province) {
       this.$request.post('/user/modify', { token: storage.get('token'), avatarUrl, city, nick, province }).then(res => {
         if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
+          return
         }
         this.$store.commit('updateUserInfo', this.userInfo)
         this.$toast('资料修改成功')
         this.$router.go(-1)
       })
     },
-    afterRead(file){
+    afterRead(file) {
       this.$toast.loading({
         mask: true,
         message: '上传中...',
         duration: 0
       })
-      let formData = new FormData()
-      formData.append('upfile', file.file,'avatar.jpg')
+      const formData = new FormData()
+      formData.append('upfile', file.file, 'avatar.jpg')
       formData.append('token', storage.get('token'))
-      this.$request.uploadFile('/dfs/upload/file',formData).then(res=>{
+      this.$request.uploadFile('/dfs/upload/file', formData).then(res => {
         if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
+          return
         }
         this.userInfo.avatarUrl = res.data.url
         this.$toast('上传图片成功')
       })
     },
-    onAreaConfirm(values) { 
+    onAreaConfirm(values) {
       this.userInfo.province = values[0].name
-      this.userInfo.city = values[1].name 
+      this.userInfo.city = values[1].name
       this.showPicker = false
     }
   }
@@ -157,6 +156,4 @@ export default {
     background:#fff;
   }
 </style>
-
-
 

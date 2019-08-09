@@ -22,16 +22,16 @@
 
 <script>
 import { Loading } from 'vant'
-import { storage, } from '@/common/util'
+import { storage } from '@/common/util'
 
 export default {
   components: {
-    [Loading.name]: Loading,
+    [Loading.name]: Loading
   },
   data() {
     return {
       list: [],
-      loadingSpinner: true,
+      loadingSpinner: true
     }
   },
   created() {
@@ -43,11 +43,11 @@ export default {
       this.$request.get('/user/cashLog', { token: storage.get('token'), page, pageSize }).then(res => {
         this.loadingSpinner = false
         if (res.code !== 0) {
-          return;
+          return
         }
         this.list = res.data
       })
-    },
+    }
   }
 }
 </script>
@@ -89,5 +89,4 @@ export default {
   }
 }
 </style>
-
 

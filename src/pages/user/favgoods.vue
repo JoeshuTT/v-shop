@@ -4,7 +4,7 @@
       <van-loading type="spinner" size="24px" class="ui-center">加载中...</van-loading>
     </template>
     <template v-else>
-      <div class="list" v-if="list.length"> 
+      <div class="list" v-if="list.length">
         <van-row gutter="10">
           <van-col span="12" v-for="item in list" :key="item.id">
         <div class="list-item" >
@@ -19,39 +19,39 @@
       </div>
       <div class="no-data" v-else>
         <van-loading text-size="16" class="ui-center">暂无数据</van-loading>
-      </div> 
+      </div>
     </template>
   </div>
 </template>
 
 <script>
 import { Loading } from 'vant'
-import { storage, } from '@/common/util'
+import { storage } from '@/common/util'
 
 export default {
   components: {
-    [Loading.name]: Loading,
+    [Loading.name]: Loading
   },
   data() {
-    return { 
+    return {
       list: [],
-      loadingSpinner: true,
+      loadingSpinner: true
     }
   },
   created() {
     this.getFavList()
   },
   methods: {
-    getFavList(nameLike,page=1,pageSize=50) {
+    getFavList(nameLike, page = 1, pageSize = 50) {
       this.loadingSpinner = true
-      this.$request.get('/shop/goods/fav/list', { token: storage.get('token'), nameLike,page,pageSize }).then(res => {
+      this.$request.get('/shop/goods/fav/list', { token: storage.get('token'), nameLike, page, pageSize }).then(res => {
         this.loadingSpinner = false
         if (res.code !== 0) {
-          return;
+          return
         }
         this.list = res.data
       })
-    },
+    }
   }
 }
 </script>
@@ -92,5 +92,4 @@ export default {
   }
 }
 </style>
-
 

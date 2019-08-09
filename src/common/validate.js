@@ -21,7 +21,7 @@ export function isArray(arg) {
   return Array.isArray(arg)
 }
 /**
- * @param {String} value 
+ * @param {String} value
  */
 export function isPhone(value) {
   const reg = /^1[0-9]{10}$/

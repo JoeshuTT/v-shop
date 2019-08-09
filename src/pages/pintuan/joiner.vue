@@ -17,44 +17,42 @@
 import { Tag } from 'vant'
 
 export default {
-  components:{
-    [Tag.name]: Tag,
+  components: {
+    [Tag.name]: Tag
   },
-  data(){
+  data() {
     return {
-      joiners:[]
+      joiners: []
     }
   },
-  created(){
+  created() {
     this.getPintuanJoiner(this.$route.query.id)
   },
-  methods:{
-    getPintuanJoiner(tuanId){
-      this.$request.get('/shop/goods/pingtuan/joiner',{tuanId}).then(res => { 
-            if(res.code !== 0){
-              // this.$toast(res.msg)
-              // 拼团只有处在进行中才会返回相关数据
-              this.$dialog.confirm({
-                title: '提示',
-                message: `${res.msg}`,
-                showCancelButton:false,
-                confirmButtonText:'进店逛逛'
-              }).then(() => {
-                // on confirm
-                this.$router.replace({path:'/home'})
-              })
-              return;
-            }
-            
-            this.joiners = res.data.map(item => ({
-              nick:item.apiExtUserHelp.nick || '神秘用户',
-              avatarUrl:item.apiExtUserHelp.avatarUrl || `${require('@/assets/avatar_default.png')}`,
-              dateAdd:item.dateAdd,
-              uidHelp:item.uidHelp
-            })).reverse()
+  methods: {
+    getPintuanJoiner(tuanId) {
+      this.$request.get('/shop/goods/pingtuan/joiner', { tuanId }).then(res => {
+        if (res.code !== 0) {
+          // this.$toast(res.msg)
+          // 拼团只有处在进行中才会返回相关数据
+          this.$dialog.confirm({
+            title: '提示',
+            message: `${res.msg}`,
+            showCancelButton: false,
+            confirmButtonText: '进店逛逛'
+          }).then(() => {
+            // on confirm
+            this.$router.replace({ path: '/home' })
+          })
+          return
+        }
 
-            
-        })
+        this.joiners = res.data.map(item => ({
+          nick: item.apiExtUserHelp.nick || '神秘用户',
+          avatarUrl: item.apiExtUserHelp.avatarUrl || `${require('@/assets/avatar_default.png')}`,
+          dateAdd: item.dateAdd,
+          uidHelp: item.uidHelp
+        })).reverse()
+      })
     }
   }
 }
@@ -96,7 +94,4 @@ export default {
     padding:20px 0;
   }
 </style>
-
-
-
 

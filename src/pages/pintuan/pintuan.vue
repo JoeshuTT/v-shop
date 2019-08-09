@@ -1,6 +1,6 @@
 <template>
   <div class="container bgf">
-    <div class="header"> 
+    <div class="header">
       <div class="header-label" @click="onClickRule">玩法详情</div>
       <!-- <div class="header-hd">
         <div class="header-hd-avatar"><img :src="joiner.avatarUrl" alt=""></div>
@@ -16,7 +16,7 @@
             <div class="header-title__value" v-if="marketing.set">已有{{marketing.set.numberSucccess}}人拼团成功</div>
           </div>
           <div class="header-txt fz14" v-if="marketing.set">
-            {{marketing.set.numberPersion}}人成团价￥{{basicInfo.pingtuanPrice | numberFormat}} 
+            {{marketing.set.numberPersion}}人成团价￥{{basicInfo.pingtuanPrice | numberFormat}}
             <span class="ml5 ui-c-darker fz12 ui-text-deleted">￥{{basicInfo.originalPrice | numberFormat}}</span>
           </div>
         </div>
@@ -53,19 +53,19 @@
         <div class="section-header">{{pintuanTitle}}</div>
       </template>
       <template v-if="pintuanStatus === 2">
-        <div class="section-header">{{pintuanTitle}}</div> 
+        <div class="section-header">{{pintuanTitle}}</div>
       </template>
       <template v-if="isMy">
         <div class="btn-group" v-if="pintuanStatus === 0">
           <div class="btn-danger mb10" @click="onShowActions">邀请好友参团</div>
-          <div class="btn-outline" v-if="orderId" @click="onClickOrder(orderId)">查看订单详情</div> 
+          <div class="btn-outline" v-if="orderId" @click="onClickOrder(orderId)">查看订单详情</div>
         </div>
         <div class="btn-group" v-if="pintuanStatus === 1">
-          <div class="btn-danger mb10" @click="onClickGoods">重新开团</div> 
-          <div class="btn-outline" @click="onClickHome">进店逛逛</div> 
+          <div class="btn-danger mb10" @click="onClickGoods">重新开团</div>
+          <div class="btn-outline" @click="onClickHome">进店逛逛</div>
         </div>
         <div class="btn-group" v-if="pintuanStatus === 2">
-          <div class="btn-danger mb10" v-if="orderId" @click="onClickOrder(orderId)">查看订单详情</div> 
+          <div class="btn-danger mb10" v-if="orderId" @click="onClickOrder(orderId)">查看订单详情</div>
           <div class="btn-outline" @click="onClickHome">进店逛逛</div>
         </div>
       </template>
@@ -73,7 +73,7 @@
         <div class="btn-group" v-if="pintuanStatus === 0">
           <div class="btn-danger" @click="onClickGoods">立即参团</div>
         </div>
-        <div class="btn-group" v-if="pintuanStatus === 1"> 
+        <div class="btn-group" v-if="pintuanStatus === 1">
           <div class="btn-danger mb10" @click="onClickGoods">开个新团</div>
           <div class="btn-outline" @click="onClickHome">进店逛逛</div>
         </div>
@@ -81,7 +81,7 @@
           <div class="btn-danger mb10" @click="onClickGoods">开个新团</div>
           <div class="btn-outline" @click="onClickHome">进店逛逛</div>
         </div>
-      </template> 
+      </template>
     </div>
     <!-- 分享帮砍上拉选择框 -->
     <van-action-sheet
@@ -119,47 +119,47 @@
   </div>
 </template>
 <script>
-var timer;
+var timer
 
-import {storage, sessionStorage } from '@/common/util'
+import { storage, sessionStorage } from '@/common/util'
 import { ActionSheet, Sku } from 'vant'
 import clipboard from '@/common/clipboard'
 
 export default {
-  components:{
+  components: {
     [ActionSheet.name]: ActionSheet,
-    [Sku.name]: Sku,
+    [Sku.name]: Sku
   },
   data() {
-    return { 
-      pageLink:window.location.href,
-      orderId:'',
-      marketing:{},
-      pintuanStatus:0,
-      pintuanTitle:'',
-      isMy:true,  // 是否由该用户发起拼团
-      countdown:{},
-      endTime:'',
+    return {
+      pageLink: window.location.href,
+      orderId: '',
+      marketing: {},
+      pintuanStatus: 0,
+      pintuanTitle: '',
+      isMy: true, // 是否由该用户发起拼团
+      countdown: {},
+      endTime: '',
       showActions: false,
       actions: [
-        { name: '邀请好友成团',subname: '分享页面链接'},
+        { name: '邀请好友成团', subname: '分享页面链接' },
         { name: '生成邀请海报', subname: '待开发' }
       ],
-      basicInfo:{},
-      properties:[],
-      pintuanInfo:{},
-      joiners:[],
-      helps:[],
-      showSku:false,
-      currentPintuan:{},
-      propTitle:'选择',
+      basicInfo: {},
+      properties: [],
+      pintuanInfo: {},
+      joiners: [],
+      helps: [],
+      showSku: false,
+      currentPintuan: {},
+      propTitle: '选择',
       skuData: {
         goods_id: '',
-        quota:0,  // 0表示不限购
-        quota_used:0,
+        quota: 0, // 0表示不限购
+        quota_used: 0,
         goods_info: {},
-        show_add_cart_btn:false,
-        buy_text:'确定',
+        show_add_cart_btn: false,
+        buy_text: '确定',
         sku: {
           price: '1.00', // 默认价格（单位元）
           stock_num: 100, // 商品总库存
@@ -168,123 +168,120 @@ export default {
           collection_id: 2261, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
           tree: [],
           list: [],
-          messages:[],
-        },
+          messages: []
+        }
       }
     }
   },
-  filters:{
-    numberFormat(val){
+  filters: {
+    numberFormat(val) {
       return parseFloat(Number(val).toFixed(2))
     },
-    priceFormat(val){
+    priceFormat(val) {
       return parseFloat(Number(val)).toFixed(2)
     }
   },
   created() {
-    this.getPintuanInfo(this.$route.query.tuanId,this.$route.query.goodsId)
+    this.getPintuanInfo(this.$route.query.tuanId, this.$route.query.goodsId)
     this.currentPintuan.id = this.$route.query.tuanId
   },
-  beforeDestroy(){
+  beforeDestroy() {
     clearTimeout(timer)
   },
   methods: {
-    getPintuanInfo(tuanId,goodsId){
-      this.$request.get('/shop/goods/pingtuan/set',{goodsId}).then(res => {
-          if(res.code !== 0){
-            return;
+    getPintuanInfo(tuanId, goodsId) {
+      this.$request.get('/shop/goods/pingtuan/set', { goodsId }).then(res => {
+        if (res.code !== 0) {
+          return
+        }
+        const set = res.data
+        this.marketing = {
+          type: 'pintuan',
+          set,
+          isBuy: true,
+          info: {
+            title: '拼团',
+            time: new Date(set.dateEnd.replace(/-/g, '/')).getTime(),
+            label: `${set.numberPersion}人拼团价`
+            // minPrice:this.basicInfo.pingtuanPrice,
+            // originalPrice:this.basicInfo.originalPrice,
           }
-          const set = res.data
-          this.marketing = {
-            type:'pintuan',
-            set,
-            isBuy:true,
-            info:{
-              title:'拼团',
-              time:new Date(set.dateEnd.replace(/-/g,'/')).getTime(),
-              label:`${set.numberPersion}人拼团价`,
-              // minPrice:this.basicInfo.pingtuanPrice,
-              // originalPrice:this.basicInfo.originalPrice,
-            },
+        }
+        this.getGoodsDetail(goodsId)
+        this.checkIsmyPintuan(this.$route.query.tuanId)
+        this.$request.get('/shop/goods/pingtuan/joiner', { tuanId }).then(res => {
+          switch (res.code) {
+            case 10000:
+              // msg：当前拼团超时未成团，已失效
+              this.pintuanStatus = 1
+              this.pintuanTitle = '拼团失败'
+              break
+            case 20000:
+              // msg：当前拼团已成团
+              this.pintuanStatus = 2
+              this.pintuanTitle = '拼团成功'
+              break
+            case 0:
+              // msg：拼团进行中
+              this.pintuanStatus = 0
+              break
+            default:
+              this.$toast(res.msg)
+              break
           }
-          this.getGoodsDetail(goodsId)
-          this.checkIsmyPintuan(this.$route.query.tuanId)
-          this.$request.get('/shop/goods/pingtuan/joiner',{tuanId}).then(res => {
-          
-            switch (res.code) {
-              case 10000:
-                // msg：当前拼团超时未成团，已失效 
-                this.pintuanStatus = 1
-                this.pintuanTitle = '拼团失败'
-                break;
-              case 20000:
-                // msg：当前拼团已成团
-                this.pintuanStatus = 2
-                this.pintuanTitle = '拼团成功'
-                break;
-              case 0:
-                // msg：拼团进行中
-                this.pintuanStatus = 0
-                break;
-              default:
-                this.$toast(res.msg)
-                break;
-            }
-            if(res.code !== 0){
-              // this.$toast(res.msg)
-              // 拼团只有在进行中才会返回相关数据
-              // this.$dialog.confirm({
-              //   title: '提示',
-              //   message: `${res.msg}`,
-              //   showCancelButton:false,
-              //   confirmButtonText:'进店逛逛'
-              // }).then(() => {
-              //   // on confirm
-              //   this.$router.replace({path:'/home'})
-              // })
-              return;
-            }
-            
-            this.joiners = res.data.map(item => ({
-              nick:item.apiExtUserHelp.nick || '神秘用户',
-              avatarUrl:item.apiExtUserHelp.avatarUrl || `${require('@/assets/avatar_default.png')}`,
-              dateAdd:item.dateAdd,
-              uidHelp:item.uidHelp
-            }))
-            // 拼团剩余时间
-            const endTime = new Date(this.joiners[this.joiners.length-1].dateAdd.replace(/-/g,'/')).getTime() + set.timeoutHours*60*60*1000
-            this.endTime = endTime
-            this.countdownInit()
+          if (res.code !== 0) {
+            // this.$toast(res.msg)
+            // 拼团只有在进行中才会返回相关数据
+            // this.$dialog.confirm({
+            //   title: '提示',
+            //   message: `${res.msg}`,
+            //   showCancelButton:false,
+            //   confirmButtonText:'进店逛逛'
+            // }).then(() => {
+            //   // on confirm
+            //   this.$router.replace({path:'/home'})
+            // })
+            return
+          }
+
+          this.joiners = res.data.map(item => ({
+            nick: item.apiExtUserHelp.nick || '神秘用户',
+            avatarUrl: item.apiExtUserHelp.avatarUrl || `${require('@/assets/avatar_default.png')}`,
+            dateAdd: item.dateAdd,
+            uidHelp: item.uidHelp
+          }))
+          // 拼团剩余时间
+          const endTime = new Date(this.joiners[this.joiners.length - 1].dateAdd.replace(/-/g, '/')).getTime() + set.timeoutHours * 60 * 60 * 1000
+          this.endTime = endTime
+          this.countdownInit()
         })
       })
     },
-    checkIsmyPintuan(tuanId){
+    checkIsmyPintuan(tuanId) {
       // 判断是否是该用户参与的 拼团
-      this.$request.post('/shop/goods/pingtuan/my-join-list',{token:storage.get('token'),tuanId}).then(res => {
+      this.$request.post('/shop/goods/pingtuan/my-join-list', { token: storage.get('token'), tuanId }).then(res => {
         // 对已参团的情况暂时未处理，提交订单时后端会检查并提示，您已经参与本次团购，请勿重复下单
-        if(res.code === 700 ){
+        if (res.code === 700) {
           this.isMy = false
           this.orderId = ''
         }
-        if(res.code === 0){
+        if (res.code === 0) {
           this.orderId = res.data.result[0].buyInfo.orderId
           this.isMy = true
-          return;
+          return
         }
-        
-        
       })
     },
-    getGoodsDetail(id){
-      this.$request.get('/shop/goods/detail',{id}).then(res => {
+    getGoodsDetail(id) {
+      this.$request.get('/shop/goods/detail', { id }).then(res => {
         this.basicInfo = res.data.basicInfo
         this.properties = res.data.properties || []
 
         this.marketing.info.minPrice = this.basicInfo.pingtuanPrice
         this.marketing.info.originalPrice = this.basicInfo.originalPrice
 
-        if(this.pintuanStatus !== 2){
-          this.initSkuData(this.properties, this.basicInfo )
+        if (this.pintuanStatus !== 2) {
+          this.initSkuData(this.properties, this.basicInfo)
         }
       })
     },
@@ -301,16 +298,16 @@ export default {
       const endTime = this.endTime
       const gapTime = Math.ceil((endTime - Date.now()) / 1000)
       if (gapTime > 0) {
-        let lastTime = gapTime % 86400;
+        let lastTime = gapTime % 86400
         const day = Math.floor(gapTime / 86400)
         const hour = Math.floor(lastTime / 3600)
-        lastTime = lastTime % 3600;
+        lastTime = lastTime % 3600
         const minute = Math.floor(lastTime / 60)
         const second = Math.floor(lastTime % 60)
         // const countdown = `${day}天${hour}时${minute}分${second}秒`
         this.countdownInit()
-        const countdown = {day,hour,minute,second} 
-        for (const num in countdown) {  
+        const countdown = { day, hour, minute, second }
+        for (const num in countdown) {
           countdown[num] = formatNumber(countdown[num])
         }
         this.countdown = countdown
@@ -320,47 +317,45 @@ export default {
         this.$dialog.confirm({
           title: '提示',
           message: `该拼团活动已结束`,
-          showCancelButton:false,
-          confirmButtonText:'进店逛逛'
+          showCancelButton: false,
+          confirmButtonText: '进店逛逛'
         }).then(() => {
           // on confirm
-          this.$router.replace({path:'/home'})
+          this.$router.replace({ path: '/home' })
         })
       }
-
     },
-    onShowActions(){
+    onShowActions() {
       this.showActions = !this.showActions
     },
-    onSelect(item){
-      this.showActions = false;
-      if(item.name === '邀请好友成团'){ 
-        document.querySelector('.div1').click()  
+    onSelect(item) {
+      this.showActions = false
+      if (item.name === '邀请好友成团') {
+        document.querySelector('.div1').click()
       }
-      if(item.name === '生成邀请海报'){
-        this.$toast(JSON.stringify(item));
+      if (item.name === '生成邀请海报') {
+        this.$toast(JSON.stringify(item))
       }
     },
-    onClickOrder(orderId){
-      this.$router.push({path:'/order-detail',query:{id:orderId}})
-      
+    onClickOrder(orderId) {
+      this.$router.push({ path: '/order-detail', query: { id: orderId }})
     },
-    onClickGoods(){
-      // this.$router.push({path:'/goods-detail',query:{id:this.pintuanInfo.goodsId}}) 
-      if(this.marketing.info.time < Date.now()){ 
+    onClickGoods() {
+      // this.$router.push({path:'/goods-detail',query:{id:this.pintuanInfo.goodsId}})
+      if (this.marketing.info.time < Date.now()) {
         this.$toast('当前砍价活动已结束,去看看其他商品吧')
-        return;
+        return
       }
       this.showSku = !this.showSku
     },
-    onClickHome(){
-      this.$router.replace({path:'/home'})
+    onClickHome() {
+      this.$router.replace({ path: '/home' })
     },
     onBuyClicked(data) {
       // copy
       console.log(data)
       // 立即购买商品数据定义格式
-      let goodsInfo = []
+      const goodsInfo = []
       if (this.properties.length) {
         goodsInfo.push({
           id: `${Date.now()}`,
@@ -373,7 +368,7 @@ export default {
           name: this.basicInfo.name,
           characteristic: this.basicInfo.characteristic,
           pic: this.basicInfo.pic,
-          marketing:{},  // 商品活营销动相关数据都存在此对象下
+          marketing: {} // 商品活营销动相关数据都存在此对象下
         })
       } else {
         goodsInfo.push({
@@ -387,24 +382,24 @@ export default {
           name: this.basicInfo.name,
           characteristic: this.basicInfo.characteristic,
           pic: this.basicInfo.pic,
-          marketing:{},
+          marketing: {}
         })
       }
       // 拼团购买
-      if(this.marketing.type === 'pintuan'&&this.marketing.isBuy){
+      if (this.marketing.type === 'pintuan' && this.marketing.isBuy) {
         goodsInfo[0].price = this.marketing.info.minPrice
-        goodsInfo[0].marketing = {type:this.marketing.type,typeStr:this.marketing.info.title,pingtuanOpenId:this.currentPintuan.id ? this.currentPintuan.id : 0}
+        goodsInfo[0].marketing = { type: this.marketing.type, typeStr: this.marketing.info.title, pingtuanOpenId: this.currentPintuan.id ? this.currentPintuan.id : 0 }
       }
       sessionStorage.set('buyInfo', goodsInfo)
-      this.$router.push({ path: '/order-submit', query: { type: 'buy' } })
+      this.$router.push({ path: '/order-submit', query: { type: 'buy' }})
     },
-    onClickRule(){
-      this.$router.push({path:'/pintuan/rule'})
+    onClickRule() {
+      this.$router.push({ path: '/pintuan/rule' })
     },
     initSkuData(properties, basicInfo) {
       // copy
       // 商品规格sku数据
-      let tree = properties.map((item, index) => ({
+      const tree = properties.map((item, index) => ({
         k: item.name,
         k_id: item.id,
         v: item.childsCurGoods,
@@ -416,18 +411,18 @@ export default {
         title: basicInfo.name,
         picture: basicInfo.pic
       }
-      
-      this.skuData.goods_id = basicInfo.id  // 商品id
-      this.skuData.sku.price = basicInfo.minPrice.toFixed(2)  // 默认价格（单位元）
-      this.skuData.sku.stock_num = basicInfo.stores           // 商品总库存
+
+      this.skuData.goods_id = basicInfo.id // 商品id
+      this.skuData.sku.price = basicInfo.minPrice.toFixed(2) // 默认价格（单位元）
+      this.skuData.sku.stock_num = basicInfo.stores // 商品总库存
       this.skuData.sku.tree = tree
-      
+
       // 商品无规格
       if (tree.length === 0) {
         this.propTitle = ''
         this.skuData.none_sku = true
         // this.skuData.collection_id= 2261
-        return;
+        return
       }
 
       // 商品多个规格
@@ -437,59 +432,57 @@ export default {
          * 生成笛卡尔积
          * @returns {*}
          */
-        const descartes = function (array){
-          if( array.length < 2 ) return array[0] || [];
+        const descartes = function(array) {
+          if (array.length < 2) return array[0] || []
 
           return [].reduce.call(array, function(col, set) {
-            var res = [];
+            var res = []
             col.forEach(function(c) {
               set.forEach(function(s) {
-                  var t = [].concat( Array.isArray(c) ? c : [c] );
-                  t.push(s);
-                  res.push(t);
-            })});
-            return res;
-          });
-        } 
+                var t = [].concat(Array.isArray(c) ? c : [c])
+                t.push(s)
+                res.push(t)
+              })
+            })
+            return res
+          })
+        }
         const calc = descartes(Array.prototype.concat.apply([], tree.map(item => [item.v])))
-        this.skuData.sku.list = calc.map(item =>{
-          let obj = {
-            price: parseFloat((basicInfo.minPrice*100).toFixed(2)), // 价格（单位分）
-            stock_num: basicInfo.stores,  // 当前 sku 组合对应的库存
+        this.skuData.sku.list = calc.map(item => {
+          const obj = {
+            price: parseFloat((basicInfo.minPrice * 100).toFixed(2)), // 价格（单位分）
+            stock_num: basicInfo.stores // 当前 sku 组合对应的库存
           }
-          if(Array.isArray(item)){
+          if (Array.isArray(item)) {
             // 2种规格以上
-            item.forEach((v, i) =>{
+            item.forEach((v, i) => {
               obj[`s${i + 1}`] = v.id
-              obj.propertyChildIds = `${obj.propertyChildIds||''}${v.propertyId}:${v.id},`
-              obj.id = `${obj.id||''}${v.propertyId}${v.id}`
+              obj.propertyChildIds = `${obj.propertyChildIds || ''}${v.propertyId}:${v.id},`
+              obj.id = `${obj.id || ''}${v.propertyId}${v.id}`
             })
             return obj
-
-          }else{
-              // 只有一种规格的情况下 
-              obj['s1'] = item.id
-              obj.propertyChildIds = `${item.propertyId}:${item.id},`
-              obj.id = `${item.propertyId}${item.id}`
+          } else {
+            // 只有一种规格的情况下
+            obj['s1'] = item.id
+            obj.propertyChildIds = `${item.propertyId}:${item.id},`
+            obj.id = `${item.propertyId}${item.id}`
             return obj
           }
         })
       }
-
-    }, 
+    },
     onSkuSelected(data) {
       // copy
       console.log(data)
       if (data.selectedSkuComb) {
-        let title = []
+        const title = []
         this.properties.forEach((item, index) => {
-          let current = item.childsCurGoods.find(v => v.id === data.selectedSku[`s${index + 1}`])
+          const current = item.childsCurGoods.find(v => v.id === data.selectedSku[`s${index + 1}`])
           title.push(current.name)
         })
         this.propTitle = `已选 ${title.join(',')}`
         this.getGoodsPrice(this.basicInfo.id, data.selectedSkuComb.propertyChildIds, (res) => {
-
-          if(this.marketing.type === 'pintuan'){
+          if (this.marketing.type === 'pintuan') {
             this.marketing.info.minPrice = res.data.pingtuanPrice
             this.marketing.info.originalPrice = res.data.originalPrice
           }
@@ -498,8 +491,8 @@ export default {
           this.basicInfo.originalPrice = res.data.originalPrice
           this.basicInfo.pingtuanPrice = res.data.pingtuanPrice
           this.basicInfo.stores = res.data.stores
-          
-          data.selectedSkuComb.price = parseFloat((res.data.price*100).toFixed(2)) // 价格（单位分）
+
+          data.selectedSkuComb.price = parseFloat((res.data.price * 100).toFixed(2)) // 价格（单位分）
           data.selectedSkuComb.stock_num = res.data.stores
           data.selectedSkuComb.propertyChildIds = res.data.propertyChildIds
         })
@@ -517,8 +510,8 @@ export default {
         // this.$toast.clear()
       })
     },
-    handleClipboard(text,event){
-      clipboard(text,event)
+    handleClipboard(text, event) {
+      clipboard(text, event)
     }
   }
 }
@@ -559,11 +552,11 @@ export default {
   &-hd{
     text-align:center;
     font-size: 14px;
-    &-avatar{ 
+    &-avatar{
       .round-img(60px);
       margin:0 auto;
     }
-    &-nick{ 
+    &-nick{
       font-weight:bold;
     }
   }
@@ -572,7 +565,7 @@ export default {
     line-height: 28px;
     text-align:center;
   }
-  &-ft{ 
+  &-ft{
     .flex()
   }
   &-inner{
@@ -583,7 +576,7 @@ export default {
     align-items: flex-start;
     flex-direction: column;
   }
-  &-title{ 
+  &-title{
     font-size: 14px;
     margin-bottom:10px;
     max-width:170px;
@@ -604,7 +597,7 @@ export default {
     height:100px;
     border-radius:6px;
     overflow:hidden;
-  } 
+  }
 }
 .section{
   position: relative;
@@ -658,7 +651,7 @@ export default {
   padding:12px 0;
   font-size: 14px;
 }
-.btn-danger{  
+.btn-danger{
   color:#fff;
   background:linear-gradient(309deg,rgba(255,112,61,1) 0%,rgba(255,70,57,1) 100%);
   animation: heartBeat 1s ease infinite;
@@ -684,7 +677,7 @@ export default {
   font-size: 10px;
   color:#fff;
   background:linear-gradient(309deg,rgba(255,112,61,1) 0%,rgba(255,70,57,1) 100%);
-} 
+}
 
 .color-red{
   color:#E60012;

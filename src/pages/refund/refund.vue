@@ -1,7 +1,7 @@
 <template>
   <div class="contaienr">
     <van-list class="list" v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onListLoad">
-      <div class="list-item"  v-for="item in list" :key="item.id" > 
+      <div class="list-item"  v-for="item in list" :key="item.id" >
         <van-panel class="panel" :title="'订单编号：'+item.orderNumber" :status="item.statusStr">
           <template slot="default">
             <router-link :to="'/order-detail?id='+item.id">
@@ -26,7 +26,7 @@
               <div class="panel-button panel-button-danger">申请售后</div>
             </router-link>
           </div>
-        </van-panel> 
+        </van-panel>
       </div>
     </van-list>
   </div>
@@ -34,13 +34,13 @@
 
 <script>
 import { Card, Panel, List } from 'vant'
-import { storage  } from '@/common/util'
+import { storage } from '@/common/util'
 
 export default {
   components: {
     [Card.name]: Card,
     [Panel.name]: Panel,
-    [List.name]: List,
+    [List.name]: List
   },
   data() {
     return {
@@ -50,15 +50,15 @@ export default {
       pageSize: 10,
       loading: false,
       finished: false,
-      finishedTxt:'没有更多了'
+      finishedTxt: '没有更多了'
     }
   },
   created() {
-    
+
   },
   methods: {
     onListLoad() {
-      this.getOrderList('',this.page++,this.pageSize)
+      this.getOrderList('', this.page++, this.pageSize)
     },
     getOrderList(status = '', page = this.page, pageSize = this.pageSize) {
       // 订单状态，-1 已关闭 0 待支付 1 已支付待发货 2 已发货待确认 3 确认收货待评价 4 已评价
@@ -66,28 +66,27 @@ export default {
         token: storage.get('token'),
         status,
         page,
-        pageSize,
+        pageSize
 
       }
       this.$request.post('/order/list', params).then(res => {
-        if(res.code === 404){
+        if (res.code === 404) {
           this.loading = false
           this.finished = true
           this.finishedTxt = page > 1 ? '暂无数据' : '没有更多了'
-          return;
-        } 
-        if (res.code !== 0) { 
-          this.$toast(res.msg)
-          return;
+          return
         }
-        
-        let list = res.data.orderList.filter(item => item.status > 0)
-        list.forEach(item => this.goodsMap[item.id] = res.data.goodsMap[item.id] )
+        if (res.code !== 0) {
+          this.$toast(res.msg)
+          return
+        }
+
+        const list = res.data.orderList.filter(item => item.status > 0)
+        list.forEach(item => { this.goodsMap[item.id] = res.data.goodsMap[item.id] })
         this.list = this.list.concat(list)
 
         this.loading = false
         this.finishedTxt = '没有更多了'
-        
       })
     }
   }
@@ -139,5 +138,4 @@ export default {
   display: none;
 }
 </style>
-
 

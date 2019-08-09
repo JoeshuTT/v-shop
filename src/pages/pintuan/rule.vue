@@ -29,16 +29,13 @@ export default {
   }
   b{
     font-size: 16px;
-    margin-bottom:5px; 
+    margin-bottom:5px;
   }
   ul{
-    margin-bottom:10px; 
+    margin-bottom:10px;
   }
   p {
     margin-bottom:10px;
   }
 </style>
-
-
-
 

@@ -12,7 +12,7 @@
         </div>
       </div>
       <van-steps :active="active">
-        <van-step v-for="(v,i) in steps" :key="i">{{v}}</van-step> 
+        <van-step v-for="(v,i) in steps" :key="i">{{v}}</van-step>
       </van-steps>
     </div>
     <div class="header van-hairline--bottom"
@@ -108,8 +108,8 @@
       <div class="affix-bar__bar">
         <van-cell icon="service-o" value="联系客服" class="affix-bar__left" />
 <div class="affix-bar__inner" v-if="orderInfo.status === 0 || orderInfo.status === 2">
-            <van-button v-if="orderInfo.status === 0" class="ml5" plain round size="small" type="default" @click="onCancelOrder">取消订单</van-button> 
-          <van-button v-if="orderInfo.status === 0" class="ml5" round size="small" type="danger" @click="onPayOrder">立即付款</van-button> 
+            <van-button v-if="orderInfo.status === 0" class="ml5" plain round size="small" type="default" @click="onCancelOrder">取消订单</van-button>
+          <van-button v-if="orderInfo.status === 0" class="ml5" round size="small" type="danger" @click="onPayOrder">立即付款</van-button>
           <van-button v-if="orderInfo.status === 2" class="ml5"
           round
           size="small"
@@ -171,13 +171,13 @@ export default {
     [Step.name]: Step,
     [Steps.name]: Steps,
     [Rate.name]: Rate,
-    [Field.name]: Field,
+    [Field.name]: Field
   },
   data() {
     return {
-      extJson:{},  // 扩展对象
-      marketing:{},
-      steps:['买家付款','商家发货','交易完成'],
+      extJson: {}, // 扩展对象
+      marketing: {},
+      steps: ['买家付款', '商家发货', '交易完成'],
       orderInfo: {},
       goods: [],
       logistics: {},
@@ -186,8 +186,8 @@ export default {
       visible: false,
       rateValue: 5,
       // reputation:2,   // 0 差评 1 中评 2 好评
-      rateRemark: '',  // 评价备注，限200字符
-      closeTime:0,
+      rateRemark: '', // 评价备注，限200字符
+      closeTime: 0
     }
   },
   computed: {
@@ -197,19 +197,19 @@ export default {
         switch (this.rateValue) {
           case 1:
             value = 0
-            break;
+            break
           case 2:
             value = 1
-            break;
+            break
           case 3:
             value = 1
-            break;
+            break
           case 4:
             value = 2
-            break;
+            break
           case 5:
             value = 2
-            break;
+            break
           default:
             value = 2
         }
@@ -218,7 +218,7 @@ export default {
       set() {
         this.rateValue = 3
       }
-    },
+    }
   },
   created() {
     this.getOrderDetail(this.$route.query.id)
@@ -230,25 +230,25 @@ export default {
     onShowPopup() {
       this.visible = !this.visible
     },
-    onRefundOrder(){
-      // 
-      this.$router.push({path:'refund-apply',query:{orderId:this.orderInfo.id,amount:this.orderInfo.amount}})
+    onRefundOrder() {
+      //
+      this.$router.push({ path: 'refund-apply', query: { orderId: this.orderInfo.id, amount: this.orderInfo.amount }})
     },
     onDeliveryOrder() {
       this.$dialog.confirm({
         title: '提示',
-        message: '确认您已收到商品？',
+        message: '确认您已收到商品？'
       }).then(() => {
         // on confirm
         this.$toast.loading({
           mask: true,
           message: '加载中...',
-          duration: 0,
+          duration: 0
         })
         this.$request.post('/order/delivery', { orderId: this.orderInfo.id, token: storage.get('token') }).then(res => {
           if (res.code !== 0) {
             this.$toast(res.msg)
-            return;
+            return
           }
           this.$router.go(-1)
           this.$toast({ message: '收货成功!', duration: 1500 })
@@ -256,7 +256,6 @@ export default {
       }).catch(() => {
         // on cancel
       })
-
     },
     onCancelOrder() {
       const orderId = this.orderInfo.id
@@ -270,7 +269,7 @@ export default {
         this.$toast.loading({
           mask: true,
           message: '加载中...',
-          duration: 0,
+          duration: 0
         })
         this.$request.post('/order/close', { orderId, token: storage.get('token') }).then(res => {
           console.log(`/order/close：${JSON.stringify(res)}`)
@@ -279,42 +278,42 @@ export default {
         })
       }).catch(() => {
         // on cancel
-      });
+      })
     },
-    onPayOrder() { 
+    onPayOrder() {
       const orderId = this.orderInfo.id
       // const amountReal = this.orderInfo.amountReal
       this.$toast.loading({
         mask: true,
         message: '支付提交中',
-        duration:0,
+        duration: 0
       })
-      pay_balance(orderId, storage.get('token')).then(res=>{
-        if(res.code === 0){
+      pay_balance(orderId, storage.get('token')).then(res => {
+        if (res.code === 0) {
           this.$toast.clear()
-          this.$router.replace({path:'/order-detail',query:{id:this.orderInfo.id}})
-        }else{
+          this.$router.replace({ path: '/order-detail', query: { id: this.orderInfo.id }})
+        } else {
           this.$toast(res.msg)
         }
       })
     },
     onSubmitRate() {
-      let rateArray = this.goods.map(item => ({ id: item.id, reputation: this.reputation, remark: this.rateRemark }))
+      const rateArray = this.goods.map(item => ({ id: item.id, reputation: this.reputation, remark: this.rateRemark }))
       const params = {
         token: storage.get('token'),
         orderId: this.orderInfo.id,
-        reputations: rateArray,
+        reputations: rateArray
       }
 
       this.$toast.loading({
         mask: true,
         message: '加载中...',
-        duration: 0,
+        duration: 0
       })
       this.$request.post('/order/reputation', { postJsonString: JSON.stringify(params) }).then(res => {
         if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
+          return
         }
         this.$router.go(-1)
         this.$toast({ message: '评价成功!', duration: 1500 })
@@ -325,10 +324,10 @@ export default {
       this.$request.get('/order/detail', { token: storage.get('token'), id }).then(res => {
         if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
+          return
         }
         this.extJson = res.data.extJson
-        this.marketing = res.data.extJson.marketing  || {}  // 兼容旧代码未增商品营销活动
+        this.marketing = res.data.extJson.marketing || {} // 兼容旧代码未增商品营销活动
         this.orderInfo = res.data.orderInfo
         this.goods = res.data.goods
         // 商品设置了物流模板才会有地址信息
@@ -341,26 +340,25 @@ export default {
           this.active = this.orderInfo.status - 1
         }
         if (this.orderInfo.status === 0 && this.orderInfo.dateClose) {
-          let last = Date.now()
-          let close = new Date(this.orderInfo.dateClose.replace(/-/g, '/')).getTime()
-          if(close>last){
-            this.closeTime = Math.floor((close-last)/1000/60)
+          const last = Date.now()
+          const close = new Date(this.orderInfo.dateClose.replace(/-/g, '/')).getTime()
+          if (close > last) {
+            this.closeTime = Math.floor((close - last) / 1000 / 60)
           }
         }
         // 拼团
-        if(this.orderInfo.pingtuanOpenId){
-          this.steps = ['买家付款','已成团','商家发货','交易完成']
-          if(this.orderInfo.status > 1){
-              this.active = this.orderInfo.status
-            }else{
-              this.active = this.orderInfo.isSuccessPingtuan ? 1 : 0
+        if (this.orderInfo.pingtuanOpenId) {
+          this.steps = ['买家付款', '已成团', '商家发货', '交易完成']
+          if (this.orderInfo.status > 1) {
+            this.active = this.orderInfo.status
+          } else {
+            this.active = this.orderInfo.isSuccessPingtuan ? 1 : 0
           }
         }
-        
       })
     },
-    handleClipboard(text,event){
-      clipboard(text,event)
+    handleClipboard(text, event) {
+      clipboard(text, event)
     }
   }
 }
@@ -646,5 +644,4 @@ export default {
     }
   }
 </style>
-
 

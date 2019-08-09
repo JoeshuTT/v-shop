@@ -1,4 +1,4 @@
-import { Toast } from 'vant';
+import { Toast } from 'vant'
 import Clipboard from 'clipboard'
 function clipboardSuccess() {
   Toast({

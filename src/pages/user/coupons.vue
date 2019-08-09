@@ -7,7 +7,7 @@
       <van-loading type="spinner" size="24px" class="ui-center">加载中...</van-loading>
     </template>
     <template v-else>
-      <div class="list" v-if="list.length"> 
+      <div class="list" v-if="list.length">
         <div class="list-item" v-for="item in list" :key="item.id">
           <div class="list-item-hd">
             <div class="list-item-hd-money">￥<span class="fz24">{{item.money}}</span></div>
@@ -21,12 +21,12 @@
             <div class="list-item-bd-actions">
               <van-button plain round size="small" :type="active?'default':'danger'" :disabled="!!active" @click="onCouponClicked">{{tabs[active].buttonTxt}}</van-button>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
       <div class="no-data" v-else>
         <van-loading text-size="16" class="ui-center">暂无数据</van-loading>
-      </div> 
+      </div>
     </template>
   </div>
 </template>
@@ -39,18 +39,18 @@ export default {
   components: {
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
-    [Loading.name]: Loading,
+    [Loading.name]: Loading
   },
   data() {
     return {
       tabs: [
         { name: '未使用', status: '0', buttonTxt: '立即使用' },
         { name: '已使用', status: '3', buttonTxt: '已使用' },
-        { name: '已过期', status: '2', buttonTxt: '已过期' },
+        { name: '已过期', status: '2', buttonTxt: '已过期' }
       ],
       active: 0,
       list: [],
-      loadingSpinner: true,
+      loadingSpinner: true
     }
   },
   filters: {
@@ -62,7 +62,7 @@ export default {
     this.getMyDiscounts(this.tabs[this.active].status)
   },
   methods: {
-    onClick: debounce(function (index) {
+    onClick: debounce(function(index) {
       this.getMyDiscounts(this.tabs[index].status)
     }, 300),
     onCouponClicked() {
@@ -75,11 +75,11 @@ export default {
         if (res.code !== 0) {
           // this.$toast(res.msg)
           this.list = []
-          return;
+          return
         }
         this.list = res.data
       })
-    },
+    }
   }
 }
 </script>
@@ -140,5 +140,4 @@ export default {
   }
 }
 </style>
-
 

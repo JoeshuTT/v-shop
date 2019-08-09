@@ -105,8 +105,8 @@ const routes = [
     }
   },
   {
-    name: 'setting', 
-    path: '/setting', 
+    name: 'setting',
+    path: '/setting',
     component: () => import('@/pages/user/setting'),
     meta: {
       title: '我的资料'
@@ -174,7 +174,7 @@ const routes = [
     component: () => import('@/pages/kanjia/kanjia'),
     meta: {
       title: '砍价购'
-    },
+    }
   },
   {
     name: 'kanjia-rule',
@@ -182,7 +182,7 @@ const routes = [
     component: () => import('@/pages/kanjia/rule'),
     meta: {
       title: '玩法详情'
-    },
+    }
   },
   {
     name: 'test',
@@ -190,7 +190,7 @@ const routes = [
     component: () => import('@/pages/test/index'),
     meta: {
       title: '测试'
-    },
+    }
   },
   {
     name: '404',
@@ -203,11 +203,10 @@ const routes = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
-
 const router = new Router({
   mode: 'history',
   routes,
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
     } else {
@@ -224,6 +223,5 @@ router.beforeEach((to, from, next) => {
   }
   next()
 })
-
 
 export default router

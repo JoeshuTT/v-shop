@@ -18,13 +18,13 @@ import { isEmpty } from '@/common/validate'
 
 export default {
   components: {
-    [AddressEdit.name]: AddressEdit,
+    [AddressEdit.name]: AddressEdit
   },
   data() {
     return {
-      status: 0,  // 0添加地址,1修改地址
+      status: 0, // 0添加地址,1修改地址
       addressInfo: {},
-      areaList:areaList,
+      areaList: areaList,
       searchResult: []
     }
   },
@@ -42,7 +42,7 @@ export default {
           addressDetail: res.data.address,
           postalCode: res.data.code,
           areaCode: res.data.districtId,
-          isDefault: res.data.isDefault,
+          isDefault: res.data.isDefault
         }
       })
     }
@@ -52,12 +52,12 @@ export default {
       console.log(form)
       if (isEmpty(form.postalCode)) {
         this.$toast('请填写邮政编码')
-        return;
+        return
       }
       this.updateAddress(form)
     },
     updateAddress(form) {
-      let addressAction = 'update', params = {}
+      let addressAction = 'update'; let params = {}
       this.$route.query.id ? addressAction = 'update' : addressAction = 'add'
       params = {
         id: this.$route.query.id,
@@ -69,7 +69,7 @@ export default {
         provinceId: form.areaCode.slice(0, 2) + '0000',
         cityId: form.areaCode.slice(0, 4) + '00',
         districtId: form.areaCode,
-        code: form.postalCode,
+        code: form.postalCode
       }
       this.$toast.loading({
         mask: true,
@@ -80,7 +80,7 @@ export default {
         // 已参团不做处理，提交订单时后端会提示
         if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
+          return
         }
         this.$toast.clear()
         this.$router.go(-1)
@@ -95,7 +95,6 @@ export default {
       this.$request.post('/user/shipping-address/delete', params).then(res => {
         if (res.code !== 0) {
           this.$toast(res.msg)
-
         }
         this.$toast.clear()
         this.$router.go(-1)
@@ -104,15 +103,13 @@ export default {
     onDelete() {
       this.deleteAddress({
         token: storage.get('token'),
-        id: this.addressInfo.id,
+        id: this.addressInfo.id
       })
-
-    },
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
 </style>
-
 

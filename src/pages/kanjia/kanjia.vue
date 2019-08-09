@@ -1,6 +1,6 @@
 <template>
   <div class="container bgf">
-    <div class="header"> 
+    <div class="header">
       <div class="header-label" @click="onClickRule">玩法详情</div>
       <div class="header-hd">
         <div class="header-hd-avatar"><img :src="joiner.avatarUrl" alt=""></div>
@@ -74,15 +74,15 @@
         </div>
       </template>
       <div class="btn-group" v-if="isMy">
-        <div class="btn-danger" v-if="kanjiaInfo.status === 0" @click="onShowActions">邀请好友帮忙砍</div> 
-        <div class="btn-outline" v-if="kanjiaInfo.status === 1" @click="onClickGoods">查看其他商品</div> 
-        <div class="btn-danger" v-if="kanjiaInfo.status === 2" @click="onClickBuy">{{kanjiaSet.minPrice}}元直接购买</div> 
+        <div class="btn-danger" v-if="kanjiaInfo.status === 0" @click="onShowActions">邀请好友帮忙砍</div>
+        <div class="btn-outline" v-if="kanjiaInfo.status === 1" @click="onClickGoods">查看其他商品</div>
+        <div class="btn-danger" v-if="kanjiaInfo.status === 2" @click="onClickBuy">{{kanjiaSet.minPrice}}元直接购买</div>
       </div>
       <div class="btn-group" v-else>
         <div class="btn-warning" @click="onClickKanjiaGoods">我也要砍价拿</div>
         <template v-if="kanjiaInfo.status === 0">
           <div class="btn-gray ml10" v-if="kanjiaHelp.uid">已砍过此商品</div>
-          <div class="btn-danger ml10" @click="onhelpKanjia" v-else>帮好友砍一刀</div> 
+          <div class="btn-danger ml10" @click="onhelpKanjia" v-else>帮好友砍一刀</div>
         </template>
       </div>
     </div>
@@ -120,139 +120,135 @@
   </div>
 </template>
 <script>
-var timer;
+var timer
 
-import {storage, sessionStorage } from '@/common/util'
+import { storage, sessionStorage } from '@/common/util'
 import { ActionSheet } from 'vant'
 import clipboard from '@/common/clipboard'
 
 export default {
-  components:{
-    [ActionSheet.name]: ActionSheet,
+  components: {
+    [ActionSheet.name]: ActionSheet
   },
   data() {
-    return { 
-      pageTitle:'发现一个好货，快来邀请好友砍价吧',
-      pageLink:window.location.href,
-      isMy:true,  // 是否由该用户发起砍价
-      countdown:{},
-      endTime:'',
-      progressWidth:0,
+    return {
+      pageTitle: '发现一个好货，快来邀请好友砍价吧',
+      pageLink: window.location.href,
+      isMy: true, // 是否由该用户发起砍价
+      countdown: {},
+      endTime: '',
+      progressWidth: 0,
       showPopup: false,
       showActions: false,
       actions: [
-        { name: '邀请好友帮砍',subname: '复制页面链接'},
+        { name: '邀请好友帮砍', subname: '复制页面链接' },
         { name: '生成邀请海报', subname: '待开发' }
       ],
-      goodsInfo:{},
-      kanjiaInfo:{},
-      kanjiaSet:{},
-      kanjiaHelp:{},
-      joiner:{},
-      helps:[],
+      goodsInfo: {},
+      kanjiaInfo: {},
+      kanjiaSet: {},
+      kanjiaHelp: {},
+      joiner: {},
+      helps: []
     }
   },
-  filters:{
-    numberFormat(val){
+  filters: {
+    numberFormat(val) {
       return parseFloat(Number(val).toFixed(2))
     },
-    priceFormat(val){
+    priceFormat(val) {
       return parseFloat(Number(val)).toFixed(2)
     }
   },
   created() {
-    this.getKanjiaInfo(this.$route.query.joiner,this.$route.query.kjid)
-    
+    this.getKanjiaInfo(this.$route.query.joiner, this.$route.query.kjid)
   },
-  mounted() { 
-    
+  mounted() {
+
   },
-  beforeDestroy(){
+  beforeDestroy() {
     clearTimeout(timer)
   },
   methods: {
-    getKanjiaInfo(joiner,kjid,callbak=()=>{}){
-      this.$request.get('/shop/goods/kanjia/info',{joiner,kjid}).then(res => {
-        if(res.code !== 0){
+    getKanjiaInfo(joiner, kjid, callbak = () => {}) {
+      this.$request.get('/shop/goods/kanjia/info', { joiner, kjid }).then(res => {
+        if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
-        } 
-        this.kanjiaInfo = res.data.kanjiaInfo 
-        // res.data.kanjiaInfo.status  0 进行中，1 无效， 2 完成 
-        this.joiner = {
-          nick:res.data.joiner.nick || '神秘用户',
-          avatarUrl:res.data.joiner.avatarUrl || `${require('@/assets/avatar_default.png')}`,
+          return
         }
-        this.helps = res.data.helps.map(item =>({
-          cutPrice:item.cutPrice,
-          nick:item.nick || '神秘用户',
-          avatarUrl:item.avatarUrl || `${require('@/assets/avatar_default.png')}`,
+        this.kanjiaInfo = res.data.kanjiaInfo
+        // res.data.kanjiaInfo.status  0 进行中，1 无效， 2 完成
+        this.joiner = {
+          nick: res.data.joiner.nick || '神秘用户',
+          avatarUrl: res.data.joiner.avatarUrl || `${require('@/assets/avatar_default.png')}`
+        }
+        this.helps = res.data.helps.map(item => ({
+          cutPrice: item.cutPrice,
+          nick: item.nick || '神秘用户',
+          avatarUrl: item.avatarUrl || `${require('@/assets/avatar_default.png')}`
         }))
 
-        if(this.kanjiaInfo.uid !== storage.get('uid')){
+        if (this.kanjiaInfo.uid !== storage.get('uid')) {
           // 检查是否由该用户发起砍价
           this.isMy = false
           this.pageTitle = '朋友一生一起走，帮砍一刀有没有'
         }
-        
 
-        this.$request.get('/shop/goods/kanjia/set',{goodsId:this.kanjiaInfo.goodsId}).then(res => {
-          if(res.code === 700){
+        this.$request.get('/shop/goods/kanjia/set', { goodsId: this.kanjiaInfo.goodsId }).then(res => {
+          if (res.code === 700) {
             // this.kanjiaInfo.status = 1
             this.$dialog.confirm({
               title: '提示',
               message: '砍价活动已结束,去看看其他商品吧！',
-              showCancelButton:false,
+              showCancelButton: false
             }).then(() => {
               // on confirm
-              this.$router.replace({path:'/home'})
+              this.$router.replace({ path: '/home' })
             })
-            return;
+            return
           }
-          if(res.code !== 0){
+          if (res.code !== 0) {
             this.$toast(res.msg)
-            return;
+            return
           }
           const set = res.data
           this.kanjiaSet = res.data
-          const time = +new Date(res.data.dateEnd.replace(/-/g,'/'))
+          const time = +new Date(res.data.dateEnd.replace(/-/g, '/'))
 
           this.marketing = {
-            type:'kanjia',
+            type: 'kanjia',
             set,
-            isBuy:true,
-            info:{
-              title:'砍价',
+            isBuy: true,
+            info: {
+              title: '砍价',
               time,
-              label:'砍价享',
-              minPrice:this.kanjiaSet.minPrice,
-              originalPrice:this.kanjiaSet.originalPrice,
-            },
+              label: '砍价享',
+              minPrice: this.kanjiaSet.minPrice,
+              originalPrice: this.kanjiaSet.originalPrice
+            }
           }
 
           this.countdownInit()
-          this.$nextTick(()=>{
-            const barWidth = this.$refs.progressBar.clientWidth 
-            const diff = this.kanjiaSet.originalPrice-this.kanjiaInfo.curPrice
-            this.progressWidth = parseFloat((diff/(this.kanjiaSet.originalPrice-this.kanjiaSet.minPrice) *barWidth).toFixed(2))
+          this.$nextTick(() => {
+            const barWidth = this.$refs.progressBar.clientWidth
+            const diff = this.kanjiaSet.originalPrice - this.kanjiaInfo.curPrice
+            this.progressWidth = parseFloat((diff / (this.kanjiaSet.originalPrice - this.kanjiaSet.minPrice) * barWidth).toFixed(2))
           })
-          
-        }) 
+        })
         this.getGoodsDetail(this.kanjiaInfo.goodsId)
 
-        this.$request.get('/shop/goods/kanjia/myHelp',{token:storage.get('token'),joinerUser:joiner,kjid}).then(res => {
+        this.$request.get('/shop/goods/kanjia/myHelp', { token: storage.get('token'), joinerUser: joiner, kjid }).then(res => {
           // 检查该用户是否帮忙砍过价
-          if(res.code === 0 ){
+          if (res.code === 0) {
             this.kanjiaHelp = res.data
           }
           callbak()
         })
-        
       })
     },
-    getGoodsDetail(id){
-      this.$request.get('/shop/goods/detail',{id}).then(res => {
-          this.goodsInfo = res.data.basicInfo
+    getGoodsDetail(id) {
+      this.$request.get('/shop/goods/detail', { id }).then(res => {
+        this.goodsInfo = res.data.basicInfo
       })
     },
     countdownInit() {
@@ -268,16 +264,16 @@ export default {
       const endTime = this.marketing.info.time
       const gapTime = Math.ceil((endTime - Date.now()) / 1000)
       if (gapTime > 0) {
-        let lastTime = gapTime % 86400;
+        let lastTime = gapTime % 86400
         const day = Math.floor(gapTime / 86400)
         const hour = Math.floor(lastTime / 3600)
-        lastTime = lastTime % 3600;
+        lastTime = lastTime % 3600
         const minute = Math.floor(lastTime / 60)
         const second = Math.floor(lastTime % 60)
         // const countdown = `${day}天${hour}时${minute}分${second}秒`
         this.countdownInit()
-        const countdown = {day,hour,minute,second} 
-        for (const num in countdown) {  
+        const countdown = { day, hour, minute, second }
+        for (const num in countdown) {
           countdown[num] = formatNumber(countdown[num])
         }
         this.countdown = countdown
@@ -286,52 +282,51 @@ export default {
         this.countdown.tips = '倒计时结束'
         this.kanjiaInfo.status = 1
       }
-
     },
-    onShowPopup(){
+    onShowPopup() {
       this.showPopup = !this.showPopup
     },
-    onShowActions(){
+    onShowActions() {
       // this.$router.push({path:'/kanjia/rule'})
       this.showActions = !this.showActions
     },
-    onSelect(item){
-      this.showActions = false;
-      if(item.name === '邀请好友帮砍'){ 
-        document.querySelector('.div1').click()  
+    onSelect(item) {
+      this.showActions = false
+      if (item.name === '邀请好友帮砍') {
+        document.querySelector('.div1').click()
       }
-      if(item.name === '生成邀请海报'){
+      if (item.name === '生成邀请海报') {
         this.$toast(JSON.stringify(item))
       }
     },
-    onClickKanjiaGoods(){
-      this.$router.push({path:'/goods-detail',query:{id:this.kanjiaInfo.goodsId}})
+    onClickKanjiaGoods() {
+      this.$router.push({ path: '/goods-detail', query: { id: this.kanjiaInfo.goodsId }})
     },
-    onClickGoods(){
-      this.$router.push({path:'/home'})
+    onClickGoods() {
+      this.$router.push({ path: '/home' })
     },
-    onClickBuy(){
-      let goodsInfo = []
+    onClickBuy() {
+      const goodsInfo = []
       goodsInfo.push({
-          id: `${Date.now()}`,
-          goodsId: this.goodsInfo.id,
-          propertyChildIds: '',
-          propTitle: '',
-          price: this.kanjiaSet.minPrice,
-          selectedNum: 1,
-          messages: '',
-          name: this.goodsInfo.name,
-          characteristic: this.goodsInfo.characteristic,
-          pic: this.goodsInfo.pic,
-          marketing:{type:this.marketing.type,typeStr:this.marketing.info.title,kjid:this.kanjiaInfo.kjId}
+        id: `${Date.now()}`,
+        goodsId: this.goodsInfo.id,
+        propertyChildIds: '',
+        propTitle: '',
+        price: this.kanjiaSet.minPrice,
+        selectedNum: 1,
+        messages: '',
+        name: this.goodsInfo.name,
+        characteristic: this.goodsInfo.characteristic,
+        pic: this.goodsInfo.pic,
+        marketing: { type: this.marketing.type, typeStr: this.marketing.info.title, kjid: this.kanjiaInfo.kjId }
       })
       sessionStorage.set('buyInfo', goodsInfo)
-      this.$router.push({ path: '/order-submit', query: { type: 'buy' } })
+      this.$router.push({ path: '/order-submit', query: { type: 'buy' }})
     },
-    onClickRule(){
-      this.$router.push({path:'/kanjia/rule'})
+    onClickRule() {
+      this.$router.push({ path: '/kanjia/rule' })
     },
-    onhelpKanjia(){
+    onhelpKanjia() {
       const kjid = this.kanjiaInfo.kjId
       const joinerUser = this.kanjiaInfo.uid
       this.$toast.loading({
@@ -339,19 +334,19 @@ export default {
         message: '加载中...',
         duration: 0
       })
-      this.$request.get('/shop/goods/kanjia/help',{token:storage.get('token'),joinerUser,kjid}).then(res => {
-        if(res.code === 0 ){ 
-          this.getKanjiaInfo(this.$route.query.joiner,this.$route.query.kjid,()=>{
+      this.$request.get('/shop/goods/kanjia/help', { token: storage.get('token'), joinerUser, kjid }).then(res => {
+        if (res.code === 0) {
+          this.getKanjiaInfo(this.$route.query.joiner, this.$route.query.kjid, () => {
             this.$toast.clear()
             this.onShowPopup()
-            })
-        }else{
+          })
+        } else {
           this.$toast(res.msg)
         }
       })
     },
-    handleClipboard(text,event){
-      clipboard(text,event)
+    handleClipboard(text, event) {
+      clipboard(text, event)
     }
   }
 }
@@ -392,11 +387,11 @@ export default {
   &-hd{
     text-align:center;
     font-size: 14px;
-    &-avatar{ 
+    &-avatar{
       .round-img(60px);
       margin:0 auto;
     }
-    &-nick{ 
+    &-nick{
       font-weight:bold;
     }
   }
@@ -405,7 +400,7 @@ export default {
     line-height: 28px;
     text-align:center;
   }
-  &-ft{ 
+  &-ft{
     .flex()
   }
   &-inner{
@@ -416,7 +411,7 @@ export default {
     align-items: flex-start;
     flex-direction: column;
   }
-  &-title{ 
+  &-title{
     font-size: 14px;
     margin-bottom:10px;
     p{
@@ -436,7 +431,7 @@ export default {
     height:100px;
     border-radius:6px;
     overflow:hidden;
-  } 
+  }
 }
 .section{
   position: relative;
@@ -488,9 +483,9 @@ export default {
   .progress-bar{
     flex:1;
     height:8px;
-    margin:0 10px; 
+    margin:0 10px;
     background:rgba(255,112,61,.3);
-    border-radius:4px; 
+    border-radius:4px;
     &__portion{
       position: relative;
       height:8px;
@@ -540,7 +535,7 @@ export default {
   padding:12px 0;
   font-size: 14px;
 }
-.btn-danger{  
+.btn-danger{
   color:#fff;
   background:linear-gradient(309deg,rgba(255,112,61,1) 0%,rgba(255,70,57,1) 100%);
   animation: heartBeat 1s ease infinite;
@@ -588,13 +583,13 @@ export default {
       overflow: hidden;
       border-radius:50%;
     }
-    &-hd{ 
+    &-hd{
       flex:1;
       width: 0;
     }
     &-bd{
       font-size: 12px;
-      
+
     }
   }
 }

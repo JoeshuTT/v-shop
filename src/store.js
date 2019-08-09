@@ -11,13 +11,13 @@ const store = new Vuex.Store({
       desc: '一个前端基于vue，后端使用api 工厂提供的免费接口和云后台实现的移动端商城'
     },
     defaultAddress: {},
-    userInfo:{
+    userInfo: {
       avatarUrl: '',
-      nick:'',
-      province:'',
-      city:'',
-      mobile:'',
-    },
+      nick: '',
+      province: '',
+      city: '',
+      mobile: ''
+    }
   },
   mutations: {
     increment(state) {
@@ -27,8 +27,8 @@ const store = new Vuex.Store({
       state.defaultAddress = address
     },
     updateUserInfo(state, userInfo) {
-      state.userInfo = Object.assign(state.userInfo,userInfo)
-    },
+      state.userInfo = Object.assign(state.userInfo, userInfo)
+    }
   }
 })
 export default store

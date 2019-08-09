@@ -121,19 +121,4 @@ css: {
   }
 }
 ```
-## Histosy 配置
 
-路由模式修改
-```
-// router.js
-const router = new VueRouter({
-  mode: 'history',
-  routes: [...]
-})
-```
-nginx 加上
-```
-location / {
-  try_files $uri $uri/ /index.html;
-}
-```

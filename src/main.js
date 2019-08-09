@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 Vue.config.productionTip = false
 
-import 'vant/lib/index.css';
+import 'vant/lib/index.css'
 import request from './common/request'
 import './common/flexible'
 
@@ -19,13 +19,13 @@ Vue.prototype.$dialog = Dialog
 Vue.prototype.$request = request
 
 router.beforeEach((to, from, next) => {
-  // 统计代码 
-  window._hmt.push(['_trackPageview', to.fullPath]);
-  next();
-});
+  // 统计代码
+  window._hmt.push(['_trackPageview', to.fullPath])
+  next()
+})
 
 new Vue({
   store,
   router,
-  render: h => h(App),
+  render: h => h(App)
 }).$mount('#app')

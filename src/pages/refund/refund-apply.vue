@@ -8,7 +8,7 @@
     </div>
     <div class="main">
       <van-radio-group v-model="type" >
-        <van-cell-group title="选择服务类型"> 
+        <van-cell-group title="选择服务类型">
           <van-cell :title="item.name" @click="onChangeType(item.value)" v-for="(item,index ) in typeItems" :key="index">
             <van-radio :name="item.value" checked-color="#ff703d" />
           </van-cell>
@@ -42,13 +42,13 @@
         placeholder="请输入退款说明"
         rows="1"
         autosize
-      /> 
+      />
       <!-- 上传图片(空间有限省略) -->
     <div class="affix-bar">
       <div class="affix-bar__bar">
         <template v-if="refundApplyInfo.baseInfo">
-          <van-button v-if="refundApplyInfo.baseInfo.status === 0" square size="large" type="danger" @click="onRefundApplyCancel">撤回本次申请</van-button> 
-          <van-button v-if="refundApplyInfo.baseInfo.status === 2" square size="large" type="danger" @click="onRefundApplyCancel">本次申请已拒绝，请联系客服</van-button> 
+          <van-button v-if="refundApplyInfo.baseInfo.status === 0" square size="large" type="danger" @click="onRefundApplyCancel">撤回本次申请</van-button>
+          <van-button v-if="refundApplyInfo.baseInfo.status === 2" square size="large" type="danger" @click="onRefundApplyCancel">本次申请已拒绝，请联系客服</van-button>
           <van-button v-if="refundApplyInfo.baseInfo.status === 3" square size="large" type="info" disabled>等待处理</van-button>
           <van-button v-if="refundApplyInfo.baseInfo.status === 4" square size="large" type="primary" disabled>处理完毕</van-button>
         </template>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { RadioGroup, Radio , Picker , Field } from 'vant'
+import { RadioGroup, Radio, Picker, Field } from 'vant'
 import { storage } from '@/common/util'
 
 export default {
@@ -78,7 +78,7 @@ export default {
     [RadioGroup.name]: RadioGroup,
     [Radio.name]: Radio,
     [Picker.name]: Picker,
-    [Field.name]: Field,
+    [Field.name]: Field
   },
   data() {
     return {
@@ -86,42 +86,42 @@ export default {
       typeItems: [
         { name: '我要退款(无需退货)', value: 0 },
         { name: '我要退货退款', value: 1 },
-        { name: '我要换货', value: 2 },
+        { name: '我要换货', value: 2 }
       ],
-      logisticsStatus:0,
+      logisticsStatus: 0,
       logisticsStatusItems: [
         { name: '未收到货', value: 0 },
         { name: '已收到货', value: 1 }
       ],
       reason: '',
       reasonItems: [
-        "不喜欢/不想要", 
-        "空包裹", 
-        "未按约定时间发货",
-        "快递/物流一直未送达",
-        "货物破损已拒签",
-        "退运费",
-        "规格尺寸与商品页面描述不符",
-        "功能/效果不符",
-        "质量问题",
-        "少件/漏发",
-        "包装/商品破损",
-        "发票问题",
+        '不喜欢/不想要',
+        '空包裹',
+        '未按约定时间发货',
+        '快递/物流一直未送达',
+        '货物破损已拒签',
+        '退运费',
+        '规格尺寸与商品页面描述不符',
+        '功能/效果不符',
+        '质量问题',
+        '少件/漏发',
+        '包装/商品破损',
+        '发票问题'
       ],
-      showPicker:false,
-      amount:'',
-      remark:'',
-      refundApplyInfo:{}
+      showPicker: false,
+      amount: '',
+      remark: '',
+      refundApplyInfo: {}
     }
   },
-  watch:{
-    type(val){
-      if(val>0){
-        this.logisticsStatus = 1 
+  watch: {
+    type(val) {
+      if (val > 0) {
+        this.logisticsStatus = 1
       }
     },
-    logisticsStatus(val){
-      if(val>0){
+    logisticsStatus(val) {
+      if (val > 0) {
         this.type = 0
       }
     }
@@ -132,11 +132,11 @@ export default {
   },
   methods: {
     getRefundApplyInfo() {
-      this.$request.get('/order/refundApply/info', {orderId:this.$route.query.orderId,token: storage.get('token')}).then(res => {
-        if (res.code !== 0) { 
-          return;
+      this.$request.get('/order/refundApply/info', { orderId: this.$route.query.orderId, token: storage.get('token') }).then(res => {
+        if (res.code !== 0) {
+          return
         }
-        this.refundApplyInfo = res.data[0]  // baseInfo, pics
+        this.refundApplyInfo = res.data[0] // baseInfo, pics
         const baseInfo = res.data[0].baseInfo
         this.amount = baseInfo.amount
         this.logisticsStatus = baseInfo.logisticsStatus
@@ -145,52 +145,51 @@ export default {
         this.remark = baseInfo.remark
       })
     },
-    onChangeType(value){
+    onChangeType(value) {
       this.type = value
     },
     onConfirm(value) {
       this.reason = value
       this.showPicker = false
     },
-    onRefundApplyCancel(){
-      this.$request.post('/order/refundApply/cance', {orderId:this.$route.query.orderId,token: storage.get('token')}).then(res => {
-        if (res.code !== 0) { 
+    onRefundApplyCancel() {
+      this.$request.post('/order/refundApply/cance', { orderId: this.$route.query.orderId, token: storage.get('token') }).then(res => {
+        if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
+          return
         }
         this.$toast('撤销申请成功')
         this.$router.go(-1)
       })
     },
-    onRefundApplySubmit(){
-      if(!this.reason){
+    onRefundApplySubmit() {
+      if (!this.reason) {
         this.$toast('请选择退换货原因')
-        return;
+        return
       }
       const params = {
-        orderId:this.$route.query.orderId,
+        orderId: this.$route.query.orderId,
         token: storage.get('token'),
-        amount:this.typ === 2 ? 0 :this.amount,
-        type:this.type,
-        logisticsStatus:this.logisticsStatus,
-        reason:this.reason,
-        remark:this.remark,
+        amount: this.typ === 2 ? 0 : this.amount,
+        type: this.type,
+        logisticsStatus: this.logisticsStatus,
+        reason: this.reason,
+        remark: this.remark
       }
       this.$request.post('/order/refundApply/apply', params).then(res => {
-        if (res.code !== 0) { 
+        if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
+          return
         }
         this.$dialog.confirm({
           title: '提示',
           message: '提交成功，请耐心等待我们处理！',
           showCancelButton: false,
-          confirmButtonText: '我知道了',
+          confirmButtonText: '我知道了'
         }).then(() => {
           // on confirm
           this.$router.go(-1)
         })
-        
       })
     }
   }
@@ -238,5 +237,4 @@ export default {
     }
   }
 </style>
-
 

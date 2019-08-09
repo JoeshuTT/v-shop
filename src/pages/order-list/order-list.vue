@@ -8,7 +8,7 @@
         <van-panel class="panel" :title="'订单编号：'+item.orderNumber" :status="item.statusStr">
           <div>
             <router-link :to="'/order-detail?id='+item.id">
-              <van-card 
+              <van-card
                 :num="goodsMap[item.id][0].number"
                 :tag="item.pingtuanOpenId > 0 ? '拼团' : ''"
                 :price="goodsMap[item.id][0].amount"
@@ -44,7 +44,7 @@
 
 <script>
 import { Tab, Tabs, Card, Panel, List, Loading } from 'vant'
-import { storage, debounce,  } from '@/common/util'
+import { storage, debounce } from '@/common/util'
 import { pay_balance } from '@/common/pay'
 
 export default {
@@ -54,7 +54,7 @@ export default {
     [Card.name]: Card,
     [Panel.name]: Panel,
     [List.name]: List,
-    [Loading.name]: Loading,
+    [Loading.name]: Loading
   },
   data() {
     return {
@@ -63,7 +63,7 @@ export default {
         { name: '待付款', status: '0' },
         { name: '待发货', status: '1' },
         { name: '待收货', status: '2' },
-        { name: '待评价', status: '3' },
+        { name: '待评价', status: '3' }
       ],
       active: 0,
       goodsMap: {},
@@ -72,57 +72,57 @@ export default {
       pageSize: 10,
       loading: false,
       finished: false,
-      finishedTxt:'没有更多了'
+      finishedTxt: '没有更多了'
     }
   },
   created() {
-    let status = this.$route.query.status === undefined ? '' : this.$route.query.status
+    const status = this.$route.query.status === undefined ? '' : this.$route.query.status
     this.active = this.tabs.findIndex(item => item.status === status)
   },
   methods: {
     onListLoad() {
-      this.getOrderList(this.tabs[this.active].status,this.page++,this.pageSize)
+      this.getOrderList(this.tabs[this.active].status, this.page++, this.pageSize)
     },
-    onClick: debounce(function (index ) {
+    onClick: debounce(function(index) {
       this.loading = true
       this.finished = false
-      this.getOrderList(this.tabs[index].status,1,this.pageSize,true)
+      this.getOrderList(this.tabs[index].status, 1, this.pageSize, true)
     }, 1000),
-    getOrderList(status = '', page = this.page, pageSize = this.pageSize,isTab=false) {
+    getOrderList(status = '', page = this.page, pageSize = this.pageSize, isTab = false) {
       // 订单状态，-1 已关闭 0 待支付 1 已支付待发货 2 已发货待确认 3 确认收货待评价 4 已评价
       const params = {
         token: storage.get('token'),
         status,
         page,
-        pageSize,
+        pageSize
 
       }
       this.$request.post('/order/list', params).then(res => {
-        if(res.code === 404){
+        if (res.code === 404) {
           this.loading = false
           this.finished = true
           this.finishedTxt = page > 1 ? '没有更多了' : '您还没有任何订单哦~'
-          if(isTab&&page===1){
+          if (isTab && page === 1) {
             this.list = []
             this.goodsMap = {}
           }
-          
-          return;
-        } 
-        if (res.code !== 0) { 
-          this.$toast(res.msg)
-          return;
+
+          return
         }
-        if(isTab){
+        if (res.code !== 0) {
+          this.$toast(res.msg)
+          return
+        }
+        if (isTab) {
           this.list = res.data.orderList
           this.goodsMap = res.data.goodsMap
           this.loading = false
           this.finishedTxt = '没有更多了'
-          return;
+          return
         }
 
-        let list = res.data.orderList
-        list.forEach(item => this.goodsMap[item.id] = res.data.goodsMap[item.id] )
+        const list = res.data.orderList
+        list.forEach(item => { this.goodsMap[item.id] = res.data.goodsMap[item.id] })
         this.list = this.list.concat(list)
         this.loading = false
         this.finishedTxt = '没有更多了'
@@ -140,42 +140,42 @@ export default {
         this.$toast.loading({
           mask: true,
           message: '加载中...',
-          duration: 0,
+          duration: 0
         })
         this.$request.post('/order/close', { orderId, token: storage.get('token') }).then(res => {
           console.log(`/order/close：${JSON.stringify(res)}`)
           this.$toast({ message: '取消订单成功', duration: 1500 })
           // this.getOrderList(this.tabs[this.active].status)
-          this.list.splice(this.list.findIndex(item => item.id === id),1)
+          this.list.splice(this.list.findIndex(item => item.id === id), 1)
         })
       }).catch(() => {
         // on cancel
-      });
+      })
     },
-    onPayOrder(data) { 
+    onPayOrder(data) {
       const orderId = data.id
       const amountReal = data.amountReal
       this.$toast.loading({
         mask: true,
         message: '支付提交中',
-        duration:0,
+        duration: 0
       })
-      pay_balance(orderId, storage.get('token')).then(res=>{
-        if(res.code === 0){
+      pay_balance(orderId, storage.get('token')).then(res => {
+        if (res.code === 0) {
           this.$toast.clear()
           this.$dialog.confirm({
-              title: '支付成功',
-              message: `实付￥${amountReal}`,
-              cancelButtonText:'返回首页',
-              confirmButtonText:'查看订单'
+            title: '支付成功',
+            message: `实付￥${amountReal}`,
+            cancelButtonText: '返回首页',
+            confirmButtonText: '查看订单'
           }).then(() => {
-            this.$router.replace({path:'/order-detail',query:{id:orderId}})
-              // on confirm
-          }).catch(() => { 
+            this.$router.replace({ path: '/order-detail', query: { id: orderId }})
+            // on confirm
+          }).catch(() => {
             // on cancel
-              this.$router.replace({path:'/home'})
+            this.$router.replace({ path: '/home' })
           })
-        }else{
+        } else {
           this.$toast(res.msg)
         }
       })
@@ -238,5 +238,4 @@ export default {
   display: none;
 }
 </style>
-
 

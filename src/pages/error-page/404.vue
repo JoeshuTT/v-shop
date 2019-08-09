@@ -9,10 +9,10 @@
 
 <script>
 export default {
-  name:'Page404',
-  data(){
+  name: 'Page404',
+  data() {
     return {
-      error:'页面未找到'
+      error: '页面未找到'
     }
   }
 }

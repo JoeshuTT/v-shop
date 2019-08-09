@@ -1,7 +1,6 @@
 import request from '@/common/request'
 
-
-export function kanjiaList (data) {
+export function kanjiaList(data) {
   return request.post('/shop/goods/kanjia/list', data)
 }
 

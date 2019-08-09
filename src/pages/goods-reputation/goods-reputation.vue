@@ -1,9 +1,7 @@
 <template>
   <div class="contaienr">
     <div class="list">
-      <div class="list-item mb10"
-        v-for="item in list"
-        :key="item.id">
+      <div class="list-item mb10" v-for="item in list" :key="item.id">
         <div class="list-item-header van-hairline--bottom">
           <div class="list-item-avatar"><img :src="item.avatarUrl" alt=""></div>
           <div class="list-item-inner">
@@ -31,12 +29,12 @@ import { Rate } from 'vant'
 
 export default {
   components: {
-    [Rate.name]: Rate,
+    [Rate.name]: Rate
   },
   data() {
     return {
       list: [],
-      noTips: '您还没有评价信息',
+      noTips: '您还没有评价信息'
     }
   },
   created() {
@@ -48,13 +46,13 @@ export default {
       switch (rateValue) {
         case 0:
           value = 1
-          break;
+          break
         case 1:
           value = 3
-          break;
+          break
         case 2:
           value = 5
-          break;
+          break
         default:
           value = 5
       }
@@ -64,7 +62,7 @@ export default {
       this.$request.post('/shop/goods/reputation', { goodsId, page, pageSize }).then(res => {
         if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
+          return
         }
         this.list = res.data.map(item => ({
           id: item.goods.id,
@@ -72,18 +70,18 @@ export default {
           nickName: item.user.nickName || item.user.mobile.replace(item.user.mobile.substring(3, 7), '****'),
           rate: this.rate2star(item.goods.goodReputationStr),
           remark: item.goods.goodReputationRemark || '此用户没有填写评价',
-          date: item.goods.dateReputation.slice(0,10),
-          property:item.goods.property
-        }));
+          date: item.goods.dateReputation.slice(0, 10),
+          property: item.goods.property
+        }))
       })
-    },
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
 .list-item{
-  background:#fff; 
+  background:#fff;
   &-avatar{
     width:40px;
     height:40px;
@@ -124,5 +122,4 @@ export default {
   padding-top: 150px;
 }
 </style>
-
 

@@ -9,8 +9,8 @@
       </div>
       <div class="header-setting" @click="onSettingClick">
         <van-icon name="setting-o" />
-      </div> 
-    </div> 
+      </div>
+    </div>
     <div class="main">
       <div class="group balance-group">
         <van-cell value="我的钱包" />
@@ -34,7 +34,8 @@
         </van-row>
       </div>
       <div class="group order-group">
-        <van-cell title="我的订单"
+        <van-cell
+          title="我的订单"
           value="查看全部订单"
           to="/order-list"
           is-link />
@@ -124,7 +125,7 @@ export default {
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
     [Grid.name]: Grid,
-    [GridItem.name]: GridItem,
+    [GridItem.name]: GridItem
   },
   data() {
     return {
@@ -134,14 +135,14 @@ export default {
       freeze: 0,
       score: 0,
       totleConsumed: 0,
-      count: {},  // 订单统计
-      tools:[
-        {icon:'balance-o',title:'资金明细',path:'/cashlog'},
-        {icon:'star-o',title:'我的收藏',path:'/favgoods'},
+      count: {}, // 订单统计
+      tools: [
+        { icon: 'balance-o', title: '资金明细', path: '/cashlog' },
+        { icon: 'star-o', title: '我的收藏', path: '/favgoods' },
         // {icon:'comment-o',title:'我的评价',path:'/favgoods'},
-        {icon:'coupon-o',title:'优惠券',path:'/coupons'},
-        {icon:'location-o',title:'收货地址',path:'/address-list'},
-        {icon:'setting-o',title:'设置',path:'/setting'},
+        { icon: 'coupon-o', title: '优惠券', path: '/coupons' },
+        { icon: 'location-o', title: '收货地址', path: '/address-list' },
+        { icon: 'setting-o', title: '设置', path: '/setting' }
       ]
     }
   },
@@ -159,34 +160,33 @@ export default {
     getUserInfo() {
       this.$request.get('/user/detail', { token: util.storage.get('token') }).then(res => {
         if (res.code !== 0) {
-          return;
+          return
         }
         const baseInfo = res.data.base
         this.userInfo = {
           ...res.data.base,
           avatarUrl: baseInfo.avatarUrl || `${require('@/assets/avatar_default.png')}`,
           nick: baseInfo.nick || `${baseInfo.sourceStr}${baseInfo.id}`,
-          mobile: baseInfo.mobile || '',
+          mobile: baseInfo.mobile || ''
         }
         this.$store.commit('updateUserInfo', this.userInfo)
       })
-
     },
     getOrderCount() {
       this.$request.get('/order/statistics', { token: util.storage.get('token') }).then(res => {
         if (res.code !== 0) {
-          return;
+          return
         }
         this.count = res.data
-        for (let filed in this.count) {
-          this.count[filed] = this.count[filed] || ''  // 为0时角标不显示
+        for (const filed in this.count) {
+          this.count[filed] = this.count[filed] || '' // 为0时角标不显示
         }
       })
     },
     getUserAmount() {
       this.$request.get('/user/amount', { token: util.storage.get('token') }).then(res => {
         if (res.code !== 0) {
-          return;
+          return
         }
         this.balance = res.data.balance
         this.freeze = res.data.freeze
@@ -200,10 +200,10 @@ export default {
         message: this.$store.state.globalData.desc
       }).then(() => {
         // on close
-      });
+      })
     },
-    onSettingClick(){
-      this.$router.push({path:'/setting'})
+    onSettingClick() {
+      this.$router.push({ path: '/setting' })
     }
   }
 }
@@ -342,6 +342,3 @@ export default {
   }
 }
 </style>
-
-
-

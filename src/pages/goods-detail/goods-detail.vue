@@ -1,12 +1,8 @@
   <template>
   <div class="contaienr pd50">
-    <van-swipe :autoplay="3000"
-      indicator-color="white"
-      class="goods-swiper">
-      <van-swipe-item v-for="item in banner"
-        :key="item.id">
-        <img :src="item.pic"
-          alt="" />
+    <van-swipe :autoplay="3000" indicator-color="white" class="goods-swiper">
+      <van-swipe-item v-for="item in banner" :key="item.id">
+        <img :src="item.pic" alt="" />
       </van-swipe-item>
     </van-swipe>
     <div class="countdown mb10" v-if="marketing.type">
@@ -42,7 +38,7 @@
         <div class="goods-desc-more-item ui-right">剩余 {{basicInfo.stores}}</div>
       </div>
     </div>
-    
+
     <div class="rule mb10" @click="onRuleClick(marketing.rule.path)" v-if="marketing.type">
       <div class="rule-header">
         <div class="rule-header-title">{{marketing.rule.title}}</div>
@@ -115,26 +111,20 @@
       </div>
     </template>
     <template v-else>
-      <van-cell class="mb10"
-        title="暂无评价" />
+      <van-cell class="mb10" title="暂无评价" />
     </template>
     <div class="goods-h2 common-h2">
       <span class="common-h2-title">商品详情</span>
     </div>
-    <div class="goods-content"
-      v-html="content"></div>
+    <div class="goods-content" v-html="content"></div>
 
     <!-- 公用弹层 -->
-    <van-popup v-model="showPopup"
-      position="bottom">
+    <van-popup v-model="showPopup" position="bottom">
       <div class="popup">
         <div class="service-desc">
           <img src="../../assets/gif_1.gif" style="margin:20px auto;" />
         </div>
-        <van-button class="popup-confirm"
-          type="danger"
-          size="large"
-          @click="onShowPopup">我知道了</van-button>
+        <van-button class="popup-confirm" type="danger" size="large" @click="onShowPopup">我知道了</van-button>
       </div>
     </van-popup>
     <!-- 拼团弹层  -->
@@ -147,7 +137,7 @@
           <div class="pintuan-popup-avatar"><img :src="currentPintuan.avatarUrl" alt=""></div>
           <div class="pintuan-popup-avatar pintuan-popup-avatar--empty"><van-icon name="plus" /></div>
         </div>
-        
+
       </div>
       <div class="btn-danger" @click="onShowSku">参与拼单</div>
     </van-popup>
@@ -157,9 +147,7 @@
       <div class="popup popup-coupon">
         <div class="coupon-list-header van-hairline--bottom">优惠券</div>
         <div class="coupon-list">
-          <div class="coupon-list-item"
-            v-for="(coupon, i) in coupons"
-            :key="coupon.id">
+          <div class="coupon-list-item" v-for="(coupon, i) in coupons" :key="coupon.id">
             <div class="coupon-list-item-hd">
               <div class="coupon-list-item-money">
                 <span class="fz12">￥</span>{{coupon.moneyMin}}</div>
@@ -168,18 +156,13 @@
             <div class="coupon-list-item-bd">
               <div class="coupon-list-item-name">{{coupon.moneyMin}}元券</div>
               <div class="coupon-list-item-dateEndDays">领取后{{coupon.dateEndDays}}天有效</div>
-            </div> 
-            <div v-if="coupon.status === 0" class="coupon-list-item-btn" @click="handleCouponClicked(coupon,i)">立即领取</div> 
+            </div>
+            <div v-if="coupon.status === 0" class="coupon-list-item-btn" @click="handleCouponClicked(coupon,i)">立即领取</div>
             <div v-else class="coupon-list-item-btn coupon-list-item-btn-clicked">已领取</div>
           </div>
         </div>
-        <van-icon name="close"
-          class="popup-close"
-          @click="onShowCoupon" />
-        <van-button class="popup-confirm"
-          type="danger"
-          size="large"
-          @click="onShowCoupon">完成</van-button>
+        <van-icon name="close" class="popup-close" @click="onShowCoupon" />
+        <van-button class="popup-confirm" type="danger" size="large" @click="onShowCoupon">完成</van-button>
       </div>
     </van-popup>
     <!-- 商品规格弹层 -->
@@ -213,7 +196,7 @@
                 type="danger"
                 @click="props.skuEventBus.$emit('sku:buy')"
               >
-                确定 
+                确定
               </van-button>
             </div>
             <div class="van-sku-actions" v-else>
@@ -238,7 +221,6 @@
           </template>
         </van-sku>
 
-
     <!-- 商品导航栏 -->
     <van-goods-action v-if="marketing.type">
       <van-goods-action-icon icon="thumb-circle-o"
@@ -258,7 +240,7 @@
         @click="onClickBuy" />
       <van-goods-action-button type="danger"
         :text="marketing.actions[1].text"
-        @click="onClickMarketing(marketing.type)" /> 
+        @click="onClickMarketing(marketing.type)" />
     </van-goods-action>
     <van-goods-action v-else>
       <van-goods-action-icon icon="thumb-circle-o"
@@ -278,7 +260,7 @@
         @click="onShowSku" />
       <van-goods-action-button type="danger"
         text="立即购买"
-        @click="onShowSku" /> 
+        @click="onShowSku" />
     </van-goods-action>
     <!-- 右侧悬浮图标 -->
     <div class="side-bar">
@@ -288,13 +270,12 @@
   </div>
 </template>
 <script>
-import { Swipe, SwipeItem, Sku, GoodsAction, GoodsActionIcon, GoodsActionButton, Rate, Tag ,CountDown  } from 'vant'
+import { Swipe, SwipeItem, Sku, GoodsAction, GoodsActionIcon, GoodsActionButton, Rate, Tag, CountDown } from 'vant'
 
 import { storage, sessionStorage } from '@/common/util'
 import { scrollTo } from '@/common/scroll-to'
 
 export default {
-  name:'GoodsDetail',
   components: {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
@@ -304,33 +285,33 @@ export default {
     [GoodsActionButton.name]: GoodsActionButton,
     [Rate.name]: Rate,
     [Tag.name]: Tag,
-    [CountDown.name]: CountDown,
+    [CountDown.name]: CountDown
   },
   data() {
-    return { 
-      marketing:{},
-      pintuanList:[],
-      cartCount:'',
-      backTop:false,
+    return {
+      marketing: {},
+      pintuanList: [],
+      cartCount: '',
+      backTop: false,
       banner: [],
       rateList: [],
       reputation: {},
       basicInfo: {},
-      logistics:{},
+      logistics: {},
       content: '',
       properties: [],
       showCoupon: false,
-      hasFav:false,
+      hasFav: false,
       coupons: [],
       showPopup: false,
       showPtPopup: false,
-      currentPintuan:{},  // 当前选中拼团数据
+      currentPintuan: {}, // 当前选中拼团数据
       propTitle: '选择',
       showSku: false,
       skuData: {
         goods_id: '',
-        quota:0,  // 0表示不限购
-        quota_used:0,
+        quota: 0, // 0表示不限购
+        quota_used: 0,
         goods_info: {},
         sku: {
           price: '1.00', // 默认价格（单位元）
@@ -340,8 +321,8 @@ export default {
           collection_id: 2261, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
           tree: [],
           list: [],
-          messages:[],
-        },
+          messages: []
+        }
       }
     }
   },
@@ -351,105 +332,103 @@ export default {
     this.getGoodsReputation(this.$route.query.id)
     this.checkGoodsFav(this.$route.query.id)
     this.getCartCount()
-    
   },
   mounted() {
     window.addEventListener('scroll', this.onPageScroll, false)
-    
   },
   beforeDestroy() {
-    window.removeEventListener('scroll', this.onPageScroll, false);
+    window.removeEventListener('scroll', this.onPageScroll, false)
   },
   methods: {
-    marketingType(type,set={}){ 
-      /* 
+    marketingType(type, set = {}) {
+      /*
         砍价忽略规格,拼团支持规格
         活动到期，商品恢复原价
       */
-     let time
-     if(type !== 'default'){
-        let endTime = new Date(set.dateEnd.replace(/-/g,'/')).getTime()
-        let nowTime = Date.now()
-        time = endTime > 0 ? Math.floor(endTime-nowTime) : 0
-     }
-     
+      let time
+      if (type !== 'default') {
+        const endTime = new Date(set.dateEnd.replace(/-/g, '/')).getTime()
+        const nowTime = Date.now()
+        time = endTime > 0 ? Math.floor(endTime - nowTime) : 0
+      }
+
       const marketing = {
-        'default':{
-          type:'',
-          info:{
-            title:'普通',
-            minPrice:this.basicInfo.minPrice,
-            originalPrice:this.basicInfo.originalPrice,
-          }, 
-        },
-        'kanjia':{
-          type,set,
-          isBuy:true,
-          info:{
-            title:'砍价',
-            time,
-            label:'砍价享',
-            minPrice:this.basicInfo.kanjiaPrice,
-            originalPrice:this.basicInfo.originalPrice,
-          },
-          rule:{
-            title:'[砍价购]',
-            desc:'邀请好友砍价，超低价购买心仪商品。',
-            path:'/kanjia/rule',
-          },
-          actions:[
-            {text:`￥${this.basicInfo.minPrice}购买`},
-            {text:`￥${this.basicInfo.kanjiaPrice}砍价拿`},
-          ]
-        },
-        'pintuan':{
-          type,set,
-          isBuy:true,
-          info:{
-            title:'拼团',
-            time,
-            label:`${set.numberPersion}人拼团价`,
-            minPrice:this.basicInfo.pingtuanPrice,
-            originalPrice:this.basicInfo.originalPrice,
-          },
-          rule:{
-            title:'[多人拼团]',
-            desc:'支付开团邀请一人成团，人数不足自动退款。',
-            path:'/kanjia/rule',
-          },
-          actions:[
-            {text:`￥${this.basicInfo.minPrice}购买`},
-            {text:`￥${this.basicInfo.pingtuanPrice}开团`},
-          ]
-        },
-        'miaosha':{
-          type:type,
-          isBuy:true,
-          info:{
-            title:'秒杀',
-            time:0
-          },
-          rule:{
-            title:'[秒杀]',
-            desc:'订单5分钟内未支付将被取消。'
+        'default': {
+          type: '',
+          info: {
+            title: '普通',
+            minPrice: this.basicInfo.minPrice,
+            originalPrice: this.basicInfo.originalPrice
           }
         },
+        'kanjia': {
+          type, set,
+          isBuy: true,
+          info: {
+            title: '砍价',
+            time,
+            label: '砍价享',
+            minPrice: this.basicInfo.kanjiaPrice,
+            originalPrice: this.basicInfo.originalPrice
+          },
+          rule: {
+            title: '[砍价购]',
+            desc: '邀请好友砍价，超低价购买心仪商品。',
+            path: '/kanjia/rule'
+          },
+          actions: [
+            { text: `￥${this.basicInfo.minPrice}购买` },
+            { text: `￥${this.basicInfo.kanjiaPrice}砍价拿` }
+          ]
+        },
+        'pintuan': {
+          type, set,
+          isBuy: true,
+          info: {
+            title: '拼团',
+            time,
+            label: `${set.numberPersion}人拼团价`,
+            minPrice: this.basicInfo.pingtuanPrice,
+            originalPrice: this.basicInfo.originalPrice
+          },
+          rule: {
+            title: '[多人拼团]',
+            desc: '支付开团邀请一人成团，人数不足自动退款。',
+            path: '/kanjia/rule'
+          },
+          actions: [
+            { text: `￥${this.basicInfo.minPrice}购买` },
+            { text: `￥${this.basicInfo.pingtuanPrice}开团` }
+          ]
+        },
+        'miaosha': {
+          type: type,
+          isBuy: true,
+          info: {
+            title: '秒杀',
+            time: 0
+          },
+          rule: {
+            title: '[秒杀]',
+            desc: '订单5分钟内未支付将被取消。'
+          }
+        }
       }
       this.marketing = marketing[type]
     },
-    getCartCount(){
+    getCartCount() {
       const cartInfo = storage.get('cartInfo') || []
       this.cartCount = cartInfo.length || ''
     },
-    onPageScroll(){ 
+    onPageScroll() {
       const sTop = document.documentElement.scrollTop || document.body.scrollTop
       this.backTop = sTop >= 500
     },
-    goShare(){ 
+    goShare() {
       this.$toast('未开放')
     },
-    goBackTop(){ 
-      scrollTo(0,800)
+    goBackTop() {
+      scrollTo(0, 800)
     },
     onClickIcon() {
       // this.$toast('点击图标');
@@ -458,66 +437,65 @@ export default {
       // this.$toast('点击按钮弹出sku规格弹层');
       this.showSku = !this.showSkugetSkuData
     },
-    onMarketingAction(path){
+    onMarketingAction(path) {
       console.log(path)
-      if(path.includes('order')){
+      if (path.includes('order')) {
         this.onShowSku()
-      }else{
-        this.$router.push({path})
+      } else {
+        this.$router.push({ path })
       }
     },
-    onClickBuy(){
+    onClickBuy() {
       this.marketing.isBuy = false
       this.onShowSku()
     },
-    onClickKanjia(){
-      let kjid = this.marketing.set.id
-      if(this.marketing.actions[1].text === '正在砍价'){
-        this.$router.push({path:'/kanjia/kanjia',query:{joiner:storage.get('uid'),kjid }})
-        return;
+    onClickKanjia() {
+      const kjid = this.marketing.set.id
+      if (this.marketing.actions[1].text === '正在砍价') {
+        this.$router.push({ path: '/kanjia/kanjia', query: { joiner: storage.get('uid'), kjid }})
+        return
       }
       // 发起砍价活动
       this.$toast.loading({
         mask: true,
         message: '加载中...',
-        duration:0
+        duration: 0
       })
-      this.$request.post('/shop/goods/kanjia/join',{token:storage.get('token'),kjid}).then(res=>{
-        if(res.code !== 0){
-          this.$toast({message:res.msg || '发起砍价失败，请重试！',duration:1500})
+      this.$request.post('/shop/goods/kanjia/join', { token: storage.get('token'), kjid }).then(res => {
+        if (res.code !== 0) {
+          this.$toast({ message: res.msg || '发起砍价失败，请重试！', duration: 1500 })
         }
         this.$toast.clear()
         this.marketing.actions[1].text = '正在砍价'
-        this.$router.push({path:'/kanjia/kanjia',query:{joiner:storage.get('uid'),kjid }})
-
+        this.$router.push({ path: '/kanjia/kanjia', query: { joiner: storage.get('uid'), kjid }})
       })
     },
-    onClickPintuan(){ 
-      if(this.marketing.actions[1].text === '查看我的团'){
-        let tuanId = this.marketing.set.tuanId
-        this.$router.push({path:'/pintuan/pintuan',query:{ tuanId ,goodsId:this.basicInfo.id}})
-        return;
+    onClickPintuan() {
+      if (this.marketing.actions[1].text === '查看我的团') {
+        const tuanId = this.marketing.set.tuanId
+        this.$router.push({ path: '/pintuan/pintuan', query: { tuanId, goodsId: this.basicInfo.id }})
+        return
       }
       this.marketing.isBuy = true
       this.onShowSku()
     },
-    onjoinPintuan(){
-      // this.tuanId = 
+    onjoinPintuan() {
+      // this.tuanId =
       this.onShowPtPopup()
       this.onShowSku()
     },
-    onClickMarketing(type){
-      if(type === 'pintuan'){
+    onClickMarketing(type) {
+      if (type === 'pintuan') {
         this.onClickPintuan()
       }
-      if(type === 'kanjia'){
+      if (type === 'kanjia') {
         this.onClickKanjia()
       }
     },
     onShowPopup() {
       this.showPopup = !this.showPopup
     },
-    onCurrentPintuan(item){
+    onCurrentPintuan(item) {
       this.currentPintuan = item
       this.marketing.isBuy = true
       this.onShowPtPopup()
@@ -528,44 +506,43 @@ export default {
     onShowCoupon() {
       this.showCoupon = !this.showCoupon
     },
-    checkGoodsFav(id){
-      this.$request.get('/shop/goods/fav/check', { goodsId:id, token: storage.get('token') }).then(res => {
-        if(res.code === 0){
-          this.hasFav = true
-        }else{
-          this.hasFav = false
-        }
-     
-      })
-    },
-    onFavAdd(id){
-      this.$request.post('/shop/goods/fav/add', { goodsId:id, token: storage.get('token') }).then(res => {
-        if(res.code === 0){
-          this.$toast({message:'收藏成功',duration:1500})
-          this.hasFav = true
-        }else{
-          this.hasFav = false
-        }
-      })
-    },
-    onFavDelete(id){
-      this.$request.post('/shop/goods/fav/delete', { goodsId:id, token: storage.get('token') }).then(res => {
-        if(res.code === 0){
-          this.$toast({message:'取消收藏成功',duration:1500})
-          this.hasFav = false
-        }else{
-          this.hasFav = true
-        }
-      })
-    },
-    handleCouponClicked(coupon,index) {
-      if(coupon.pwd){
-        this.$toast({ message: '本券需要使用口令才能领取', duration: 1500 })
-        return;
-      }
-      this.$request.post('/discounts/fetch', { id:coupon.id, token: storage.get('token') }).then(res => {
+    checkGoodsFav(id) {
+      this.$request.get('/shop/goods/fav/check', { goodsId: id, token: storage.get('token') }).then(res => {
         if (res.code === 0) {
-          // this.$toast('领取成功') 
+          this.hasFav = true
+        } else {
+          this.hasFav = false
+        }
+      })
+    },
+    onFavAdd(id) {
+      this.$request.post('/shop/goods/fav/add', { goodsId: id, token: storage.get('token') }).then(res => {
+        if (res.code === 0) {
+          this.$toast({ message: '收藏成功', duration: 1500 })
+          this.hasFav = true
+        } else {
+          this.hasFav = false
+        }
+      })
+    },
+    onFavDelete(id) {
+      this.$request.post('/shop/goods/fav/delete', { goodsId: id, token: storage.get('token') }).then(res => {
+        if (res.code === 0) {
+          this.$toast({ message: '取消收藏成功', duration: 1500 })
+          this.hasFav = false
+        } else {
+          this.hasFav = true
+        }
+      })
+    },
+    handleCouponClicked(coupon, index) {
+      if (coupon.pwd) {
+        this.$toast({ message: '本券需要使用口令才能领取', duration: 1500 })
+        return
+      }
+      this.$request.post('/discounts/fetch', { id: coupon.id, token: storage.get('token') }).then(res => {
+        if (res.code === 0) {
+          // this.$toast('领取成功')
           this.$toast({ message: '恭喜,抢到了~', duration: 1500 })
           this.coupons[index].status = 0
         } else if (res.code === 20001 || res.code === 20002 || res.code === 20003) {
@@ -582,13 +559,13 @@ export default {
       switch (rateValue) {
         case 0:
           value = 1
-          break;
+          break
         case 1:
           value = 3
-          break;
+          break
         case 2:
           value = 5
-          break;
+          break
         default:
           value = 5
       }
@@ -598,25 +575,25 @@ export default {
       this.$request.post('/shop/goods/reputation', { goodsId, page, pageSize }).then(res => {
         if (res.code !== 0) {
           // this.$toast(res.msg)
-          return;
+          return
         }
         this.rateList = res.data
         // user.avatarUrl
         this.reputation = {
-          id:res.data[0].goods.id,
+          id: res.data[0].goods.id,
           avatarUrl: res.data[0].user.avatarUrl || `${require('@/assets/avatar_default.png')}`,
           nickName: res.data[0].user.nickName || res.data[0].user.mobile.replace(res.data[0].user.mobile.substring(3, 7), '****'),
           rate: this.rate2star(res.data[0].goods.goodReputationStr),
           remark: res.data[0].goods.goodReputationRemark || '此用户没有填写评价',
-          date: res.data[0].goods.dateReputation.slice(0,10),
-          property:res.data[0].goods.property
+          date: res.data[0].goods.dateReputation.slice(0, 10),
+          property: res.data[0].goods.property
         }
       })
     },
     onBuyClicked(data) {
       console.log(data)
       // 立即购买商品数据定义格式
-      let goodsInfo = []
+      const goodsInfo = []
       if (this.properties.length) {
         goodsInfo.push({
           id: `${Date.now()}`,
@@ -629,7 +606,7 @@ export default {
           name: this.basicInfo.name,
           characteristic: this.basicInfo.characteristic,
           pic: this.basicInfo.pic,
-          marketing:{},  // 商品活营销动相关数据都存在此对象下
+          marketing: {} // 商品活营销动相关数据都存在此对象下
         })
       } else {
         goodsInfo.push({
@@ -643,25 +620,25 @@ export default {
           name: this.basicInfo.name,
           characteristic: this.basicInfo.characteristic,
           pic: this.basicInfo.pic,
-          marketing:{},
+          marketing: {}
         })
       }
       // 拼团购买
-      if(this.marketing.type === 'pintuan'&&this.marketing.isBuy){
+      if (this.marketing.type === 'pintuan' && this.marketing.isBuy) {
         goodsInfo[0].price = this.marketing.info.minPrice
-        goodsInfo[0].marketing = {type:this.marketing.type,typeStr:this.marketing.info.title,pingtuanOpenId:this.currentPintuan.id ? this.currentPintuan.id : 0}
+        goodsInfo[0].marketing = { type: this.marketing.type, typeStr: this.marketing.info.title, pingtuanOpenId: this.currentPintuan.id ? this.currentPintuan.id : 0 }
       }
       sessionStorage.set('buyInfo', goodsInfo)
-      this.$router.push({ path: '/order-submit', query: { type: 'buy' } })
+      this.$router.push({ path: '/order-submit', query: { type: 'buy' }})
     },
     onAddCartClicked(data) {
       console.log(data)
       // 加入购物车商品数据定义格式
-      let goodsInfo = storage.get('cartInfo') || []
-      // 
+      const goodsInfo = storage.get('cartInfo') || []
+      //
       if (this.properties.length) {
         // 添加相同且规格一致的商品
-        let index = goodsInfo.findIndex(item => item.goodsId === data.goodsId && item.propertyChildIds === data.selectedSkuComb.propertyChildIds)
+        const index = goodsInfo.findIndex(item => item.goodsId === data.goodsId && item.propertyChildIds === data.selectedSkuComb.propertyChildIds)
         if (goodsInfo.length && index > -1) {
           goodsInfo[index].selectedNum = goodsInfo[index].selectedNum + data.selectedNum
         } else {
@@ -676,13 +653,12 @@ export default {
             name: this.basicInfo.name,
             characteristic: this.basicInfo.characteristic,
             pic: this.basicInfo.pic,
-            marketing:{},
+            marketing: {}
           })
         }
-
       } else {
         // 添加相同且规格一致的商品
-        let index = goodsInfo.findIndex(item => item.goodsId === data.goodsId)
+        const index = goodsInfo.findIndex(item => item.goodsId === data.goodsId)
         if (goodsInfo.length && index > -1) {
           goodsInfo[index].selectedNum = goodsInfo[index].selectedNum + data.selectedNum
         } else {
@@ -697,7 +673,7 @@ export default {
             name: this.basicInfo.name,
             characteristic: this.basicInfo.characteristic,
             pic: this.basicInfo.pic,
-            marketing:{},
+            marketing: {}
           })
         }
       }
@@ -708,15 +684,14 @@ export default {
     onSkuSelected(data) {
       console.log(data)
       if (data.selectedSkuComb) {
-        let title = []
+        const title = []
         this.properties.forEach((item, index) => {
-          let current = item.childsCurGoods.find(v => v.id === data.selectedSku[`s${index + 1}`])
+          const current = item.childsCurGoods.find(v => v.id === data.selectedSku[`s${index + 1}`])
           title.push(current.name)
         })
         this.propTitle = `已选 ${title.join(',')}`
         this.getGoodsPrice(this.basicInfo.id, data.selectedSkuComb.propertyChildIds, (res) => {
-
-          if(this.marketing.type === 'pintuan'){
+          if (this.marketing.type === 'pintuan') {
             this.marketing.info.minPrice = res.data.pingtuanPrice
             this.marketing.info.originalPrice = res.data.originalPrice
           }
@@ -725,8 +700,8 @@ export default {
           this.basicInfo.originalPrice = res.data.originalPrice
           this.basicInfo.pingtuanPrice = res.data.pingtuanPrice
           this.basicInfo.stores = res.data.stores
-          
-          data.selectedSkuComb.price = parseFloat((res.data.price*100).toFixed(2)) // 价格（单位分）
+
+          data.selectedSkuComb.price = parseFloat((res.data.price * 100).toFixed(2)) // 价格（单位分）
           data.selectedSkuComb.stock_num = res.data.stores
           data.selectedSkuComb.propertyChildIds = res.data.propertyChildIds
         })
@@ -751,9 +726,9 @@ export default {
     },
     getGoodsDetail(id) {
       this.$request.get('/shop/goods/detail', { id }).then(res => {
-        if(res.code !== 0){
+        if (res.code !== 0) {
           this.$toast(res.msg)
-          return;
+          return
         }
 
         this.banner = res.data.pics
@@ -763,109 +738,105 @@ export default {
         this.logistics = res.data.logistics || {}
         this.properties = res.data.properties || []
         // 商品营销玩法相关
-        const marketingFn = ()=>{
-          if(this.basicInfo.kanjia&&this.basicInfo.kanjiaPrice){
-            this.$request.get('/shop/goods/kanjia/set',{goodsId:id}).then(res =>{ 
-              if(res.code === 700){
-                // 暂无数据：活动时间截止了或者后台设置了禁用      
+        const marketingFn = () => {
+          if (this.basicInfo.kanjia && this.basicInfo.kanjiaPrice) {
+            this.$request.get('/shop/goods/kanjia/set', { goodsId: id }).then(res => {
+              if (res.code === 700) {
+                // 暂无数据：活动时间截止了或者后台设置了禁用
                 this.$toast('砍价活动已结束,商品恢复原价')
               }
-              if(res.code !== 0){ 
-                return;
+              if (res.code !== 0) {
+                return
               }
               const set = res.data
-              // 
-              this.marketingType('kanjia',set)
+              //
+              this.marketingType('kanjia', set)
 
-              this.$request.get('/shop/goods/kanjia/my',{token:storage.get('token'),kjid:set.id}).then(res => {
-                if(res.code !== 0){
-                  return;
+              this.$request.get('/shop/goods/kanjia/my', { token: storage.get('token'), kjid: set.id }).then(res => {
+                if (res.code !== 0) {
+                  return
                 }
                 this.marketing.actions[1].text = '正在砍价'
               })
             })
-            
-            return;
-          } 
-          else if(this.basicInfo.pingtuan){
-            // pingtuan 官方拼团拼写错误  
-            this.$request.get('/shop/goods/pingtuan/set',{goodsId:id}).then(res =>{
-              if(res.code !== 0){ 
-                return;
+
+            return
+          } else if (this.basicInfo.pingtuan) {
+            // pingtuan 官方拼团拼写错误
+            this.$request.get('/shop/goods/pingtuan/set', { goodsId: id }).then(res => {
+              if (res.code !== 0) {
+                return
               }
               const set = res.data
-              if(new Date(set.dateEnd.replace(/-/g,'/')).getTime()<Date.now()){
+              if (new Date(set.dateEnd.replace(/-/g, '/')).getTime() < Date.now()) {
                 this.$toast('拼团活动已结束,商品恢复原价')
-                console.log('活动结束，时间截止到'+set.dateEnd)
-                return;
+                console.log('活动结束，时间截止到' + set.dateEnd)
+                return
               }
-              if(set.status === 1){
-                console.log('后台设置了禁用' )
-                return;
+              if (set.status === 1) {
+                console.log('后台设置了禁用')
+                return
               }
-              this.marketingType('pintuan',set)
+              this.marketingType('pintuan', set)
               // 进行中的拼团
-              this.$request.post('/shop/goods/pingtuan/list/v2',{goodsId:id,page:1,pageSize:10,status:0}).then(res => {
-                if(res.code === 0){  
-                  let nowTime = Date.now()
-                  this.pintuanList = res.data.result.map(item =>({
-                    id:item.id,
-                    avatarUrl:item.apiExtUser.avatarUrl || `${require('@/assets/avatar_default.png')}`,
-                    nick:item.apiExtUser.nick || '神秘用户',
-                    time: Math.floor(((new Date(item.dateEnd.replace(/-/g,'/')).getTime()) - nowTime)),
-                    number:set.numberPersion - item.helpNumber,
+              this.$request.post('/shop/goods/pingtuan/list/v2', { goodsId: id, page: 1, pageSize: 10, status: 0 }).then(res => {
+                if (res.code === 0) {
+                  const nowTime = Date.now()
+                  this.pintuanList = res.data.result.map(item => ({
+                    id: item.id,
+                    avatarUrl: item.apiExtUser.avatarUrl || `${require('@/assets/avatar_default.png')}`,
+                    nick: item.apiExtUser.nick || '神秘用户',
+                    time: Math.floor(((new Date(item.dateEnd.replace(/-/g, '/')).getTime()) - nowTime)),
+                    number: set.numberPersion - item.helpNumber
                   }))
                   // 查看我的团
-                  this.$request.get('/shop/goods/pingtuan/my-join-list',{token:storage.get('token'),goodsId:id}).then(res => {
-                    if(res.code !== 0){
-                      return;
+                  this.$request.get('/shop/goods/pingtuan/my-join-list', { token: storage.get('token'), goodsId: id }).then(res => {
+                    if (res.code !== 0) {
+                      return
                     }
                     const myList = res.data.result.map(item => item.tuanInfo.id)
                     const pintuanList = this.pintuanList.map(item => item.id)
                     const isMyTuan = myList.some(item => pintuanList.includes(item))
-                    if(isMyTuan){
+                    if (isMyTuan) {
                       this.marketing.actions[1].text = '查看我的团'
-                      this.marketing.set.tuanId = res.data.result[0].tuanInfo.id  // 团号
+                      this.marketing.set.tuanId = res.data.result[0].tuanInfo.id // 团号
                     }
                   })
                 }
               })
-            })    
-            return;
-          }   
-          else if(this.basicInfo.miaosha){
+            })
+            return
+          } else if (this.basicInfo.miaosha) {
             this.marketingType('miaosha')
-            return;
-          }
-          else {
+            return
+          } else {
             this.marketingType('default')
           }
         }
         marketingFn()
         // 商品已下架
-        if(this.basicInfo.status === 1){
+        if (this.basicInfo.status === 1) {
           this.$toast(this.basicInfo.statusStr)
         }
         // 商品库存为0
-        if(this.basicInfo.stores === 0){ 
+        if (this.basicInfo.stores === 0) {
           this.$dialog.confirm({
             title: '提示',
             message: '该商品已售罄,去看看其他商品吧！',
-            showCancelButton:false,
+            showCancelButton: false
           }).then(() => {
             // on confirm
-            this.$router.replace({path:'/home'})
+            this.$router.replace({ path: '/home' })
           })
-          return;
+          return
         }
 
         this.initSkuData(this.properties, this.basicInfo)
-        
       })
     },
     initSkuData(properties, basicInfo) {
       // 商品规格sku数据
-      let tree = properties.map((item, index) => ({
+      const tree = properties.map((item, index) => ({
         k: item.name,
         k_id: item.id,
         v: item.childsCurGoods,
@@ -877,18 +848,18 @@ export default {
         title: basicInfo.name,
         picture: basicInfo.pic
       }
-      
-      this.skuData.goods_id = basicInfo.id  // 商品id
-      this.skuData.sku.price = basicInfo.minPrice.toFixed(2)  // 默认价格（单位元）
-      this.skuData.sku.stock_num = basicInfo.stores           // 商品总库存
+
+      this.skuData.goods_id = basicInfo.id // 商品id
+      this.skuData.sku.price = basicInfo.minPrice.toFixed(2) // 默认价格（单位元）
+      this.skuData.sku.stock_num = basicInfo.stores // 商品总库存
       this.skuData.sku.tree = tree
-      
+
       // 商品无规格
       if (tree.length === 0) {
         this.propTitle = ''
         this.skuData.none_sku = true
         // this.skuData.collection_id= 2261
-        return;
+        return
       }
 
       // 商品多个规格
@@ -898,56 +869,55 @@ export default {
          * 生成笛卡尔积
          * @returns {*}
          */
-        const descartes = function (array){
-          if( array.length < 2 ) return array[0] || [];
+        const descartes = function(array) {
+          if (array.length < 2) return array[0] || []
 
           return [].reduce.call(array, function(col, set) {
-            var res = [];
+            var res = []
             col.forEach(function(c) {
               set.forEach(function(s) {
-                  var t = [].concat( Array.isArray(c) ? c : [c] );
-                  t.push(s);
-                  res.push(t);
-            })});
-            return res;
-          });
-        } 
+                var t = [].concat(Array.isArray(c) ? c : [c])
+                t.push(s)
+                res.push(t)
+              })
+            })
+            return res
+          })
+        }
         const calc = descartes(Array.prototype.concat.apply([], tree.map(item => [item.v])))
-        this.skuData.sku.list = calc.map(item =>{
-          let obj = {
-            price: parseFloat((basicInfo.minPrice*100).toFixed(2)), // 价格（单位分）
-            stock_num: basicInfo.stores,  // 当前 sku 组合对应的库存
+        this.skuData.sku.list = calc.map(item => {
+          const obj = {
+            price: parseFloat((basicInfo.minPrice * 100).toFixed(2)), // 价格（单位分）
+            stock_num: basicInfo.stores // 当前 sku 组合对应的库存
           }
-          if(Array.isArray(item)){
+          if (Array.isArray(item)) {
             // 2种规格以上
-            item.forEach((v, i) =>{
+            item.forEach((v, i) => {
               obj[`s${i + 1}`] = v.id
-              obj.propertyChildIds = `${obj.propertyChildIds||''}${v.propertyId}:${v.id},`
-              obj.id = `${obj.id||''}${v.propertyId}${v.id}`
+              obj.propertyChildIds = `${obj.propertyChildIds || ''}${v.propertyId}:${v.id},`
+              obj.id = `${obj.id || ''}${v.propertyId}${v.id}`
             })
             return obj
-
-          }else{
-              // 只有一种规格的情况下 
-              obj['s1'] = item.id
-              obj.propertyChildIds = `${item.propertyId}:${item.id},`
-              obj.id = `${item.propertyId}${item.id}`
+          } else {
+            // 只有一种规格的情况下
+            obj['s1'] = item.id
+            obj.propertyChildIds = `${item.propertyId}:${item.id},`
+            obj.id = `${item.propertyId}${item.id}`
             return obj
           }
         })
       }
-
     },
-    onRuleClick(path){
+    onRuleClick(path) {
       console.log(path)
-      this.$router.push({path})
+      this.$router.push({ path })
     },
-    countDownEnd(){
+    countDownEnd() {
       this.$toast({
-        type:'text',
+        type: 'text',
         mask: true,
         message: '活动结束，该商品恢复原价！',
-        duration:2500,
+        duration: 2500
       })
       this.marketingType('default')
     }
@@ -970,7 +940,7 @@ export default {
   box-sizing: border-box;
   padding: 0 15px;
   background: #fff;
-  &-hd { 
+  &-hd {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -997,7 +967,7 @@ export default {
       text-decoration: line-through;
     }
     &_label{
-      margin-left: 10px; 
+      margin-left: 10px;
       box-sizing: border-box;
       display: inline-block;
       font-size: 10px;
@@ -1007,13 +977,13 @@ export default {
       border: 1px solid #f44;
     }
   }
-  
+
   &-brief {
     font-size: 12px;
     color: #888;
     margin-bottom: 10px;
   }
-  
+
   &-more {
     box-sizing: border-box;
     width: 100%;
@@ -1362,12 +1332,12 @@ export default {
   min-height:80px;
   &-share,&-backtop{
     box-sizing: border-box;
-    background: #fff; 
+    background: #fff;
     border-radius: 50%;
     overflow: hidden;
     border: 1px solid #7d7e80;
     width: 32px;
-    height: 32px; 
+    height: 32px;
     box-shadow: 0 0 2px 3px hsla(0,0%,86.3%,.1);
     display: flex;
     align-items: center;
@@ -1394,5 +1364,4 @@ export default {
     }
 }
 </style>
-
 

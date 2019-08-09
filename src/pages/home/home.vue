@@ -9,26 +9,18 @@
                 @cancel="onCancel"
             />
         </form> -->
-    <van-swipe :autoplay="3000"
-      indicator-color="white"
-      class="home-swiper">
-      <van-swipe-item v-for="item in banner"
-        :key="item.id">
-        <img :src="item.picUrl"
-          :alt="item.title" />
+    <van-swipe :autoplay="3000" indicator-color="white" class="home-swiper">
+      <van-swipe-item v-for="item in banner" :key="item.id">
+        <img :src="item.picUrl" :alt="item.title" />
       </van-swipe-item>
     </van-swipe>
     <div class="main">
       <div class="section-header common-h2" v-if="listKanjia.length"><span class="common-h2-title">疯狂砍价</span></div>
       <div class="list">
         <van-row>
-          <van-col span="12"
-            v-for="item in listKanjia"
-            :key="item.id">
-            <div class="list-item" @click="onDetailClick(item.id)"> 
-              <img class="list-item-img"
-                :src="item.pic"
-                :alt="item.name">
+          <van-col span="12" v-for="item in listKanjia" :key="item.id">
+            <div class="list-item" @click="onDetailClick(item.id)">
+              <img class="list-item-img" :src="item.pic" :alt="item.name">
               <div class="list-item-hd van-ellipsis">{{item.name}}</div>
               <div class="list-item-bd"><span class="ui-c-red">￥{{item.kanjiaPrice}}</span><span class="ui-c-dark ui-text-deleted">￥{{item.originalPrice}}</span></div>
             </div>
@@ -38,14 +30,10 @@
       <div class="section-header common-h2"><span class="common-h2-title">全民拼团</span></div>
       <div class="list">
         <van-row>
-          <van-col span="12"
-            v-for="(item,index) in listPintuan"
-            :key="item.id">
+          <van-col span="12" v-for="(item,index) in listPintuan" :key="item.id">
             <div class="list-item" @click="onDetailClick(item.id)">
               <!-- <div class="list-item-tag" v-if="pintuanSets.length">{{pintuanSets[index].numberSucccess}}人已成团</div> -->
-              <img class="list-item-img"
-                :src="item.pic"
-                :alt="item.name">
+              <img class="list-item-img" :src="item.pic" :alt="item.name">
               <div class="list-item-hd van-ellipsis">{{item.name}}</div>
               <div class="list-item-ft">
                 <div class="ui-c-red" v-if="pintuanSets.length"><span class="fz12">{{pintuanSets[index].numberPersion}}人团</span> ￥{{item.pingtuanPrice}}</div>
@@ -58,14 +46,10 @@
       <div class="section-header common-h2"><span class="common-h2-title">商品列表</span></div>
       <div class="list">
         <van-row>
-          <van-col span="12"
-            v-for="item in list"
-            :key="item.id">
+          <van-col span="12" v-for="item in list" :key="item.id">
             <div class="list-item" @click="onDetailClick(item.id)">
               <div class="list-item-tag" v-if="item.recommendStatus">推荐</div>
-              <img class="list-item-img"
-                :src="item.pic"
-                :alt="item.name">
+              <img class="list-item-img" :src="item.pic" :alt="item.name">
               <div class="list-item-hd van-ellipsis">{{item.name}}</div>
               <div class="list-item-bd"><span class="ui-c-red">￥{{item.minPrice}}</span>
               <!-- <span class="ui-c-dark ui-text-deleted">￥{{item.originalPrice}}</span> -->
@@ -75,7 +59,6 @@
         </van-row>
       </div>
     </div>
-    <!-- <load-more tip="暂无数据" :loading="false"/> -->
     <!-- 底部导航栏 -->
     <van-tabbar route
       v-model="active"
@@ -99,27 +82,27 @@
   </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Swipe, SwipeItem, Search, } from 'vant'
+import { Tabbar, TabbarItem, Swipe, SwipeItem, Search } from 'vant'
 export default {
   components: {
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
-    [Search.name]: Search,
+    [Search.name]: Search
   },
   data() {
     return {
       active: 0,
       images: [],
       value: '',
-      banner: [], 
+      banner: [],
       list: [],
-      listKanjia:[],
-      listPintuan:[],
-      pintuanSets:{},
-      goodsMap:{}
-    };
+      listKanjia: [],
+      listPintuan: [],
+      pintuanSets: {},
+      goodsMap: {}
+    }
   },
   created() {
     this.getBannerList()
@@ -131,31 +114,30 @@ export default {
     onSearch() { },
     onCancel() { },
     getGoodsList() {
-      this.$request.post('/shop/goods/list', {kanjia:false,pingtuan:false}).then(res => {
+      this.$request.post('/shop/goods/list', { kanjia: false, pingtuan: false }).then(res => {
         this.list = res.data || []
       })
     },
     getGoodsKjList() {
-      this.$request.post('/shop/goods/list', {kanjia:true}).then(res => { 
-        if(res.code !== 0){
-          return;
+      this.$request.post('/shop/goods/list', { kanjia: true }).then(res => {
+        if (res.code !== 0) {
+          return
         }
         // this.goodsMap = res.data.goodsMap
         this.listKanjia = res.data || []
-        this.listKanjia = this.listKanjia.filter(item => item.kanjia&&item.kanjiaPrice )
+        this.listKanjia = this.listKanjia.filter(item => item.kanjia && item.kanjiaPrice)
       })
     },
     getGoodsPtList() {
-      this.$request.post('/shop/goods/list', {pingtuan:true}).then(res => {
-        if(res.code !== 0){
-          return;
+      this.$request.post('/shop/goods/list', { pingtuan: true }).then(res => {
+        if (res.code !== 0) {
+          return
         }
         this.listPintuan = res.data || []
         const goodsIdArr = this.listPintuan.map(v => v.id).join()
-        this.$request.get('/shop/goods/pingtuan/sets', {goodsId:goodsIdArr}).then(res => {
+        this.$request.get('/shop/goods/pingtuan/sets', { goodsId: goodsIdArr }).then(res => {
           this.pintuanSets = res.data
         })
-          
       })
     },
     getBannerList() {
@@ -164,29 +146,28 @@ export default {
       })
     },
     onDetailClick(id) {
-      this.$router.push({ path: '/goods-detail', query: { id } })
+      this.$router.push({ path: '/goods-detail', query: { id }})
     }
   }
 }
 </script>
 <style lang="less" scoped>
 
-.home-swiper,.home-swiper img{
+.home-swiper,.home-swiper img {
   width: 100%;
   height: 188px;
 }
-.common-h2{
+.common-h2 {
   background: none;
 }
-.list { 
-    padding-left: 5px;
-    padding-right: 5px;
+.list {
+  padding-left: 5px;
+  padding-right: 5px;
   .van-col {
     box-sizing: border-box;
     padding-left: 5px;
     padding-right: 5px;
     margin-bottom: 10px;
-    
   }
 
   &-item {
@@ -194,7 +175,7 @@ export default {
     text-align: left;
     overflow: hidden;
     background: #fff;
-    // border-radius: 8px; 
+    // border-radius: 8px;
     // box-shadow: 0px 2px 4px 3px rgba(243, 243, 243, 0.5);
   &-tag {
     position: absolute;

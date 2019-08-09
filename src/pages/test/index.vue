@@ -19,37 +19,37 @@
 import { List } from 'vant'
 
 export default {
-  components:{
-    [List.name]: List,
+  components: {
+    [List.name]: List
   },
-  data(){
+  data() {
     return {
       list: [],
       loading: false,
       finished: false
     }
   },
-  created(){
+  created() {
     // this.getPintuanJoiner(this.$route.query.id)
   },
-  methods:{
+  methods: {
     onLoad() {
       console.log(1)
       // 异步更新数据
       setTimeout(() => {
         for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1);
+          this.list.push(this.list.length + 1)
         }
         // 加载状态结束
-        this.loading = false;
+        this.loading = false
 
         // 数据全部加载完成
         // if (this.list.length >= 40) {
-          this.finished = true;
+        this.finished = true
         // }
-      }, 500);
+      }, 500)
     }
-  } 
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -89,7 +89,4 @@ export default {
     padding:20px 0;
   }
 </style>
-
-
-
 
