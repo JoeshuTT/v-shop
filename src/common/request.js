@@ -19,7 +19,7 @@ const toLogin = () => {
 // 默认请求地址
 Axios.defaults.baseURL = process.env.VUE_APP_BASE_API // url = base url + request url
 Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-Axios.defaults.timeout = 10000
+Axios.defaults.timeout = 10*1000
 // 请求(http request)拦截器 提前处理
 
 // 响应(http response)拦截器 处理异常
@@ -48,6 +48,12 @@ Axios.interceptors.response.use(
     if (response) {
       // 请求已发出，但服务器响应的状态码不在 2xx 范围内
       // console.warn(`web request ${response.config.url}，status： ${response.status}，statusText： ${response.statusText}`)
+      console.group('Ajax 错误')
+      console.log('request: ', `${response.config.url}`)
+      console.log('status: ', `${response.status}`)
+      console.log('status: ', `${response.statusText}`)
+      console.groupEnd()
+
       return Promise.reject(response)
     }else{
       // 网络超时,断网,请求不存在等

@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     },
     defaultAddress: {},
     userInfo:{
-      avatarUrl: `${require('@/assets/avatar_default.png')}`,
+      avatarUrl: '',
       nick:'',
       province:'',
       city:'',

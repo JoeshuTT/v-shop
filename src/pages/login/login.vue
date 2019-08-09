@@ -25,6 +25,10 @@
           type="tel"
           label="手机号"
           placeholder="请输入手机号" />
+        <van-field v-model="nick"
+          type="text"
+          label="用户"
+          placeholder="请输入用户名" />
         <van-field v-model="pwd"
           type="password"
           label="密码"
@@ -69,6 +73,7 @@ export default {
       current:0,  // 0登录,1注册
       mobile: '',
       pwd: '123456',
+      nick: '',
       code: '',
       vcodeSend: 0, // 0获取验证码,1验证码倒计时,
       vcodeText: '获取验证码',
@@ -93,6 +98,11 @@ export default {
         this.$toast('请输入正确的密码')
         return;
       }
+      // 用户名
+      if (this.current && isEmpty(this.nick)) {
+        this.$toast('请输入用户名')
+        return;
+      }
       // 短信验证码4位数字
       if (this.current && !/^\d{4}$/.test(this.code)) {
         this.$toast('请输入正确的验证码')
@@ -110,10 +120,10 @@ export default {
     mobileRegister() {
       const params = {
         mobile: this.mobile,
+        nick: this.nick || `用户${(new Date()).format('MM-dd')}`,
         pwd: this.pwd,
         code: this.code,
         autoLogin: true,  //该参数可以自动完成登录并返回token
-        nick:`用户${(new Date()).format('MM-dd')}`
       }
       this.$request.post('/user/m/register', params).then(res => {
         if (res.code !== 0) {
