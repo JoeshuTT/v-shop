@@ -1,11 +1,9 @@
-(function localStorage() {
-  if (!window.localStorage) {
-    alert('浏览器不支持localstorage')
-    return false
-  }
-  // return window.localStorage
-})()
+/**
+ * 工具类
+ * @author Joeshu
+ */
 
+// localStorage 简易API封装
 export const storage = {
   set(key, data) {
     window.localStorage.setItem(key, JSON.stringify(data))
@@ -20,7 +18,7 @@ export const storage = {
     window.localStorage.clear()
   }
 }
-
+// sessionStorage 简易API封装
 export const sessionStorage = {
   set(key, data) {
     window.sessionStorage.setItem(key, JSON.stringify(data))
@@ -35,9 +33,14 @@ export const sessionStorage = {
     window.sessionStorage.clear()
   }
 }
-// 函数防抖 debounce
+/**
+ * 函数防抖
+ * @param {callback} fn 事件回调
+ * @param {number} delay 每次推迟执行的等待时间
+ */
 export const debounce = function(fn, delay) {
-  let last = 0; let timer = null
+  let last = 0
+  let timer = null
   return function() {
     const context = this
     const args = arguments
@@ -55,7 +58,11 @@ export const debounce = function(fn, delay) {
     }
   }
 }
-// 函数节流 throttle
+/**
+ * 函数节流
+ * @param {*} fn 事件回调
+ * @param {*} interval 时间间隔的阈值
+ */
 export const throttle = function(fn, interval) {
   let last = 0
   return function() {

@@ -31,6 +31,7 @@ export default {
   },
   created() {
     // this.getPintuanJoiner(this.$route.query.id)
+
   },
   methods: {
     onLoad() {
