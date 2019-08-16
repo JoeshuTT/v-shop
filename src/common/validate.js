@@ -1,5 +1,5 @@
 /**
- * 是否是字符串
+ * 是否是字符串类型
  * @param {string} str
  */
 export function isString(str) {
@@ -10,7 +10,7 @@ export function isString(str) {
 }
 
 /**
- * 是否是字符串
+ * 是否是数组类型
  * @param {array} arg
  */
 export function isArray(arg) {
@@ -21,18 +21,31 @@ export function isArray(arg) {
 }
 /**
  * 是否是手机号码格式
- * @param {array} arg
+ * @param {string} value
  */
 export function isPhone(value) {
   const reg = /^1[0-9]{10}$/
   return reg.test(value)
 }
 /**
- * 是否为空字符串
- * @param {string} value
+ * 是否为空数据
+ * @param {*} obj
  */
-export function isEmpty(value) {
-  return !`${value}`.trim().length
+
+export function isEmpty(obj) {
+  if (obj == null) {
+    return true
+  }
+  if (isArray(obj)) {
+    return obj.length === 0
+  }
+  if (isString(obj)) {
+    return !`${obj}`.trim().length
+  }
+  if (JSON.stringify(obj) === '{}') {
+    return true
+  }
+  return true
 }
 /**
  * 是否是邮箱格式
