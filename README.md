@@ -1,13 +1,11 @@
 # v-shop 商城(H5端)
 一个前端基于vue，后端使用api工厂供的免费接口和云后台实现的移动端商城
-**最近有点忙,暂不更**
-**最近有点忙,暂不更**
-**最近有点忙,暂不更**
+
 - 项目地址  
 [http://wx.shuzp.top](http//:wx.shuzp.top)
 
 - 项目二维码(手机扫码)  
-![项目二维码](http://shuzp.top/tuchuang/二维码_vshop.png)
+![项目二维码](https://s2.ax1x.com/2020/02/11/1TPJKS.png)
 
 ## 项目设置
 ```
@@ -59,11 +57,11 @@ npm run build
 ## 项目截图
 上传图片会被截掉,换成点链接查看
 
-[项目截图](http://shuzp.top/tuchuang/项目截图_vshop.jpg)  
+[项目截图](https://s2.ax1x.com/2020/02/11/1T9Bon.jpg)  
 
-[拼团截图](http://shuzp.top/tuchuang/拼团截图_vshop.jpg)  
+[拼团截图](https://s2.ax1x.com/2020/02/11/1T9yWV.jpg)  
 
-[砍价截图](http://shuzp.top/tuchuang/砍价截图_vshop.jpg)  
+[砍价截图](https://s2.ax1x.com/2020/02/11/1T9riq.jpg)
 ## 项目结构
 ```
 src -- 源码目录
