@@ -45,7 +45,7 @@ export function isEmpty(obj) {
   if (JSON.stringify(obj) === '{}') {
     return true
   }
-  return true
+  return false
 }
 /**
  * 是否是邮箱格式
