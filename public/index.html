@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"
+    />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      .p-preloader {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+        background-color: #fff;
+        color: #c8c9cc;
+      }
+
+      .p-preloader__icon {
+        box-sizing: border-box;
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 10px;
+      }
+
+      .p-preloader__icon svg {
+        margin: 0 auto 10px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .p-preloader__label {
+        font-size: 14px;
+        text-align: center;
+        letter-spacing: 2px;
+        padding-left: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <strong
+        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please
+        enable it to continue.</strong
+      >
+    </noscript>
+    <div id="app">
+      <div class="p-preloader">
+        <div class="p-preloader__wrap">
+          <div class="p-preloader__icon">
+            <svg
+              t="1644157294581"
+              class="icon"
+              viewBox="0 0 1024 1024"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="2168"
+              width="128"
+              height="128"
+            >
+              <path
+                d="M799.301818 1002.705455H222.254545a122.298182 122.298182 0 0 1-122.181818-122.181819V455.330909a29.090909 29.090909 0 0 1 58.181818 0v425.192727a64.116364 64.116364 0 0 0 64 64h577.047273a64.116364 64.116364 0 0 0 64-64V455.330909a29.090909 29.090909 0 0 1 58.181818 0v425.192727a122.298182 122.298182 0 0 1-122.181818 122.181819z"
+                fill="currentColor"
+                p-id="2169"
+              ></path>
+              <path
+                d="M976.174545 465.454545h-930.90909a29.090909 29.090909 0 0 1-27.578182-38.283636l128-384A29.090909 29.090909 0 0 1 173.265455 23.272727h674.90909a29.090909 29.090909 0 0 1 27.578182 19.898182l128 384A29.090909 29.090909 0 0 1 976.174545 465.454545zM85.643636 407.272727h850.152728L827.229091 81.454545h-633.018182z"
+                fill="currentColor"
+                p-id="2170"
+              ></path>
+              <path
+                d="M276.014545 743.447273A29.090909 29.090909 0 0 1 256 693.643636l90.996364-89.949091a29.090909 29.090909 0 1 1 40.96 41.425455l-90.996364 89.949091a28.974545 28.974545 0 0 1-20.945455 8.378182zM354.443636 829.556364A29.090909 29.090909 0 0 1 334.08 779.636364l181.992727-179.898182a29.090909 29.090909 0 0 1 40.843637 41.425454L374.923636 821.178182a28.974545 28.974545 0 0 1-20.48 8.378182z"
+                fill="currentColor"
+                p-id="2171"
+              ></path>
+            </svg>
+          </div>
+          <div class="p-preloader__label">加载中...</div>
+        </div>
+      </div>
+    </div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
