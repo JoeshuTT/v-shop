@@ -1,0 +1,41 @@
+{
+  // editor
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // eslint
+  "eslint.validate": ["javascript", "javascriptreact", "vue", "typescript", "typescriptreact"],
+  // typescript
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "cSpell.words": [
+    "avic",
+    "browserslist",
+    "compressorjs",
+    "flashdeliver",
+    "groupon",
+    "Lazyload",
+    "Localforage",
+    "openid",
+    "ordermeal",
+    "ordermealwx",
+    "Pinia",
+    "pnpm",
+    "prefetch",
+    "scroller",
+    "Seckill",
+    "superdesk",
+    "swipeable",
+    "tabbar",
+    "tailwindcss",
+    "unref",
+    "vant",
+    "vconsole",
+    "vite",
+    "vitejs",
+    "vueuse",
+    "vuex"
+  ]
+}

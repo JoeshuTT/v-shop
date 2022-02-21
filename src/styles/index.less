@@ -1,0 +1,31 @@
+@import './css-var.less';
+@import './iconfont.less';
+@import './vant-theme-custom.less';
+
+body {
+  font-family: @font-family-base;
+  font-size: 16px;
+  color: var(--gray-color-8);
+  background-color: var(--gray-color-1);
+}
+
+.text-brand-color {
+  color: var(--brand-color) !important;
+}
+
+// 按钮点击
+.button-active:active {
+  opacity: @active-opacity;
+}
+
+.container-full {
+  box-sizing: border-box;
+  min-height: 100vh;
+  background: var(--white);
+}
+
+// html识别\n 换行
+.rich-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
