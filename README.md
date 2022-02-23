@@ -44,7 +44,13 @@ v-shop 是一个前端免费开源的企业级 H5 商城，也可用于学习参
 获取项目代码
 
 ```bash
+# 通过 github 拉取
 git clone https://github.com/JoeshuTT/v-shop.git
+
+# 或者 gitee（国内）
+git clone https://gitee.com/Joeshu/v-shop.git
+
+# 进入项目目录
 cd v-shop
 ```
 
@@ -66,3 +72,9 @@ pnpm run dev
 ```bash
 pnpm run build
 ```
+
+## ⭐ 作者
+
+如果觉得项目不错，或者有帮助到你，希望你可以去 Github 或者 Gitee 帮我点个 ⭐ Star，这将是对我极大的鼓励与支持。
+
+微信： f144270（请备注 v-shop）
