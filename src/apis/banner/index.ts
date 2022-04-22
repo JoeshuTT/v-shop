@@ -1,10 +1,10 @@
-import { defRequest } from '@/utils/http/request';
+import { request } from '@/utils/request';
 
 /**
  * Banner列表
  */
 export function bannerList(data?: Recordable) {
-  return defRequest({
+  return request({
     url: `/banner/list`,
     method: 'get',
     params: data,
@@ -15,7 +15,7 @@ export function bannerList(data?: Recordable) {
  * 获取所有的Banner类型
  */
 export function bannerTypes(data?: Recordable) {
-  return defRequest({
+  return request({
     url: `/banner/types`,
     method: 'get',
     params: data,
