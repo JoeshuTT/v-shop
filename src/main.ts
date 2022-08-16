@@ -5,12 +5,8 @@ import { router } from './router';
 import { store } from './store';
 
 // Vant
-import Vant, { Lazyload, Dialog } from 'vant';
+import Vant, { Lazyload } from 'vant';
 import 'vant/lib/index.less';
-
-Dialog.setDefaultOptions({
-  teleport: '.container',
-});
 
 // guard
 import './router/guard';

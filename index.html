@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cmn-Hans">
+<html>
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -8,52 +8,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"
     />
-    <link rel="icon" href="/favicon.ico" />
     <title><%= title %></title>
-    <style>
-      .p-preloader {
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: center;
-        -webkit-align-items: center;
-        -ms-flex-align: center;
-        align-items: center;
-        -webkit-box-pack: center;
-        -webkit-justify-content: center;
-        -ms-flex-pack: center;
-        justify-content: center;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 2;
-        background-color: #fff;
-        color: #c8c9cc;
-      }
-
-      .p-preloader__icon {
-        box-sizing: border-box;
-        width: 40px;
-        height: 40px;
-        margin: 0 auto 10px;
-      }
-
-      .p-preloader__icon svg {
-        margin: 0 auto 10px;
-        width: 40px;
-        height: 40px;
-      }
-
-      .p-preloader__label {
-        font-size: 14px;
-        text-align: center;
-        letter-spacing: 2px;
-        padding-left: 2px;
-      }
-    </style>
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/index.css" />
   </head>
   <body>
     <div id="app">
@@ -87,11 +44,10 @@
               ></path>
             </svg>
           </div>
-          <div class="p-preloader__label">加载中...</div>
+          <div class="p-preloader__label">加载中，请稍后</div>
         </div>
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
-    <!-- built files will be auto injected -->
   </body>
 </html>

@@ -1,12 +1,12 @@
-import { getAPI } from '@/utils';
-import { defRequest } from '@/utils/http/request';
 import qs from 'qs';
+import { getAPI } from '@/utils';
+import { request } from '@/utils/request';
 
 /**
  * 校验邮件验证码是否正确
  */
 export function verificationMailCheck(data?: Recordable) {
-  return defRequest({
+  return request({
     url: `/verification/mail/check`,
     method: 'post',
     data,
@@ -17,7 +17,7 @@ export function verificationMailCheck(data?: Recordable) {
  * 获取邮件验证码
  */
 export function verificationMailGet(data?: Recordable) {
-  return defRequest({
+  return request({
     url: `/verification/mail/get`,
     method: 'get',
     params: data,
@@ -28,7 +28,7 @@ export function verificationMailGet(data?: Recordable) {
  * 校验图片验证码是否正确
  */
 export function verificationPicCheck(data?: Recordable) {
-  return defRequest({
+  return request({
     url: `/verification/pic/check`,
     method: 'post',
     data,
@@ -46,7 +46,7 @@ export function verificationPicGet(data?: Recordable) {
  * 校验短信验证码是否正确
  */
 export function verificationSmsCheck(data?: Recordable) {
-  return defRequest({
+  return request({
     url: `/verification/sms/check`,
     method: 'post',
     data,
@@ -57,7 +57,7 @@ export function verificationSmsCheck(data?: Recordable) {
  * 获取短信验证码
  */
 export function verificationSmsGet(data?: Recordable) {
-  return defRequest({
+  return request({
     url: `/verification/sms/get`,
     method: 'get',
     params: data,
@@ -68,7 +68,7 @@ export function verificationSmsGet(data?: Recordable) {
  * 获取短信验证码[发送至当前绑定手机]
  */
 export function verificationSmsGetByToken(data?: Recordable) {
-  return defRequest({
+  return request({
     url: `/verification/sms/get-by-token`,
     method: 'get',
     params: data,

@@ -113,7 +113,7 @@ export function isCaptchaCode(val: string) {
 
 /**
  * 账户名称
- * @param {String} val
+ * @param {string} val
  * @description 1到32位的数字、字母、下划线组合，不能以下划线、横线开头
  */
 export function isUserName(val: string) {
@@ -123,7 +123,7 @@ export function isUserName(val: string) {
 
 /**
  * 账户密码
- * @param {String} val
+ * @param {string} val
  * @description 8-25位大小写字母、数字或数字加字母的形式
  */
 export function isPassWord(val: string) {
@@ -133,8 +133,8 @@ export function isPassWord(val: string) {
 
 /**
  * 数据是否一致
- * @param {String} target
- * @param {String} source
+ * @param {string} target
+ * @param {string} source
  */
 export function isSame(target: any, source: any) {
   return Object.is(target, source);

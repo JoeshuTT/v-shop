@@ -8,7 +8,7 @@ import AffixBarAction from '@/components/AffixBarAction/index.vue';
 import Upload from '@/components/Upload/index.vue';
 import { isEmpty } from '@/utils/validate';
 import { assets } from '@/constants';
-import { areaList } from '@vant/area-data';
+import AreaField from '@/components/AreaField/index.vue';
 
 import { useUserStore } from '@/store/modules/user';
 
@@ -27,7 +27,6 @@ const avatarUrl = ref('');
 const nick = ref('');
 const province = ref('');
 const city = ref('');
-const showPicker = ref(false);
 const areaLabel = computed(() => {
   if (!unref(province)) {
     return '';
@@ -44,10 +43,9 @@ function onFileSuccess(res: any) {
   avatarUrl.value = res.data.url;
 }
 
-function onAreaConfirm(values: Array<AreaColumnOption>) {
+function onAreaChange(values: Array<AreaColumnOption>) {
   province.value = values[0].name;
   city.value = values[1].name;
-  showPicker.value = false;
 }
 
 function onSubmit() {
@@ -108,19 +106,15 @@ function onSubmit() {
       <div class="nick-label">昵称</div>
       <van-field v-model="nick" placeholder="12个字以内" />
     </div>
-    <van-field
-      readonly
+    <AreaField
       :model-value="areaLabel"
       label="所在地"
       placeholder="点击选择城市"
       input-align="right"
-      is-link
       :border="false"
-      @click="showPicker = true"
+      :columns-num="2"
+      @change="onAreaChange"
     />
-    <van-popup v-model:show="showPicker" position="bottom">
-      <van-area :area-list="areaList" :columns-num="2" @cancel="showPicker = false" @confirm="onAreaConfirm" />
-    </van-popup>
 
     <AffixBarAction @submit="onSubmit" />
   </div>

@@ -3,6 +3,7 @@
  */
 export const app = {
   name: 'v-shop',
+  link: 'https://github.com/JoeshuTT/v-shop/',
 };
 
 export interface ITheme {
@@ -12,10 +13,6 @@ export interface ITheme {
   viceTextColor: string;
   colors: {
     brandColor: string;
-    viceColor: string;
-    viceTextColor: string;
-    black: string;
-    white: string;
     [key: string]: string;
   };
 }
@@ -42,8 +39,7 @@ export interface ITabBar {
   selectedColor: string;
   list: {
     text: string;
-    pagePath: string;
-    icon: string;
+    [key: string]: string;
   }[];
 }
 
@@ -58,21 +54,25 @@ export const tabBar: ITabBar = {
       text: '首页',
       pagePath: '/home',
       icon: 'home-o',
+      activeIcon: 'home-o',
     },
     {
       text: '分类',
       pagePath: '/category',
       icon: 'apps-o',
+      activeIcon: 'apps-o',
     },
     {
       text: '购物车',
       pagePath: '/cart',
       icon: 'shopping-cart-o',
+      activeIcon: 'shopping-cart',
     },
     {
       text: '个人中心',
       pagePath: '/mine',
       icon: 'contact',
+      activeIcon: 'contact',
     },
   ],
 };

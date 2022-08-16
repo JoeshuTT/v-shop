@@ -1,4 +1,53 @@
 /**
+ * 函数节流
+ * @param {callback} fn 事件回调
+ * @param {number} interval 时间间隔的阈值
+ */
+export function throttle(fn: any, interval: number) {
+  let last = 0;
+  return function () {
+    // @ts-ignore
+    // eslint-disable-next-line
+    const context = this;
+    const args = arguments;
+    const now = Number(new Date());
+
+    if (now - last >= interval) {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+}
+
+/**
+ * 函数防抖
+ * @param {callback} fn 事件回调
+ * @param {number} delay 每次推迟执行的等待时间
+ */
+export function debounce(fn: any, delay: number) {
+  let last = 0;
+  let timer: any = null;
+  return function () {
+    // @ts-ignore
+    // eslint-disable-next-line
+    const context = this;
+    const args = arguments;
+    const now = Number(new Date());
+
+    if (now - last < delay) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        last = now;
+        fn.apply(context, args);
+      }, delay);
+    } else {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+}
+
+/**
  * 深拷贝
  * @param {*} sources 源对象
  * @returns {*} 拷贝后的新对象
@@ -17,8 +66,8 @@ export function deepClone(sources: any): any {
 
 /**
  * 生成指定两个整数范围内的随机整数
- * @param {Number} m
- * @param {Number} n
+ * @param {number} m
+ * @param {number} n
  * @example random(0, 10)
  */
 export const randomIntegerInRange = function (m: number, n: number) {

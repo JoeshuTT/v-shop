@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import IMAGE_RELOAD from '@/assets/images/error/reload.png';
+import IMAGE_RELOAD from '@/assets/images/exception/reload.png';
 
 const router = useRouter();
 
@@ -33,7 +33,7 @@ function onReload() {
 }
 
 .title {
-  color: var(--gray-6);
+  color: #999;
   font-size: 14px;
 }
 

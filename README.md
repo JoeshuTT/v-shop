@@ -2,7 +2,17 @@
 
 ## 🌈 简介
 
-v-shop 是一个前端免费开源的企业级 H5 商城，也可用于学习参考。
+v-shop 是一个前端免费开源的企业级移动端（H5）商城，使用 `vue3` `vite` `vant` `typescript`等前端前沿技术开发，也可用于学习参考。
+
+## ✨ 特性
+
+- 💪 使用前端主流技术栈搭建
+- 🍭 使用 [api 工厂](https://www.it120.cc/) 提供的开放 API 接口
+- 🍭 Vant 设计风格，支持 Vue 2、Vue 3
+- 🍭 清晰的项目结构，业务代码的最佳实现
+- 🍭 使用 TypeScript 开发
+- 🍭 使用 [AlloyTeam ESLint](https://github.com/AlloyTeam/eslint-config-alloy) 规则， 规范项目代码
+- 🎨 支持动态切换主题，支持动态加载 vconsole 面板
 
 ## 🔥 预览
 

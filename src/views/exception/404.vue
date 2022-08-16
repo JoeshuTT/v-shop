@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import IMAGE_404 from '@/assets/images/error/404.png';
+import IMAGE_404 from '@/assets/images/exception/404.png';
 
 const router = useRouter();
 
 function goHome() {
-  router.replace('/home');
+  router.replace('/');
 }
 </script>
 

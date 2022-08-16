@@ -1,11 +1,10 @@
 /* eslint-disable */
 
 /**
- * @description 打开 vConsole 面板
- * 支持url带参数唤起 vconsole=show
- * 测试环境下自动打开 vConsole 面板
+ * 支持动态加载 vconsole 面板，调试定位错误
+ * 1. 支持 vConsole 面板展示
+ * 2. 支持 url 带参数（vconsole=show）唤起
  */
-
 import { getDevicePlatform } from '@/utils';
 
 if (show()) {
@@ -24,9 +23,8 @@ if (show()) {
     };
   });
 
-  loadScript('https://cdn.jsdelivr.net/npm/vconsole@3/dist/vconsole.min.js', function () {
+  loadScript('https://fastly.jsdelivr.net/npm/vconsole@3/dist/vconsole.min.js', function () {
     if (typeof vConsole === 'undefined') {
-      // eslint-disable-next-line no-undef
       window.vConsole = new VConsole({
         maxLogNumber: 5000,
       });

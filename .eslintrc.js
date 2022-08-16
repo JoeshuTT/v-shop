@@ -1,9 +1,18 @@
-// @ts-check
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { defineConfig } = require('eslint-define-config');
-
-module.exports = defineConfig({
+module.exports = {
   root: true,
+  extends: ['alloy', 'alloy/vue', 'alloy/typescript'],
+  parser: 'vue-eslint-parser',
+  parserOptions: {
+    parser: {
+      js: '@babel/eslint-parser',
+      jsx: '@babel/eslint-parser',
+
+      ts: '@typescript-eslint/parser',
+      tsx: '@typescript-eslint/parser',
+
+      // Leave the template parser unspecified, so that it could be determined by `<script lang="...">`
+    },
+  },
   env: {
     browser: true,
     node: true,
@@ -12,17 +21,6 @@ module.exports = defineConfig({
     uni: true,
     wx: true,
   },
-  parser: 'vue-eslint-parser',
-  parserOptions: {
-    parser: '@typescript-eslint/parser',
-    ecmaVersion: 2020,
-    sourceType: 'module',
-    jsxPragma: 'React',
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
-  extends: ['alloy', 'alloy/typescript', 'alloy/vue'],
   rules: {
     // 自定义你的规则
     'no-console': 'off',
@@ -33,5 +31,6 @@ module.exports = defineConfig({
     'vue/no-multiple-template-root': 'off',
     // 'vue/no-duplicate-attributes': 'off',
     // 'vue/no-v-for-template-key': 'off',
+    '@typescript-eslint/prefer-optional-chain': 'off',
   },
-});
+};

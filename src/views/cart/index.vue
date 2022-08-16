@@ -450,7 +450,6 @@ function onSubmit() {
 
   &-btn {
     box-sizing: border-box;
-    width: 74px;
     height: 32px;
     line-height: 30px;
     font-size: 14px;

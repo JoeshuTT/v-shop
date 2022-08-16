@@ -57,7 +57,21 @@ export default defineComponent({
 .tabbar {
   :deep(.van-tabbar-item--active) {
     color: var(--brand-color);
-    color: var(--brand-color);
+    .van-icon {
+      animation: scale-icon 0.3s ease-in-out;
+    }
+  }
+
+  @keyframes scale-icon {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.8);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 }
 </style>

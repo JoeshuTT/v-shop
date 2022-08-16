@@ -403,7 +403,7 @@ function addCartHandle() {
   padding: 0 10px;
   padding-top: 10px;
   overflow: hidden;
-  color: va(--color-gray-8);
+  color: var(--color-gray-8);
   font-size: 16px;
   line-height: 1.5;
   text-align: left;

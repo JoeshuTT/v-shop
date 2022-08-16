@@ -1,24 +1,12 @@
 import { Notify } from 'vant';
-import { getDevicePlatform } from '@/utils';
-import deviceModel from '@/utils/helpers/deviceModel';
 import { toRouteType } from '@/router/types';
 import { router } from '@/router';
+import { getDevicePlatform } from '@/utils';
+import deviceModel from '@/utils/helpers/deviceModel';
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { useAppStoreWithOut } from '@/store/modules/app';
 
 let appLoadedFlag: boolean; // 应用窗口加载标记
-const whitePathList: string[] = [
-  '/',
-  '/home',
-  '/category',
-  '/cart',
-  '/mine',
-  '/login',
-  '/register',
-  '/resetPwd',
-  '/test',
-  '/theme',
-];
 
 router.beforeEach(async (to: toRouteType, from, next) => {
   console.log('[route]', from.path, to.path);
@@ -37,7 +25,7 @@ router.beforeEach(async (to: toRouteType, from, next) => {
     console.info('app URL', window.location.href);
 
     console.info(
-      '[用户信息] 设备信息: ',
+      '[用户信息] 设备信息：',
       '设备型号',
       deviceModel(),
       '是否Android',
@@ -49,7 +37,8 @@ router.beforeEach(async (to: toRouteType, from, next) => {
       '是否小程序内打开',
       getDevicePlatform().isInMiniProgram,
     );
-    //
+
+    // PC 浏览提示
     if (deviceModel() === 'PC' && document.documentElement.clientWidth >= 750) {
       Notify({
         color: '#ed6a0c',
@@ -63,19 +52,12 @@ router.beforeEach(async (to: toRouteType, from, next) => {
   }
 
   const userStore = useUserStoreWithOut();
-
   const token = userStore.getToken;
 
-  if (!(token || whitePathList.includes(to.path))) {
+  // 需要登录
+  if (to.meta.needLogin && !token) {
     const redirect = to.path || '/';
 
-    console.log({
-      path: '/login',
-      query: {
-        ...to.query,
-        redirect,
-      },
-    });
     next({
       path: '/login',
       query: {

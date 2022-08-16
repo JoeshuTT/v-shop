@@ -1,14 +1,6 @@
 import { isDef } from './validate';
 
 /**
- * 保留小数点（非四舍五入）
- * @example toFixed(3.146, 2) // 3.14
- */
-export function toFixed(n: number, digits = 2) {
-  return ~~(Math.pow(10, digits) * n) / Math.pow(10, digits);
-}
-
-/**
  * 保留小数点（原生toFixed）
  */
 export function decimalFormat(n: number | string, digits = 2) {

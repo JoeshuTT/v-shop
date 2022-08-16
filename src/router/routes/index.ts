@@ -65,6 +65,7 @@ const routes = [
     component: () => import('@/views/order/list.vue'),
     meta: {
       title: '订单列表',
+      needLogin: true,
     },
   },
   {
@@ -73,6 +74,7 @@ const routes = [
     component: () => import('@/views/order/detail.vue'),
     meta: {
       title: '订单详情',
+      needLogin: true,
     },
   },
   {
@@ -81,6 +83,7 @@ const routes = [
     component: () => import('@/views/order/submit.vue'),
     meta: {
       title: '提交订单',
+      needLogin: true,
     },
   },
   {
@@ -89,6 +92,7 @@ const routes = [
     component: () => import('@/views/order/payResult.vue'),
     meta: {
       title: '支付结果',
+      needLogin: true,
     },
   },
   {
@@ -97,6 +101,7 @@ const routes = [
     component: () => import('@/views/refund/index.vue'),
     meta: {
       title: '退款/售后',
+      needLogin: true,
     },
   },
   {
@@ -105,6 +110,7 @@ const routes = [
     component: () => import('@/views/refund/apply.vue'),
     meta: {
       title: '申请售后',
+      needLogin: true,
     },
   },
   {
@@ -113,6 +119,7 @@ const routes = [
     component: () => import('@/views/coupon/index.vue'),
     meta: {
       title: '我的优惠券',
+      needLogin: true,
     },
   },
   {
@@ -121,6 +128,7 @@ const routes = [
     component: () => import('@/views/integral/index.vue'),
     meta: {
       title: '积分中心',
+      needLogin: true,
     },
   },
   {
@@ -129,6 +137,7 @@ const routes = [
     component: () => import('@/views/integral/rule.vue'),
     meta: {
       title: '积分规则',
+      needLogin: true,
     },
   },
   {
@@ -137,6 +146,7 @@ const routes = [
     component: () => import('@/views/integral/scoreLog.vue'),
     meta: {
       title: '积分明细',
+      needLogin: true,
     },
   },
   {
@@ -145,6 +155,7 @@ const routes = [
     component: () => import('@/views/integral/exchange.vue'),
     meta: {
       title: '积分兑换',
+      needLogin: true,
     },
   },
   {
@@ -153,6 +164,7 @@ const routes = [
     component: () => import('@/views/wallet/index.vue'),
     meta: {
       title: '我的钱包（资产）',
+      needLogin: true,
     },
   },
   {
@@ -161,6 +173,7 @@ const routes = [
     component: () => import('@/views/wallet/cashLog.vue'),
     meta: {
       title: '资金记录',
+      needLogin: true,
     },
   },
   {
@@ -169,6 +182,7 @@ const routes = [
     component: () => import('@/views/address/index.vue'),
     meta: {
       title: '收货地址',
+      needLogin: true,
     },
   },
   {
@@ -177,6 +191,7 @@ const routes = [
     component: () => import('@/views/address/edit.vue'),
     meta: {
       title: '编辑收货地址',
+      needLogin: true,
     },
   },
   {
@@ -201,6 +216,7 @@ const routes = [
     component: () => import('@/views/setting/index.vue'),
     meta: {
       title: '设置',
+      needLogin: true,
     },
   },
   {
@@ -209,6 +225,7 @@ const routes = [
     component: () => import('@/views/profile/index.vue'),
     meta: {
       title: '编辑资料',
+      needLogin: true,
     },
   },
   {
@@ -219,24 +236,25 @@ const routes = [
       title: '主题风格',
     },
   },
-  // errorPage
+  // Test
   {
     path: '/test',
     component: () => import('@/views/test/index.vue'),
     meta: {
-      title: '加载异常',
+      title: '测试',
     },
   },
+  // exception
   {
     path: '/reload',
-    component: () => import('@/views/error/reload.vue'),
+    component: () => import('@/views/exception/reload.vue'),
     meta: {
       title: '加载异常',
     },
   },
   {
     path: '/404',
-    component: () => import('@/views/error/404.vue'),
+    component: () => import('@/views/exception/404.vue'),
     meta: {
       title: '找不到页面',
     },
