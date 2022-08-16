@@ -10,7 +10,7 @@
 export default {
   data() {
     return {
-      image: require('@/assets/images/error/404.png'),
+      image: require('@/assets/images/exception/404.png'),
     };
   },
   methods: {

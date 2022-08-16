@@ -63,8 +63,8 @@ instance.interceptors.response.use(
 /**
  * 业务错误
  * @param {*} res 业务约定的返回数据
- * @param {Number} res.code 业务约定的错误码
- * @param {String} res.msg 业务上的错误信息
+ * @param {number} res.code 业务约定的错误码
+ * @param {string} res.msg 业务上的错误信息
  * @param {*} res.data
  */
 function resultErrorHandle(res) {

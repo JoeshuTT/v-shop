@@ -1,17 +1,7 @@
 /**
- * 保留小数点（非四舍五入）
- * @param {Number} n 数值
- * @param {Number} digits 小数点后数字的个数
- * @example toFixed(3.146, 2) // 3.14
- */
-export function toFixed(n, digits) {
-  return ~~(Math.pow(10, digits) * n) / Math.pow(10, digits);
-}
-
-/**
  * 保留小数点（原生toFixed）
- * @param {Number|String} n
- * @param {Number} digits
+ * @param {number|String} n
+ * @param {number} digits
  */
 export function decimalFormat(n, digits = 2) {
   const num = Number(n);
@@ -24,8 +14,8 @@ export function decimalFormat(n, digits = 2) {
 
 /**
  * 数值显示占位
- * @param {Number|String} n
- * @param {Number} digits
+ * @param {number|String} n
+ * @param {number} digits
  */
 export function countPair(n, digits = 2) {
   return n >= 0 ? Number(n).toFixed(digits) : '--';
@@ -33,7 +23,7 @@ export function countPair(n, digits = 2) {
 
 /**
  * 手机号码显示加密
- * @param {Number|String} n
+ * @param {number|String} n
  */
 export function mobileShow(n) {
   return n.replace(n.substring(3, 7), '****');

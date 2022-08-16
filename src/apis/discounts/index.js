@@ -1,4 +1,4 @@
-import request from '@/utils/http/request';
+import request from '@/utils/request';
 
 /**
  * 获取可领取优惠券列表

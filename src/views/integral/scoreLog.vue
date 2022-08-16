@@ -1,84 +1,49 @@
 <template>
   <div class="container">
-    <van-list
-      v-model="listLoading"
-      class="list"
-      :finished="listFinished"
-      :finished-text="listFinishedText"
-      :error.sync="listError"
-      :error-text="listErrorText"
-      :immediate-check="false"
-      @load="onPageLoad"
-    >
-      <div v-for="item in list" :key="item.id" class="list-item van-hairline--bottom">
-        <div class="list-item-hd">
-          <div class="list-item-title">{{ item.typeStr }}</div>
-          <div class="list-item-txt">{{ item.dateAdd }}</div>
+    <ProList :api="loadList" :pagination="pagination" :empty-text="listEmptyText" :empty-image="listEmptyImage">
+      <template #item="{ item }">
+        <div class="list-item van-hairline--bottom">
+          <div class="list-item-hd">
+            <div class="list-item-title">{{ item.typeStr }}</div>
+            <div class="list-item-txt">{{ item.dateAdd }}</div>
+          </div>
+          <div :class="['list-item-bd', item.behavior ? 'c-red' : 'c-green']">
+            <span>{{ item.behavior ? '' : '+' }}</span>
+            <span>{{ item.score }}</span>
+          </div>
         </div>
-        <div :class="['list-item-bd', item.behavior ? 'c-red' : 'c-green']">
-          <span>{{ item.behavior ? '' : '+' }}</span>
-          <span>{{ item.score }}</span>
-        </div>
-      </div>
-      <template #finished>
-        <span v-if="list.length">{{ listFinishedText }}</span>
-        <van-empty v-else :image="listEmptyImage" :description="listEmptyText" />
       </template>
-    </van-list>
+    </ProList>
   </div>
 </template>
 
 <script>
 import API_SCORE from '@/apis/score';
+import ProList from '@/components/ProList';
 
 export default {
+  components: { ProList },
   data() {
     return {
-      list: [],
-      listLoading: false,
-      listFinished: false,
-      listError: false,
-      listFinishedText: '没有更多了',
-      listErrorText: '请求失败，点击重新加载',
+      pagination: {
+        pageCurrent: 1,
+        pageSize: 20,
+      },
       listEmptyText: '暂无交易记录',
       listEmptyImage: require('@/assets/images/empty/trade.png'),
-      pageCurrent: 1,
-      pageSize: 20,
     };
   },
   created() {
-    this.onPage();
+    //
   },
   methods: {
-    onPageLoad() {
-      if (this.listFinished) {
-        return;
-      }
-      this.pageCurrent += 1;
-      this.onPage();
-    },
-    onPage() {
-      this.listLoading = true;
-
+    loadList() {
       const params = {
-        page: this.pageCurrent,
-        pageSize: this.pageSize,
+        page: this.pagination.pageCurrent,
+        pageSize: this.pagination.pageSize,
       };
 
-      API_SCORE.scoreLogs(params)
-        .then((res) => {
-          const records = res.data?.result ?? [];
-          const total = res.data?.totalRow ?? 0;
-
-          this.list = this.pageCurrent === 1 ? records : this.list.concat(records);
-          this.listLoading = false;
-          this.listFinished = this.list.length >= total;
-        })
-        .catch((error) => {
-          console.error(error);
-          this.listLoading = false;
-          this.listError = true;
-        });
+      return API_SCORE.scoreLogs(params);
     },
   },
 };

@@ -12,19 +12,15 @@
       <div class="nick-label">昵称</div>
       <van-field v-model="nick" placeholder="12个字以内" />
     </div>
-    <van-field
-      readonly
+    <AreaField
       :value="areaLabel"
       label="所在地"
       placeholder="点击选择城市"
       input-align="right"
-      is-link
       :border="false"
-      @click="showPicker = true"
+      :columns-num="2"
+      @change="onAreaChange"
     />
-    <van-popup v-model="showPicker" position="bottom">
-      <van-area :area-list="areaList" :columns-num="2" @cancel="showPicker = false" @confirm="onAreaConfirm" />
-    </van-popup>
 
     <AffixBarAction @submit="onSubmit" />
   </div>
@@ -37,9 +33,10 @@ import Upload from '@/components/Upload';
 import { isEmpty } from '@/utils/validate';
 import { assets } from '@/utils/constant';
 import { areaList } from '@vant/area-data';
+import AreaField from '@/components/AreaField';
 
 export default {
-  components: { AffixBarAction, Upload },
+  components: { AreaField, AffixBarAction, Upload },
   data() {
     return {
       assets,
@@ -77,10 +74,9 @@ export default {
     onFileSuccess(res) {
       this.avatarUrl = res.data.url;
     },
-    onAreaConfirm(values) {
+    onAreaChange(values) {
       this.province = values[0].name;
       this.city = values[1].name;
-      this.showPicker = false;
     },
     onSubmit() {
       if (

@@ -1,4 +1,4 @@
-import request from '@/utils/http/request';
+import request from '@/utils/request';
 
 /**
  * 上传本地文件至服务器

@@ -1,5 +1,5 @@
 import { getAPI } from '@/utils';
-import request from '@/utils/http/request';
+import request from '@/utils/request';
 import qs from 'qs';
 
 /**

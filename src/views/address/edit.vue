@@ -3,14 +3,7 @@
     <div class="group">
       <van-field v-model="form.name" label="收货人" placeholder="收货人姓名" clearable />
       <van-field v-model="form.mobile" type="tel" label="手机号码" placeholder="收货人手机号" clearable />
-      <van-field
-        readonly
-        :value="form.areaStr"
-        label="所在地区"
-        placeholder="选择省 / 市 / 区"
-        is-link
-        @click="showPicker = true"
-      />
+      <AreaField :value="form.areaStr" :code="areaCode" @change="onAreaChange" />
       <van-field
         v-model="form.address"
         label="详细地址"
@@ -30,19 +23,16 @@
     </div>
     <van-button class="btn-submit" block type="primary" round @click="onSubmit">保存</van-button>
     <van-button v-if="form.id" class="btn-submit" block type="default" round @click="onDelete">删除收货地址</van-button>
-    <!-- 所在地 -->
-    <van-popup v-model="showPicker" position="bottom">
-      <van-area :area-list="areaList" :value="areaCode" @cancel="showPicker = false" @confirm="onAreaConfirm" />
-    </van-popup>
   </div>
 </template>
 
 <script>
 import API_USER from '@/apis/user';
 import { isEmpty, isMobile } from '@/utils/validate';
-import { areaList } from '@vant/area-data';
+import AreaField from '@/components/AreaField';
 
 export default {
+  components: { AreaField },
   data() {
     return {
       form: {
@@ -57,8 +47,6 @@ export default {
         cityCode: '',
         countyCode: '',
       },
-      showPicker: false,
-      areaList,
     };
   },
   computed: {
@@ -92,12 +80,11 @@ export default {
     }
   },
   methods: {
-    onAreaConfirm(values) {
+    onAreaChange(values) {
       this.form.provinceCode = values[0].code;
       this.form.cityCode = values[1].code;
       this.form.countyCode = values[2].code;
       this.form.areaStr = this.formatAreaStr(values[0].name, values[1].name, values[2].name);
-      this.showPicker = false;
     },
     formatAreaStr(provinceStr, cityStr, countyStr) {
       let str = provinceStr;

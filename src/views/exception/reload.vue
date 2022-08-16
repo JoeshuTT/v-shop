@@ -10,7 +10,7 @@
 export default {
   data() {
     return {
-      image: require('@/assets/images/error/reload.png'),
+      image: require('@/assets/images/exception/reload.png'),
     };
   },
   methods: {
@@ -37,7 +37,7 @@ export default {
 }
 
 .title {
-  color: var(--gray-6);
+  color: #999;
   font-size: 14px;
 }
 

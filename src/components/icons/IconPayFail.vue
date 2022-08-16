@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" width="82px" height="95px" viewBox="0 0 82 95">
+  <svg viewBox="0 0 82 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>失败图标</title>
     <defs>
       <filter id="filter-1" x="-6.8%" y="-50.0%" width="113.5%" height="200.0%" filterUnits="objectBoundingBox">

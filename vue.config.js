@@ -26,9 +26,11 @@ function getTimeStampVersion() {
 }
 
 const appVersion = getTimeStampVersion();
+const assetsDir = 'assets';
 
 module.exports = {
   publicPath: './',
+  assetsDir: assetsDir,
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
@@ -53,16 +55,23 @@ module.exports = {
       },
     },
   },
+  configureWebpack: {
+    resolve: {
+      alias: {
+        '@': resolve('src'),
+      },
+    },
+  },
   chainWebpack(config) {
     if (process.env.NODE_ENV === 'production') {
       // js和css 使用版本号
-      config.output.filename(`js/[name].${appVersion}.js`).end();
-      config.output.chunkFilename(`js/[name].${appVersion}.js`).end();
+      config.output.filename(`${assetsDir}/js/[name].${appVersion}.js`).end();
+      config.output.chunkFilename(`${assetsDir}/js/[name].${appVersion}.js`).end();
       config
         .plugin('extract-css')
         .tap((args) => {
-          args[0].filename = `css/[name].${appVersion}.css`;
-          args[0].chunkFilename = `css/[name].${appVersion}.css`;
+          args[0].filename = `${assetsDir}/css/[name].${appVersion}.css`;
+          args[0].chunkFilename = `${assetsDir}/css/[name].${appVersion}.css`;
           return args;
         })
         .end();

@@ -61,8 +61,8 @@ export function deepClone(sources) {
 
 /**
  * 生成指定两个整数范围内的随机整数
- * @param {Number} m
- * @param {Number} n
+ * @param {number} m
+ * @param {number} n
  * @example random(0, 10)
  */
 export const randomIntegerInRange = function (m, n) {
@@ -72,7 +72,7 @@ export const randomIntegerInRange = function (m, n) {
 /**
  * 转换驼峰拼写的字符串为特定格式
  * @description 使用 String.replace() 去除下划线，连字符和空格，并将驼峰拼写格式的单词转换为全小写。省略第二个参数 separator ，默认使用_分隔符。
- * @param {Number} n
+ * @param {number} n
  */
 export function fromCamelCase(str, separator = '_') {
   return str

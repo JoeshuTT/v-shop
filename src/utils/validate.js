@@ -87,7 +87,7 @@ export function isSrc(val) {
 
 /**
  * 是否是手机号
- * @param {String} val
+ * @param {string} val
  * @description 国内有效手机号码，不包括（台湾+886、香港+852、澳门+853）
  *
  */
@@ -98,7 +98,7 @@ export function isMobile(val) {
 
 /**
  * 是否是邮箱
- * @param {String} val
+ * @param {string} val
  */
 export function isEmail(val) {
   const reg =
@@ -108,7 +108,7 @@ export function isEmail(val) {
 
 /**
  * 图形验证码
- * @param {String} val
+ * @param {string} val
  * @description 4位大小写字母、数字组合
  */
 export function isCaptchaCode(val) {
@@ -118,7 +118,7 @@ export function isCaptchaCode(val) {
 
 /**
  * 账户名称
- * @param {String} val
+ * @param {string} val
  * @description 1到32位的数字、字母、下划线组合，不能以下划线、横线开头
  */
 export function isUserName(val) {
@@ -128,7 +128,7 @@ export function isUserName(val) {
 
 /**
  * 账户密码
- * @param {String} val
+ * @param {string} val
  * @description 8-25位大小写字母、数字或数字加字母的形式
  */
 export function isPassWord(val) {
@@ -138,8 +138,8 @@ export function isPassWord(val) {
 
 /**
  * 数据是否一致
- * @param {String} target
- * @param {String} source
+ * @param {string} target
+ * @param {string} source
  */
 export function isSame(target, source) {
   return Object.is(target, source);

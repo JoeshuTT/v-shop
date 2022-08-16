@@ -1,4 +1,4 @@
-import request from '@/utils/http/request';
+import request from '@/utils/request';
 
 /**
  * 积分兑换成长值

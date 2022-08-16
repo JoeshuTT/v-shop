@@ -2,12 +2,16 @@ export { throttle, debounce, deepClone } from './lodash';
 
 /**
  * 获取链接某个参数 search
- * @param {String} name 参数名称
- * @returns {String} 返回参数值
+ * @param {string} name 参数名称
+ * @param {*} url
+ * @returns {string} 返回参数值
+ * @example
+ * getQueryString('name');
+ * getQueryString('name', 'http://www.baidu.com?name=1&age=2');
  */
-export function getQueryString(name) {
+export function getQueryString(name, url) {
   let reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-  let r = window.location.search.substr(1).match(reg);
+  let r = (url || window.location.search).substr(1).match(reg);
   // eslint-disable-next-line eqeqeq, no-eq-null
   if (r != null) {
     return decodeURIComponent(r[2]);
@@ -17,13 +21,18 @@ export function getQueryString(name) {
 
 /**
  * 获取网址参数 search 和 hash
+ * @param {*} url
  * @returns {Object} 返回包含当前URL参数的对象
- *
+ * @example
+ * getURLParameters();
+ * getURLParameters('http://www.baidu.com?name=1&age=2#test?name=1&age=2');
  */
-export function getURLParameters() {
+export function getURLParameters(url) {
   const reg = /([^?=&]+)(=([^&]*))/g;
-  const searchParamList = window.location.search.match(reg);
-  const hashParamList = window.location.hash.match(reg);
+  const search = url ? url.split('#/')[0] : window.location.search;
+  const hash = url ? url.split('#/')[1] : window.location.hash;
+  const searchParamList = search.match(reg);
+  const hashParamList = hash.match(reg);
   const obj = {};
 
   searchParamList &&
@@ -63,22 +72,18 @@ export function getDevicePlatform() {
 /**
  * 获取接口前缀
  * @param {*} code api, host, origin
- * @returns
  */
 export function getAPI(code = 'api') {
   const host = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_HOST : location.host;
   const origin = `${location.protocol}//${host}`;
   const basePath = process.env.NODE_ENV === 'production' ? '/xiaochengxu' : '/dev-api';
   const api = `${origin}${basePath}`; // 基础接口
-  // const src = `${origin}${process.env.VUE_APP_BASE_API}`;
 
   switch (code) {
     case 'host':
       return host;
     case 'origin':
       return origin;
-    // case 'src':
-    //   return src;
     default:
       return api;
   }
@@ -86,11 +91,11 @@ export function getAPI(code = 'api') {
 
 /**
  * rpx2px
- * @param {Number} n
- * @param {Number} destWidth 设计稿基准屏幕宽度
+ * @param {number} n
+ * @param {number} destWidth 设计稿基准屏幕宽度
  */
 export function rpx2px(n, destWidth = 375) {
   const ratio = document.documentElement.clientWidth / destWidth;
 
-  return (n * ratio).toFixed(2);
+  return Number((n * ratio).toFixed(2));
 }

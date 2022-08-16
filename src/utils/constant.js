@@ -3,6 +3,7 @@
  */
 export const app = {
   name: 'v-shop',
+  link: 'https://github.com/JoeshuTT/v-shop/',
 };
 
 /**

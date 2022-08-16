@@ -1,4 +1,4 @@
-import request from '@/utils/http/request';
+import request from '@/utils/request';
 
 /**
  * 抢占秒杀名额

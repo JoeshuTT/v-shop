@@ -6,7 +6,7 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import(/* webpackChunkName: "manifest" */ '@/views/home/index.vue'),
+    component: () => import(/* webpackChunkName: "root" */ '@/views/home/index.vue'),
     meta: {
       title: '首页',
     },
@@ -14,7 +14,7 @@ const routes = [
   {
     path: '/category',
     name: 'category',
-    component: () => import(/* webpackChunkName: "manifest" */ '@/views/category/index.vue'),
+    component: () => import(/* webpackChunkName: "root" */ '@/views/category/index.vue'),
     meta: {
       title: '分类',
     },
@@ -22,7 +22,7 @@ const routes = [
   {
     path: '/cart',
     name: 'cart',
-    component: () => import(/* webpackChunkName: "manifest" */ '@/views/cart/index.vue'),
+    component: () => import(/* webpackChunkName: "root" */ '@/views/cart/index.vue'),
     meta: {
       title: '购物车',
     },
@@ -30,7 +30,7 @@ const routes = [
   {
     path: '/mine',
     name: 'mine',
-    component: () => import(/* webpackChunkName: "manifest" */ '@/views/mine/index.vue'),
+    component: () => import(/* webpackChunkName: "root" */ '@/views/mine/index.vue'),
     meta: {
       title: '我的',
     },
@@ -38,7 +38,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "manifest" */ '@/views/login/index.vue'),
+    component: () => import(/* webpackChunkName: "root" */ '@/views/login/index.vue'),
     meta: {
       title: '登录',
     },
@@ -46,7 +46,7 @@ const routes = [
   {
     path: '/register',
     name: 'register',
-    component: () => import(/* webpackChunkName: "manifest" */ '@/views/register/index.vue'),
+    component: () => import(/* webpackChunkName: "root" */ '@/views/register/index.vue'),
     meta: {
       title: '注册',
     },
@@ -54,7 +54,7 @@ const routes = [
   {
     path: '/resetPwd',
     name: 'resetPwd',
-    component: () => import(/* webpackChunkName: "manifest" */ '@/views/resetPwd/index.vue'),
+    component: () => import(/* webpackChunkName: "root" */ '@/views/resetPwd/index.vue'),
     meta: {
       title: '重置密码',
     },
@@ -219,17 +219,17 @@ const routes = [
       title: '主题风格',
     },
   },
-  // errorPage
+  // exception
   {
     path: '/reload',
-    component: () => import(/* webpackChunkName: "manifest" */ '@/views/error/reload.vue'),
+    component: () => import(/* webpackChunkName: "root" */ '@/views/exception/reload.vue'),
     meta: {
       title: '加载异常',
     },
   },
   {
     path: '/404',
-    component: () => import(/* webpackChunkName: "manifest" */ '@/views/error/404.vue'),
+    component: () => import(/* webpackChunkName: "root" */ '@/views/exception/404.vue'),
     meta: {
       title: '找不到页面',
     },
