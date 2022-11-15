@@ -26,11 +26,7 @@ module.exports = {
     'no-console': 'off',
     // js 和 ts 的规则重合
     'no-undef': 'off',
-    // vue3 和 vue2 rules 冲突
-    'vue/no-v-model-argument': 'off',
-    'vue/no-multiple-template-root': 'off',
-    // 'vue/no-duplicate-attributes': 'off',
-    // 'vue/no-v-for-template-key': 'off',
+    // @typescript-eslint
     '@typescript-eslint/prefer-optional-chain': 'off',
   },
 };

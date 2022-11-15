@@ -1,6 +1,6 @@
 <template>
   <AppProvider>
-    <RouterView />
+    <PageStackRouterView />
   </AppProvider>
 </template>
 

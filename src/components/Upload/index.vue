@@ -6,7 +6,7 @@ import API_DFS from '@/apis/dfs';
 
 export default defineComponent({
   name: 'Upload',
-  emits: ['on-success', 'on-error'],
+  emits: ['onSuccess', 'onError'],
   setup(_props, { emit }) {
     function beforeRead(file): any {
       return new Promise((resolve) => {
@@ -17,7 +17,7 @@ export default defineComponent({
           },
           error: (error) => {
             console.error(`[Compressor error]`, error);
-            emit('on-error', error);
+            emit('onError', error);
           },
         });
       });
@@ -36,17 +36,17 @@ export default defineComponent({
         .then((res) => {
           Toast.clear();
           if (res.data.url) {
-            emit('on-success', res);
+            emit('onSuccess', res);
           } else {
             Toast({
               message: res.data.msg,
               duration: 1500,
             });
-            emit('on-error', res);
+            emit('onError', res);
           }
         })
         .catch((error) => {
-          emit('on-error', error);
+          emit('onError', error);
         });
     }
 

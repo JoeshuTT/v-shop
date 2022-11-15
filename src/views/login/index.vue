@@ -71,7 +71,7 @@ function onSubmit() {
     .login({ provider: unref(loginType), params })
     .then(() => {
       submitLoading.value = false;
-      route.query.redirect ? router.replace({ path: route.query.redirect as string }) : router.replace({ path: '/' });
+      router.replace({ path: '/mine' });
       Toast.success('登录成功');
     })
     .catch((error) => {

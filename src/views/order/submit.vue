@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'OrderSubmit',
+};
+</script>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref, unref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -53,6 +59,7 @@ function getAddressInfo() {
 
 // 钱包
 const balance = ref<number>(0);
+const balanceSwitch = ref<boolean>(true);
 function getUserAmount() {
   API_USER.userAmount().then((res) => {
     balance.value = res.data?.balance ?? 0;
@@ -240,7 +247,7 @@ function cartEmptyHandle() {
       <van-cell title="余额" center>
         <template #label> 账户余额：{{ decimalFormat(balance) }} </template>
         <template #right-icon>
-          <van-checkbox :model-value="true"> </van-checkbox>
+          <van-checkbox :model-value="balanceSwitch"> </van-checkbox>
         </template>
       </van-cell>
     </div>

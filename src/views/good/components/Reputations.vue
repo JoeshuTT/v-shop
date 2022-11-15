@@ -3,13 +3,13 @@ import { onMounted, ref } from 'vue';
 import API_GOODS from '@/apis/goods';
 import { goodReputationModel } from '@/model/modules/good/reputation';
 
+const props = defineProps({
+  goodsId: { type: [String, Number] },
+});
+
 // 商品评价
 onMounted(() => {
   getGoodsReputation();
-});
-
-const props = defineProps({
-  goodsId: { type: [String, Number] },
 });
 
 const reputationList = ref<Recordable>([]);

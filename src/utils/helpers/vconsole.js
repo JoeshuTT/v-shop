@@ -5,7 +5,7 @@
  * 1. 支持 vConsole 面板展示
  * 2. 支持 url 带参数（vconsole=show）唤起
  */
-import { getDevicePlatform } from '@/utils';
+// import { getDevicePlatform } from '@/utils';
 
 if (show()) {
   let storeList = [];
@@ -43,12 +43,6 @@ if (show()) {
 function show() {
   if (window.location.href.includes('vconsole=show')) {
     return true;
-  }
-
-  if (process.env.NODE_ENV === 'production') {
-    if (!getDevicePlatform().isInWeChatDevTools && process.env.VUE_APP_ENV === 'test') {
-      return true;
-    }
   }
 
   return false;

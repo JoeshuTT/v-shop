@@ -1,5 +1,3 @@
-import { Notify } from 'vant';
-import { toRouteType } from '@/router/types';
 import { router } from '@/router';
 import { getDevicePlatform } from '@/utils';
 import deviceModel from '@/utils/helpers/deviceModel';
@@ -8,10 +6,10 @@ import { useAppStoreWithOut } from '@/store/modules/app';
 
 let appLoadedFlag: boolean; // 应用窗口加载标记
 
-router.beforeEach(async (to: toRouteType, from, next) => {
+router.beforeEach(async (to, from, next) => {
   console.log('[route]', from.path, to.path);
   // add route title
-  const title = to.meta?.title;
+  const title = to.meta?.title as string | undefined;
   if (title) {
     document.title = title;
   }
@@ -20,7 +18,6 @@ router.beforeEach(async (to: toRouteType, from, next) => {
   if (!appLoadedFlag) {
     appLoadedFlag = true;
     console.info('app onLaunch');
-    // console.info('app version', process.env.APP_VERSION);
     console.info('app version', __APP_INFO__.version);
     console.info('app URL', window.location.href);
 
@@ -39,13 +36,8 @@ router.beforeEach(async (to: toRouteType, from, next) => {
     );
 
     // PC 浏览提示
-    if (deviceModel() === 'PC' && document.documentElement.clientWidth >= 750) {
-      Notify({
-        color: '#ed6a0c',
-        background: '#fffbe8',
-        message: '请使用移动设备访问或者pc 上F12打开，获取最佳使用体验',
-      });
-    }
+    // 请使用移动设备访问或者pc 上F12打开，获取最佳使用体验
+
     // 更新主题
     const appStore = useAppStoreWithOut();
     await appStore.updateTheme();

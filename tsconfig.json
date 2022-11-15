@@ -23,7 +23,8 @@
     "removeComments": true,
     "outDir": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "#/*": ["types/*"]
     }
   },
   "include": [

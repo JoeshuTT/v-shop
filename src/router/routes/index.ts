@@ -5,7 +5,7 @@ const routes = [
   },
   {
     path: '/home',
-    name: 'home',
+    name: 'Home',
     component: () => import('@/views/home/index.vue'),
     meta: {
       title: '首页',
@@ -13,7 +13,7 @@ const routes = [
   },
   {
     path: '/category',
-    name: 'category',
+    name: 'Category',
     component: () => import('@/views/category/index.vue'),
     meta: {
       title: '分类',
@@ -21,7 +21,7 @@ const routes = [
   },
   {
     path: '/cart',
-    name: 'cart',
+    name: 'Cart',
     component: () => import('@/views/cart/index.vue'),
     meta: {
       title: '购物车',
@@ -29,7 +29,7 @@ const routes = [
   },
   {
     path: '/mine',
-    name: 'mine',
+    name: 'Mine',
     component: () => import('@/views/mine/index.vue'),
     meta: {
       title: '我的',
@@ -61,7 +61,7 @@ const routes = [
   },
   {
     path: '/order/list',
-    name: 'orderList',
+    name: 'OrderList',
     component: () => import('@/views/order/list.vue'),
     meta: {
       title: '订单列表',
@@ -70,7 +70,7 @@ const routes = [
   },
   {
     path: '/order/detail',
-    name: 'orderDetail',
+    name: 'OrderDetail',
     component: () => import('@/views/order/detail.vue'),
     meta: {
       title: '订单详情',
@@ -79,7 +79,7 @@ const routes = [
   },
   {
     path: '/order/submit',
-    name: 'orderSubmit',
+    name: 'OrderSubmit',
     component: () => import('@/views/order/submit.vue'),
     meta: {
       title: '提交订单',
@@ -88,7 +88,7 @@ const routes = [
   },
   {
     path: '/order/payResult',
-    name: 'orderPayResult',
+    name: 'OrderPayResult',
     component: () => import('@/views/order/payResult.vue'),
     meta: {
       title: '支付结果',
@@ -196,7 +196,7 @@ const routes = [
   },
   {
     path: '/good/detail',
-    name: 'goodDetail',
+    name: 'GoodDetail',
     component: () => import('@/views/good/detail.vue'),
     meta: {
       title: '商品详情',
@@ -204,7 +204,7 @@ const routes = [
   },
   {
     path: '/good/reputation',
-    name: 'goodReputation',
+    name: 'GoodReputation',
     component: () => import('@/views/good/reputation.vue'),
     meta: {
       title: '全部评价',

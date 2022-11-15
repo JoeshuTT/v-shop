@@ -2,6 +2,15 @@
 
 > 记录下重大改动
 
+## v3.1.2(2022-08-16)
+
+主要改动
+
+- 新增依赖 `unplugin-vue-components`, `vue-page-stack-router`
+- types 目录调整
+- utils 重构优化
+- 优化代码逻辑和其他细节完善
+
 ## v3.0.1(2022-08-16)
 
 主要改动

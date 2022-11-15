@@ -1,18 +1,30 @@
+<script lang="ts">
+export default {
+  name: 'OrderList',
+};
+</script>
+
 <script lang="ts" setup>
-import { onMounted, reactive, ref, unref } from 'vue';
+import { reactive, ref, unref, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 
 import API_ORDER from '@/apis/order';
 import ProList from '@/components/ProList/index.vue';
 import OrderItem from './components/OrderItem.vue';
 import { orderListModel } from '@/model/modules/order/list';
+import { usePage } from '@/hooks/shared/usePage';
 
-onMounted(() => {
+const { onPageLoad } = usePage();
+
+onPageLoad(() => {
   const { status } = route.query;
   if (status) {
     active.value = unref(tabList).findIndex((item) => item.status === status);
   }
-  //
+
+  nextTick(() => {
+    listRef.value?.loadData();
+  });
 });
 
 const route = useRoute();
@@ -103,6 +115,7 @@ function loadListAfter(data) {
       :after-fetch="loadListAfter"
       :pagination="pagination"
       :empty-text="listEmptyText"
+      :immediate="false"
     >
       <template #item="{ item, index }">
         <OrderItem :key="item.id" :item="item" :index="index" @delete="onOrderDelete" />

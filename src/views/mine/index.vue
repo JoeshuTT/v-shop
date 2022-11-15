@@ -1,96 +1,14 @@
-<template>
-  <div class="container">
-    <div class="header">
-      <div v-if="hasLogin" class="header-inner" @click="goPage('/profile')">
-        <div class="header-tag">个人资料</div>
-        <van-image class="header-avatar" :src="userInfo.avatarUrl || assets.avatar" alt="" @click.stop="onEasterEgg" />
-        <div class="header-info">
-          <div class="header-nick van-ellipsis mb10">
-            {{ userInfo.nick || `还没有昵称` }}
-          </div>
-          <div class="header-sub">
-            <span class="header-sub-item">ID {{ userInfo.id }}</span>
-            <span class="header-sub-item-separate">|</span>
-            <span class="header-sub-item">成长值 {{ growth }}</span>
-            <span class="header-sub-item-separate">|</span>
-            <!-- 会员等级 -->
-            <span v-if="userLevel.id" class="header-sub-item"> 段位 {{ userLevel.name }} </span>
-          </div>
-        </div>
-      </div>
-      <div v-else class="header-inner" @click="goLogin">
-        <van-image class="header-avatar" :src="assets.avatar" alt="" @click.stop="onEasterEgg" />
-        <div class="header-info">
-          <div class="header-nick">登录/注册</div>
-        </div>
-      </div>
-      <div class="header-bg">
-        <div class="header-bg-wave">
-          <MineSvgWaveBg />
-        </div>
-      </div>
-    </div>
-    <div class="main">
-      <div class="group"></div>
-      <!-- 我的钱包 -->
-      <div class="group">
-        <div class="count-list">
-          <div class="count-list-item" @click="goPage('/integral')">
-            <div class="count-list-item-value">{{ countPair(score, 0) }}</div>
-            <div class="count-list-item-label">积分</div>
-          </div>
-          <div class="count-list-item" @click="goPage('/coupon')">
-            <div class="count-list-item-value">{{ countPair(couponCanUse, 0) }}</div>
-            <div class="count-list-item-label">优惠券</div>
-          </div>
-          <div class="count-list-item" @click="goPage('/wallet')">
-            <div class="count-list-item-value">{{ countPair(balance) }}</div>
-            <div class="count-list-item-label">余额</div>
-          </div>
-        </div>
-      </div>
-      <!-- 订单 -->
-      <div class="group">
-        <div class="group-header van-hairline--bottom" @click="goPage('/order/list')">
-          <div class="group-header-hd">我的订单</div>
-          <div class="group-header-bd">
-            <span class="group-header-txt">查看全部订单</span>
-            <van-icon class="group-header-arrow" name="arrow" />
-          </div>
-        </div>
-        <div class="order-list">
-          <div v-for="(item, index) in orderList" :key="index" class="order-list-item" @click="goPage(item.path)">
-            <van-icon class="order-list-item-icon" :name="item.icon" :badge="item.count" />
-            <div class="order-list-item-title">{{ item.label }}</div>
-          </div>
-        </div>
-      </div>
-      <!-- 常用功能 -->
-      <div class="group">
-        <div class="group-header van-hairline--bottom">
-          <div class="group-header-hd">常用功能</div>
-        </div>
-        <div class="tool-list">
-          <div v-for="(item, index) in toolList" :key="index" class="tool-list-item" @click="goPage(item.path)">
-            <van-icon class="tool-list-item-icon" :name="item.icon" :badge="item.count" />
-            <div class="tool-list-item-title">{{ item.title }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 版权 -->
-    <Copyright />
-    <!-- 底部导航栏 -->
-    <Tabbar />
-  </div>
-</template>
+<script lang="ts">
+export default {
+  name: 'Mine',
+};
+</script>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref, unref } from 'vue';
 import API_USER from '@/apis/user';
 import API_DISCOUNTS from '@/apis/discounts';
 import API_ORDER from '@/apis/order';
-import Copyright from '@/components/Copyright';
-import Tabbar from '@/components/Tabbar/index.vue';
 import MineSvgWaveBg from '@/components/MineSvgWaveBg/index.vue';
 import { countPair } from '@/utils/format';
 import { assets } from '@/constants';
@@ -196,6 +114,94 @@ function getCounts() {
   });
 }
 </script>
+
+<template>
+  <div class="container">
+    <div class="header">
+      <div v-if="hasLogin" class="header-inner" @click="goPage('/profile')">
+        <div class="header-tag">个人资料</div>
+        <van-image class="header-avatar" :src="userInfo.avatarUrl || assets.avatar" alt="" @click.stop="onEasterEgg" />
+        <div class="header-info">
+          <div class="header-nick van-ellipsis mb10">
+            {{ userInfo.nick || `还没有昵称` }}
+          </div>
+          <div class="header-sub">
+            <span class="header-sub-item">ID {{ userInfo.id }}</span>
+            <span class="header-sub-item-separate">|</span>
+            <span class="header-sub-item">成长值 {{ growth }}</span>
+            <span class="header-sub-item-separate">|</span>
+            <!-- 会员等级 -->
+            <span v-if="userLevel.id" class="header-sub-item"> 段位 {{ userLevel.name }} </span>
+          </div>
+        </div>
+      </div>
+      <div v-else class="header-inner" @click="goLogin">
+        <van-image class="header-avatar" :src="assets.avatar" alt="" @click.stop="onEasterEgg" />
+        <div class="header-info">
+          <div class="header-nick">登录/注册</div>
+        </div>
+      </div>
+      <div class="header-bg">
+        <div class="header-bg-wave">
+          <MineSvgWaveBg />
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="group"></div>
+      <!-- 我的钱包 -->
+      <div class="group">
+        <div class="count-list">
+          <div class="count-list-item" @click="goPage('/integral')">
+            <div class="count-list-item-value">{{ countPair(score, 0) }}</div>
+            <div class="count-list-item-label">积分</div>
+          </div>
+          <div class="count-list-item" @click="goPage('/coupon')">
+            <div class="count-list-item-value">{{ countPair(couponCanUse, 0) }}</div>
+            <div class="count-list-item-label">优惠券</div>
+          </div>
+          <div class="count-list-item" @click="goPage('/wallet')">
+            <div class="count-list-item-value">{{ countPair(balance) }}</div>
+            <div class="count-list-item-label">余额</div>
+          </div>
+        </div>
+      </div>
+      <!-- 订单 -->
+      <div class="group">
+        <div class="group-header van-hairline--bottom" @click="goPage('/order/list')">
+          <div class="group-header-hd">我的订单</div>
+          <div class="group-header-bd">
+            <span class="group-header-txt">查看全部订单</span>
+            <van-icon class="group-header-arrow" name="arrow" />
+          </div>
+        </div>
+        <div class="order-list">
+          <div v-for="(item, index) in orderList" :key="index" class="order-list-item" @click="goPage(item.path)">
+            <van-icon class="order-list-item-icon" :name="item.icon" :badge="item.count" />
+            <div class="order-list-item-title">{{ item.label }}</div>
+          </div>
+        </div>
+      </div>
+      <!-- 常用功能 -->
+      <div class="group">
+        <div class="group-header van-hairline--bottom">
+          <div class="group-header-hd">常用功能</div>
+        </div>
+        <div class="tool-list">
+          <div v-for="(item, index) in toolList" :key="index" class="tool-list-item" @click="goPage(item.path)">
+            <van-icon class="tool-list-item-icon" :name="item.icon" :badge="item.count" />
+            <div class="tool-list-item-title">{{ item.title }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 版权 -->
+    <Copyright />
+    <!-- 底部导航栏 -->
+    <Tabbar />
+  </div>
+</template>
+
 <style lang="less" scoped>
 .style-box() {
   box-sizing: border-box;

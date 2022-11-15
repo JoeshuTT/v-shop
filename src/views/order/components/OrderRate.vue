@@ -13,6 +13,8 @@ const props = defineProps({
   orderInfo: { type: Object as PropType<Recordable>, default: () => {} },
 });
 
+const emit = defineEmits(['update:show', 'success']);
+
 const { token } = usePage();
 
 const popupStyle = {
@@ -24,8 +26,6 @@ const popupStyle = {
 };
 const rateValue = ref(5);
 const rateRemark = ref('');
-
-const emit = defineEmits(['update:show', 'success']);
 
 function onClose() {
   handleShowChange(false);

@@ -55,7 +55,7 @@ export function debounce(fn: any, delay: number) {
 export function deepClone(sources: any): any {
   const target = Array.isArray(sources) ? [] : {};
   for (const key in sources) {
-    if (Object.prototype.hasOwnProperty.call(sources, key)) {
+    if (Object.hasOwn(sources, key)) {
       // @ts-ignore
       target[key] = sources[key] !== null && typeof sources[key] === 'object' ? deepClone(sources[key]) : sources[key];
     }

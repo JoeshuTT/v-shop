@@ -1,11 +1,15 @@
+<script lang="ts">
+export default {
+  name: 'Cart',
+};
+</script>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref, unref } from 'vue';
 import { Dialog, Toast } from 'vant';
 import NP from 'number-precision';
 import { useDebounceFn } from '@vueuse/core';
 import API_CART from '@/apis/cart';
-import Tabbar from '@/components/Tabbar/index.vue';
-import SpainList from '@/components/SpainList/index.vue';
 import { decimalFormat } from '@/utils/format';
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/cart.png';
 import ICON_SHOPPING_CART from '@/assets/videos/shopping-cart.mp4';

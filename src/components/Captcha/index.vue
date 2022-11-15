@@ -4,7 +4,7 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import { computed, defineEmits, defineProps, ref, unref, watch } from 'vue';
+import { computed, ref, unref, watch } from 'vue';
 import { Toast } from 'vant';
 import { useThrottleFn } from '@vueuse/core';
 import { rpx2px } from '@/utils';

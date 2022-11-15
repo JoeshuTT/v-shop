@@ -7,15 +7,13 @@ import { decimalFormat } from '@/utils/format';
 
 import { useOrderStore } from '@/store/modules/order';
 
-const router = useRouter();
-const orderStore = useOrderStore();
-
 defineProps({
   item: { type: Object as PropType<Recordable>, default: () => {} },
   index: { type: Number, default: 0 },
 });
-
 const emit = defineEmits(['delete']);
+const router = useRouter();
+const orderStore = useOrderStore();
 
 function onOrderClicked(item: Recordable) {
   const { orderNumber } = item;

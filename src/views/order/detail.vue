@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'OrderDetail',
+};
+</script>
+
 <script lang="ts" setup>
 import { onMounted, ref, unref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';

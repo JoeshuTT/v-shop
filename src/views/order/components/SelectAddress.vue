@@ -78,7 +78,7 @@ function onSubmit() {
         v-if="list.length"
         v-model="addressId"
         class="address-list"
-        :switchable="true"
+        switchable
         :list="list"
         @select="onSelect"
       />

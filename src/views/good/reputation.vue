@@ -23,12 +23,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import API_GOODS from '@/apis/goods';
 import ProList from '@/components/ProList/index.vue';
 import { goodReputationModel } from '@/model/modules/good/reputation';
 
 export default {
+  name: 'GoodReputation',
   components: { ProList },
   data() {
     return {

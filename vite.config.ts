@@ -5,12 +5,17 @@ import pkg from './package.json';
 import dayjs from 'dayjs';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
+import Components from 'unplugin-vue-components/vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 
-const { dependencies, devDependencies, name, version } = pkg;
+// 当前执行node命令时文件夹的地址（工作目录）
+const root: string = process.cwd();
+
+// 打包后静态资源的存放路径
 const assetsDir = 'assets';
 
-// 生成版本号
+// __APP_INFO__
+const { dependencies, devDependencies, name, version } = pkg;
 const appVersion = dayjs().format('YYYYMMDDHHmm');
 const lastBuildTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
 const __APP_INFO__ = {
@@ -19,17 +24,21 @@ const __APP_INFO__ = {
   lastBuildTime,
 };
 
-// https://vitejs.dev/config/
 export default ({ command, mode }: ConfigEnv): UserConfig => {
-  console.log(`=== run ${command} ${dayjs().format('YYYY-MM-DD HH:mm:ss')} ===`);
-  const root = process.cwd();
   const env = loadEnv(mode, root);
+  console.log(`========== ${pkg.name} ${command} S ==========`);
+  console.log(`[lastBuildTime ${__APP_INFO__.lastBuildTime}]`);
+  console.log(`========== ${pkg.name} ${command} E ==========`);
 
   return {
     base: './',
     plugins: [
       vue(),
       vueJsx(),
+      Components({
+        extensions: ['vue', 'tsx'],
+        dts: 'src/components.d.ts',
+      }),
       createHtmlPlugin({
         inject: {
           data: {

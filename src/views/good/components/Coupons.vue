@@ -3,13 +3,13 @@ import { onMounted, ref, unref } from 'vue';
 import { Toast } from 'vant';
 import API_DISCOUNTS from '@/apis/discounts';
 
+defineProps({
+  title: { type: String },
+});
+
 // 优惠券
 onMounted(() => {
   getCouponList();
-});
-
-defineProps({
-  title: { type: String },
 });
 
 const show = ref(false);

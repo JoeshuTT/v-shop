@@ -79,19 +79,19 @@ export default defineComponent({
       props.pagination.pageCurrent = 1;
       list.value = [];
       finished.value = false;
-      onLoad();
+      loadData();
     }
 
-    function onLoadMore() {
+    function loadMore() {
       if (unref(finished)) {
         return;
       }
       // eslint-disable-next-line vue/no-mutating-props
       props.pagination.pageCurrent += 1;
-      onLoad();
+      loadData();
     }
 
-    function onLoad() {
+    function loadData() {
       loading.value = true;
 
       props
@@ -116,10 +116,10 @@ export default defineComponent({
         });
     }
 
-    expose({ deleteItemByIndex, refresh, onLoadMore });
+    expose({ deleteItemByIndex, refresh, loadMore, loadData });
 
     onMounted(() => {
-      props.immediate && onLoad(); // 立刻执行
+      props.immediate && loadData(); // 立刻执行
     });
 
     return {
@@ -128,8 +128,8 @@ export default defineComponent({
       error,
       finished,
       // methods
-      onLoadMore,
-      onLoad,
+      loadMore,
+      loadData,
     };
   },
 });
@@ -146,7 +146,7 @@ export default defineComponent({
     :immediate-check="false"
     :offset="offset"
     :direction="direction"
-    @load="onLoadMore"
+    @load="loadMore"
   >
     <template v-for="(item, index) in list">
       <slot name="item" v-bind="{ item, index }"></slot>

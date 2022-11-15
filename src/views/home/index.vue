@@ -1,10 +1,14 @@
+<script lang="ts">
+export default {
+  name: 'Home',
+};
+</script>
+
 <script lang="ts" setup>
 import { onMounted, ref, unref } from 'vue';
 import { useRouter } from 'vue-router';
 import API_GOODS from '@/apis/goods';
 import API_BANNER from '@/apis/banner';
-import Tabbar from '@/components/Tabbar/index.vue';
-import Plate from '@/components/Plate/index.vue';
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/good.png';
 
 onMounted(() => {

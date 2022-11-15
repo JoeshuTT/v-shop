@@ -2,8 +2,6 @@
 import type { PropType } from 'vue';
 import { useRouter } from 'vue-router';
 
-const router = useRouter();
-
 const props = defineProps({
   modelValue: [Number, String],
   list: {
@@ -14,6 +12,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['select', 'update:modelValue']);
+
+const router = useRouter();
 
 function onSelect(index: number) {
   const item = props.list[index];

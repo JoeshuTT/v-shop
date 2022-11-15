@@ -27,27 +27,4 @@ declare global {
   declare interface WheelEvent {
     path?: EventTarget[];
   }
-
-  // vite
-  const __APP_INFO__: {
-    pkg: {
-      name: string;
-      version: string;
-      dependencies: Recordable<string>;
-      devDependencies: Recordable<string>;
-    };
-    version: string;
-    lastBuildTime: string;
-  };
-
-  declare interface ImportMetaEnv {
-    readonly VITE_APP_TITLE: string;
-    readonly VITE_PORT: number;
-    readonly VITE_APP_ENV: 'dev' | 'test' | 'pre' | 'prd';
-    readonly VITE_APP_API_HOST: string;
-  }
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
 }

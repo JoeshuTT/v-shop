@@ -1,3 +1,48 @@
+<script lang="ts">
+export default {
+  name: 'OrderPayResult',
+};
+</script>
+
+<script lang="ts" setup>
+import API_ORDER from '@/apis/order';
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import IconPaySuccess from '@/components/icons/IconPaySuccess.vue';
+import IconPayFail from '@/components/icons/IconPayFail.vue';
+
+onMounted(() => {
+  getDetail();
+});
+
+const router = useRouter();
+const route = useRoute();
+
+const orderInfo = ref<Recordable>({});
+
+function goOrder() {
+  router.replace({
+    path: '/mine',
+  });
+}
+
+function goHome() {
+  router.replace({
+    path: '/',
+  });
+}
+
+function getDetail() {
+  API_ORDER.orderDetail({ orderNumber: route.query.orderNumber })
+    .then((res) => {
+      orderInfo.value = res.data?.orderInfo ?? {};
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+</script>
+
 <template>
   <div class="container container-full">
     <div class="result">
@@ -23,41 +68,6 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import API_ORDER from '@/apis/order';
-import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import IconPaySuccess from '@/components/icons/IconPaySuccess.vue';
-import IconPayFail from '@/components/icons/IconPayFail.vue';
-
-onMounted(() => {
-  getDetail();
-});
-
-const router = useRouter();
-const route = useRoute();
-
-const orderInfo = ref<Recordable>({});
-
-function goOrder() {
-  router.replace({
-    path: '/order/list',
-  });
-}
-
-function goHome() {
-  router.replace({
-    path: '/',
-  });
-}
-
-function getDetail() {
-  API_ORDER.orderDetail({ orderNumber: route.query.orderNumber }).then((res) => {
-    orderInfo.value = res.data?.orderInfo ?? {};
-  });
-}
-</script>
-
 <style lang="less" scoped>
 .container {
   padding: 10vh 20px 0;
@@ -69,7 +79,7 @@ function getDetail() {
   justify-content: center;
   margin-bottom: 10px;
 
-  .svg-icon {
+  &-svg-icon {
     width: 41px;
     height: 47.5px;
     fill: currentColor;

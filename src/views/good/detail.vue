@@ -1,3 +1,9 @@
+<script lang="ts">
+export default {
+  name: 'GoodDetail',
+};
+</script>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref, unref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
