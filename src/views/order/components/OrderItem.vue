@@ -37,8 +37,8 @@ function onOrderCancel(item: Recordable) {
       item.status = -1;
       item.statusStr = `订单关闭`;
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 
@@ -49,8 +49,8 @@ function onOrderDelete(item: Recordable, index: number) {
       Toast({ message: '删除订单成功', duration: 1500 });
       emit('delete', item, index);
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>

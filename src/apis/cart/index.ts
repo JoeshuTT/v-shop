@@ -1,4 +1,4 @@
-import { request } from '@/utils/request';
+import { createRequest as request } from '@/utils/request';
 import { ServiceResult } from '@/utils/request/types';
 import { shoppingCartAddParams, shoppingCartResult } from './typings';
 

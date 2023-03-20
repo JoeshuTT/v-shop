@@ -141,8 +141,8 @@ export default {
             this.$toast(this.form.id ? '修改成功' : '添加成功');
             this.$router.back();
           })
-          .catch((error) => {
-            console.error(error);
+          .catch((err) => {
+            console.error(err);
           });
       } else {
         API_USER.userShoppingAddressAdd(params)
@@ -150,8 +150,8 @@ export default {
             this.$toast(this.form.id ? '修改成功' : '添加成功');
             this.$router.back();
           })
-          .catch((error) => {
-            console.error(error);
+          .catch((err) => {
+            console.error(err);
           });
       }
     },
@@ -169,8 +169,8 @@ export default {
           this.$toast('删除成功');
           this.$router.back();
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((err) => {
+          console.error(err);
         });
     },
   },

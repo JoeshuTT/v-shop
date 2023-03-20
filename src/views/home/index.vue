@@ -69,8 +69,8 @@ function onPage() {
       listLoading.value = false;
       listFinished.value = list.value.length >= total;
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
       listLoading.value = false;
       listError.value = true;
     });

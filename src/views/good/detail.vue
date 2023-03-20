@@ -215,8 +215,8 @@ function addCartHandle() {
       Toast('已成功加入购物车');
       getCartCount();
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>

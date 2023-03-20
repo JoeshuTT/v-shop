@@ -194,8 +194,8 @@ export default {
             // on confirm
             this.$router.back();
           })
-          .catch((error) => {
-            console.error(error);
+          .catch((err) => {
+            console.error(err);
           });
       });
     },

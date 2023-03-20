@@ -1,4 +1,4 @@
-import { request } from '@/utils/request';
+import { createRequest as request } from '@/utils/request';
 
 /**
  * 获取可领取优惠券列表
@@ -41,6 +41,9 @@ export function discountsFetch(data?: Recordable) {
     url: `/discounts/fetch`,
     method: 'post',
     data,
+    requestOptions: {
+      errorMessageMode: 'none',
+    },
   });
 }
 

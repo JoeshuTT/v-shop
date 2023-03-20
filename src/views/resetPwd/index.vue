@@ -51,9 +51,9 @@ function onSubmit() {
       router.back();
       Toast.success('重置成功');
     })
-    .catch((error) => {
+    .catch((err) => {
+      console.error(err);
       submitLoading.value = false;
-      console.error(error);
     });
 }
 </script>

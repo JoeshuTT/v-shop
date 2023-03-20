@@ -34,10 +34,10 @@ function getCouponList() {
 function onItemClicked(index: number) {
   const coupon = unref(couponList)[index];
 
-  if (coupon.pwd) {
-    Toast({ message: '本券需要使用口令才能领取', duration: 1500 });
-    return;
-  }
+  // if (coupon.pwd) {
+  //   Toast({ message: '本券需要使用口令才能领取', duration: 1500 });
+  //   return;
+  // }
 
   Toast.loading({
     forbidClick: true,
@@ -50,14 +50,27 @@ function onItemClicked(index: number) {
   };
 
   API_DISCOUNTS.discountsFetch(params)
-    .then((res) => {
-      if (res.code === 0) {
-        Toast({ message: '恭喜,抢到了~', duration: 1500 });
-      }
+    .then(() => {
+      Toast.clear();
+      Toast({
+        message: '恭喜,抢到了~',
+        duration: 2000,
+      });
     })
-    .catch((error) => {
-      // Toast({ message: '很遗憾,没抢到~', duration: 1500 });
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
+      Toast.clear();
+      if (Number(err.code) === 700) {
+        Toast({
+          message: '很遗憾,没抢到~',
+          duration: 2000,
+        });
+      } else {
+        Toast({
+          message: err.msg,
+          duration: 2000,
+        });
+      }
     });
 }
 </script>

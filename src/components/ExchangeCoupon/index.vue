@@ -51,17 +51,28 @@ function onSubmit() {
   });
 
   API_DISCOUNTS.discountsFetch(params)
-    .then((res) => {
+    .then(() => {
       Toast.clear();
-      if (Number(res.code) === 0) {
-        Toast('兑换成功');
-        emit('success');
-      } else {
-        Toast('口令无效');
-      }
+      Toast({
+        message: '兑换成功',
+        duration: 2000,
+      });
+      emit('success');
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
+      Toast.clear();
+      if (Number(err.code) === 700) {
+        Toast({
+          message: '口令无效',
+          duration: 2000,
+        });
+      } else {
+        Toast({
+          message: err.msg,
+          duration: 2000,
+        });
+      }
     });
 }
 </script>

@@ -71,9 +71,9 @@ function onSubmit() {
       route.query.redirect ? router.replace({ path: route.query.redirect as string }) : router.replace({ path: '/' });
       Toast.success('注册成功');
     })
-    .catch((error) => {
+    .catch((err) => {
+      console.error(err);
       submitLoading.value = false;
-      console.error(error);
     });
 }
 </script>

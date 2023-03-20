@@ -105,8 +105,8 @@ function onDelete() {
         cartRemoveHandle();
       }
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 
@@ -122,8 +122,8 @@ function cartNumberHandle(_index: number, { key, number }) {
       Toast.clear();
       list.value = res.data?.items ?? [];
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 
@@ -132,8 +132,8 @@ function cartEmptyHandle() {
     .then(() => {
       list.value = [];
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 
@@ -145,8 +145,8 @@ function cartRemoveHandle() {
     .then((res) => {
       list.value = res.data?.items ?? [];
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 

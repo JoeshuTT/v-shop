@@ -50,8 +50,8 @@ function onSubmit() {
       Toast('兑换成功');
       getDetail();
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>

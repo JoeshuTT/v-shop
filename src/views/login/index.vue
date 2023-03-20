@@ -74,9 +74,9 @@ function onSubmit() {
       router.replace({ path: '/mine' });
       Toast.success('登录成功');
     })
-    .catch((error) => {
+    .catch((err) => {
+      console.error(err);
       submitLoading.value = false;
-      console.error(error);
     });
 }
 </script>

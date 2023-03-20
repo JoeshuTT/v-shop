@@ -5,7 +5,7 @@ import { Toast } from 'vant';
 import type { AreaColumnOption } from 'vant';
 import API_USER from '@/apis/user';
 import AffixBarAction from '@/components/AffixBarAction/index.vue';
-import Upload from '@/components/Upload/index.vue';
+import UploadAvatar from '@/components/UploadAvatar/index.vue';
 import { isEmpty } from '@/utils/validate';
 import { assets } from '@/constants';
 import AreaField from '@/components/AreaField/index.vue';
@@ -86,8 +86,8 @@ function onSubmit() {
       Toast('资料修改成功');
       router.back();
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>
@@ -95,12 +95,12 @@ function onSubmit() {
 <template>
   <div class="container">
     <div class="header">
-      <Upload @on-success="onFileSuccess">
+      <UploadAvatar @success="onFileSuccess">
         <div class="avatar">
           <van-image class="avatar-img" :src="avatarUrl || assets.avatar" />
           <div class="avatar-title">点击更换头像</div>
         </div>
-      </Upload>
+      </UploadAvatar>
     </div>
     <div class="nick van-hairline--bottom">
       <div class="nick-label">昵称</div>

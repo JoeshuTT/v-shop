@@ -180,8 +180,8 @@ function payOrder(orderId: number) {
 function cartEmptyHandle() {
   API_CART.shoppingCartEmpty()
     .then(() => {})
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 </script>

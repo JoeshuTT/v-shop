@@ -77,8 +77,8 @@ export default {
           this.listLoading = false;
           this.listFinished = this.list.length >= total;
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((err) => {
+          console.error(err);
           this.listLoading = false;
           this.listError = true;
         });

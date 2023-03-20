@@ -64,8 +64,8 @@ function onSubmit() {
       onClose();
       emit('success');
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>

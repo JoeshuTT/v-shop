@@ -8,8 +8,13 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import Components from 'unplugin-vue-components/vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 
-// 当前执行node命令时文件夹的地址（工作目录）
+/** 当前执行node命令时文件夹的地址（工作目录） */
 const root: string = process.cwd();
+
+/** 路径查找 */
+const pathResolve = (dir: string): string => {
+  return resolve(__dirname, '.', dir);
+};
 
 // 打包后静态资源的存放路径
 const assetsDir = 'assets';
@@ -51,6 +56,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     server: {
       host: true,
       port: Number(env.VITE_PORT),
+      // 本地跨域代理 https://cn.vitejs.dev/config/server-options.html#server-proxy
       proxy: {
         '/dev-api': {
           target: 'https://api.it120.cc/xiaochengxu',
@@ -68,13 +74,13 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         output: {
           entryFileNames: `${assetsDir}/[name].${appVersion}.js`,
           chunkFileNames: `${assetsDir}/[name].${appVersion}.js`,
-          assetFileNames: `${assetsDir}/static/[name].${appVersion}.[ext]`,
+          assetFileNames: `${assetsDir}/[ext]/[name].${appVersion}.[ext]`,
         },
       },
     },
     resolve: {
       alias: {
-        '@': resolve(__dirname, 'src'),
+        '@': pathResolve('src'),
       },
     },
     define: {

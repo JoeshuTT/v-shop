@@ -27,6 +27,6 @@ declare module '@vue/runtime-core' {
     Sku: typeof import('./components/Sku/index.vue')['default']
     SpainList: typeof import('./components/SpainList/index.vue')['default']
     Tabbar: typeof import('./components/Tabbar/index.vue')['default']
-    Upload: typeof import('./components/Upload/index.vue')['default']
+    UploadAvatar: typeof import('./components/UploadAvatar/index.vue')['default']
   }
 }

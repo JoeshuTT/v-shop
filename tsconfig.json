@@ -23,8 +23,7 @@
     "removeComments": true,
     "outDir": "./",
     "paths": {
-      "@/*": ["src/*"],
-      "#/*": ["types/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": [
@@ -32,8 +31,6 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "types/**/*.ts",
-    "types/**/*.d.ts",
     "build/**/*.ts",
     "build/**/*.d.ts",
     "mock/**/*.ts",

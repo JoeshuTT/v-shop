@@ -1,30 +1,40 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Toast } from 'vant';
+import { Toast, UploaderFileListItem } from 'vant';
 import Compressor from 'compressorjs';
 import API_DFS from '@/apis/dfs';
+import { blobToFile } from '@/utils/file';
 
 export default defineComponent({
   name: 'Upload',
-  emits: ['onSuccess', 'onError'],
+  emits: ['success', 'error'],
   setup(_props, { emit }) {
-    function beforeRead(file): any {
+    function beforeRead(file: File): Promise<any> {
       return new Promise((resolve) => {
         // eslint-disable-next-line no-new
         new Compressor(file, {
-          success: (result) => {
-            resolve(result);
+          quality: 0.8,
+          maxWidth: 1024,
+          success: async (result) => {
+            const resultFile = await blobToFile(result, file.name, {
+              type: file.type, // 使用原图文件类型
+            });
+
+            resolve(resultFile);
           },
           error: (error) => {
             console.error(`[Compressor error]`, error);
-            emit('onError', error);
+            emit('error', error);
           },
         });
       });
     }
-    function afterRead(file) {
+
+    async function afterRead(file: UploaderFileListItem) {
+      const uploadFile = file.file as File;
+
       const formData = new FormData();
-      formData.append('upfile', file.file);
+      formData.append('upfile', uploadFile);
 
       Toast.loading({
         forbidClick: true,
@@ -35,18 +45,14 @@ export default defineComponent({
       API_DFS.dfsUploadFile(formData)
         .then((res) => {
           Toast.clear();
-          if (res.data.url) {
-            emit('onSuccess', res);
-          } else {
-            Toast({
-              message: res.data.msg,
-              duration: 1500,
-            });
-            emit('onError', res);
-          }
+
+          emit('success', res);
         })
-        .catch((error) => {
-          emit('onError', error);
+        .catch((err) => {
+          console.error(err);
+          Toast.clear();
+
+          emit('error', err);
         });
     }
 

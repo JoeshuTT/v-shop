@@ -58,8 +58,8 @@ function onOrderCancel(orderId: number) {
       Toast({ message: '取消订单成功', duration: 1500 });
       onRefresh();
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 
@@ -70,8 +70,8 @@ function onOrderDelete(orderId: number) {
       Toast({ message: '删除订单成功', duration: 1500 });
       router.back();
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 

@@ -37,8 +37,8 @@ function getDetail() {
     .then((res) => {
       orderInfo.value = res.data?.orderInfo ?? {};
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>

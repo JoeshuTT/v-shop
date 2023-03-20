@@ -49,16 +49,14 @@ export function debounce(fn: any, delay: number) {
 
 /**
  * 深拷贝
- * @param {*} sources 源对象
- * @returns {*} 拷贝后的新对象
+ * @param {*} source 源对象
+ * @returns 拷贝后的新对象
  */
-export function deepClone(sources: any): any {
-  const target = Array.isArray(sources) ? [] : {};
-  for (const key in sources) {
-    if (Object.hasOwn(sources, key)) {
-      // @ts-ignore
-      target[key] = sources[key] !== null && typeof sources[key] === 'object' ? deepClone(sources[key]) : sources[key];
-    }
+export function deepClone(source: any) {
+  const target = Array.isArray(source) ? [] : {};
+  // eslint-disable-next-line guard-for-in
+  for (const key in source) {
+    target[key] = source[key] !== null && typeof source[key] === 'object' ? deepClone(source[key]) : source[key];
   }
 
   return target;
