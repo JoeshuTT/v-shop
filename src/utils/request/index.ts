@@ -55,7 +55,7 @@ export function createRequest<T = ServiceResult>(config: CustomRequestConfig): P
         config.data = qs.stringify(joinPayloadData(config.data));
       }
 
-      if (['get', 'delete'].includes(config.method as string)) {
+      if (['delete', 'get', 'head'].includes(config.method as string)) {
         config.params = joinPayloadData(config.params);
       }
     }
