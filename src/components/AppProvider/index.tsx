@@ -25,7 +25,7 @@ export default defineComponent({
     });
 
     return () => {
-      return <van-config-provider themeVars={unref(themeVars)}>{slots.default?.()}</van-config-provider>;
+      return <van-config-provider style={{position: 'relative'}} themeVars={unref(themeVars)}>{slots.default?.()}</van-config-provider>;
     };
   },
 });

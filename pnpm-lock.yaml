@@ -24,7 +24,7 @@ specifiers:
   number-precision: ^1.5.2
   pinia: ^2.0.18
   postcss: ^8.4.16
-  postcss-px-to-viewport: ^1.1.1
+  postcss-mobile-forever: ^3.2.0
   prettier: ^2.7.1
   qs: ^6.11.0
   typescript: ^4.7.4
@@ -69,7 +69,7 @@ devDependencies:
   eslint-plugin-vue: 9.3.0_eslint@8.22.0
   less: 4.1.3
   postcss: 8.4.16
-  postcss-px-to-viewport: 1.1.1
+  postcss-mobile-forever: 3.2.0_postcss@8.4.16
   prettier: 2.7.1
   typescript: 4.7.4
   unplugin-vue-components: 0.22.9_vue@3.2.37
@@ -2572,10 +2572,11 @@ packages:
       vue-demi: 0.13.7_vue@3.2.37
     dev: false
 
-  /postcss-px-to-viewport/1.1.1:
-    resolution: {integrity: sha512-2x9oGnBms+e0cYtBJOZdlwrFg/mLR4P1g2IFu7jYKvnqnH/HLhoKyareW2Q/x4sg0BgklHlP1qeWo2oCyPm8FQ==}
+  /postcss-mobile-forever/3.2.0_postcss@8.4.16:
+    resolution: {integrity: sha512-dN8AfHUpb2cC7RHKQRtT9jR5IqTyDxColFWHm+RKJOf9tSL5E/xg62K6Bmw9QO9yZlCnkZQ/yeDwmKlPqHzhzA==}
+    peerDependencies:
+      postcss: ^8.0.0
     dependencies:
-      object-assign: 4.1.1
       postcss: 8.4.16
     dev: true
 
