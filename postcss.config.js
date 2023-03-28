@@ -10,9 +10,6 @@ module.exports = {
       selectorBlackList: ['.ignore', /^body$/, '.hairlines', /^\.dp/, /^\.scroller/],
       rootSelector: "#app", // 根选择器，用于超过最大宽度时居中视图
       rootContainingBlockSelectorList: ["van-tabbar", "van-popup--bottom"],
-      customLengthProperty: {
-        rootContainingBlockList_LR: ["--placeholder"]
-      }
     }
   },
 };
