@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import { onMounted, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import API_USER from '@/apis/user';
+import { countPair } from '@/utils/format';
+import { mapMatchingProperties } from '@/utils/lodash';
+import { gsap } from 'gsap';
+
+const router = useRouter();
+
+let detail = reactive<Recordable>({
+  // balance: 0, 数字动画展示
+  freeze: 0,
+  totleConsumed: 0,
+});
+
+onMounted(() => {
+  getDetail();
+});
+
+function onCellClicked() {
+  router.push({ path: '/wallet/cashLog' });
+}
+
+function getDetail() {
+  API_USER.userAmount().then((res) => {
+    gsap.to(detail, { duration: 0.5, balance: Number(res.data.balance) });
+    detail = mapMatchingProperties(detail, res.data);
+  });
+}
+</script>
+
 <template>
   <div class="container">
     <div class="header">
@@ -25,33 +57,6 @@
     </van-cell>
   </div>
 </template>
-
-<script>
-import API_USER from '@/apis/user';
-import { countPair } from '@/utils/format';
-
-export default {
-  data() {
-    return {
-      detail: {},
-    };
-  },
-  created() {
-    this.getDetail();
-  },
-  methods: {
-    countPair,
-    onCellClicked() {
-      this.$router.push({ path: '/wallet/cashLog' });
-    },
-    getDetail() {
-      API_USER.userAmount().then((res) => {
-        this.detail = res.data || {};
-      });
-    },
-  },
-};
-</script>
 
 <style lang="less" scoped>
 .container {

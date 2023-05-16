@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { PropType } from 'vue';
 
 defineProps({
@@ -14,7 +14,6 @@ const popupStyle = {
   'flex-direction': 'column',
   'align-items': 'stretch',
   'font-size': '14px',
-  background: '#fff',
 };
 
 function onClose() {
@@ -61,7 +60,7 @@ function handleShowChange(v: boolean) {
     width: 100%;
     font-size: 16px;
     font-weight: bold;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     height: 50px;
     line-height: 50px;
   }
@@ -70,11 +69,11 @@ function handleShowChange(v: boolean) {
     max-height: 80vh;
 
     :deep(.van-step__title) {
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
 
     :deep(.van-step__title--active) {
-      color: var(--green-color);
+      color: var(--color-green);
     }
   }
 }

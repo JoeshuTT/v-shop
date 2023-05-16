@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -84,7 +84,7 @@ function onItemClicked(index: number) {
   display: flex;
   align-items: center;
   padding: 12px;
-  background-color: #fff;
+  background-color: var(--color-bg-2);
   border-radius: 8px;
   margin-bottom: 10px;
 
@@ -104,7 +104,7 @@ function onItemClicked(index: number) {
     line-height: 14px;
     margin-left: 8px;
     border-radius: 999px;
-    background-color: var(--brand-color);
+    background-color: var(--color-primary);
   }
 
   &-name {
@@ -116,7 +116,7 @@ function onItemClicked(index: number) {
   }
 
   &-address {
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     font-size: 13px;
     line-height: 18px;
   }

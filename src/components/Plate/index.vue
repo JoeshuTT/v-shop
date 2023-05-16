@@ -1,16 +1,14 @@
+<script setup lang="ts">
+defineProps({
+  title: String,
+});
+</script>
+
 <template>
   <div class="plate">
     <div class="plate-title">{{ title }}</div>
   </div>
 </template>
-
-<script>
-export default {
-  props: {
-    title: String,
-  },
-};
-</script>
 
 <style lang="less" scoped>
 .plate {
@@ -23,7 +21,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--white);
+  background: var(--color-bg-2);
 
   &-title {
     position: relative;
@@ -31,7 +29,7 @@ export default {
     display: flex;
     align-items: center;
     font-size: 16px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     font-weight: bold;
   }
 
@@ -45,7 +43,7 @@ export default {
     left: -30px;
     top: 25px;
     font-size: 12px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
   }
 
   &-title::after {
@@ -58,7 +56,14 @@ export default {
     right: -30px;
     top: 25px;
     font-size: 12px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
+  }
+}
+
+.dark {
+  .plate-title::after,
+  .plate-title::before {
+    display: none;
   }
 }
 </style>

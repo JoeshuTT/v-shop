@@ -1,6 +1,6 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { Toast } from 'vant';
+import { showToast } from 'vant';
 import API_USER from '@/apis/user';
 import { countPair } from '@/utils/format';
 
@@ -15,7 +15,7 @@ const { goPage } = usePage();
 const detail = ref<Recordable>({});
 
 function onCellClicked() {
-  Toast('未开放：签到送积分');
+  showToast('未开放：签到送积分');
 }
 
 function getDetail() {

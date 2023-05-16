@@ -1,7 +1,7 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import { ref, unref } from 'vue';
-import { Toast } from 'vant';
+import { showToast, showLoadingToast, closeToast } from 'vant';
 import API_ORDER from '@/apis/order';
 import { reputation2Rate } from '@/model/modules/good/reputation';
 
@@ -22,7 +22,6 @@ const popupStyle = {
   'flex-direction': 'column',
   'align-items': 'stretch',
   'font-size': '14px',
-  background: '#fff',
 };
 const rateValue = ref(5);
 const rateRemark = ref('');
@@ -52,7 +51,7 @@ function onSubmit() {
     reputations,
   };
 
-  Toast.loading({
+  showLoadingToast({
     overlay: true,
     message: '加载中...',
     duration: 0,
@@ -60,12 +59,13 @@ function onSubmit() {
 
   API_ORDER.orderReputation({ postJsonString: JSON.stringify(params) })
     .then(() => {
-      Toast({ message: '评价成功!', duration: 1500 });
+      closeToast();
+      showToast({ message: '评价成功!', duration: 1500 });
       onClose();
       emit('success');
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>
@@ -112,7 +112,7 @@ function onSubmit() {
     width: 100%;
     font-size: 16px;
     font-weight: bold;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     height: 50px;
     line-height: 50px;
   }

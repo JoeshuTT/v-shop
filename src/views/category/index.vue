@@ -4,8 +4,8 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>
-import { onMounted, ref, unref } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref, unref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import API_GOODS from '@/apis/goods';
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/good.png';
@@ -20,65 +20,38 @@ const categoryIndex = ref(0);
 const categoryList = ref<Recordable[]>([]);
 
 function onCategoryChange() {
-  if (!listLoading.value) {
-    listFinished.value = false;
-    list.value = [];
-    pageCurrent.value = 1;
-    onPage();
-  }
+  listRef.value?.refresh();
 }
 
 function getCategoryList() {
   API_GOODS.goodsCategoryAll().then((res) => {
     if (res.data?.length) {
       categoryList.value = res.data.map((v: Recordable) => ({ ...v, text: v.name }));
+      listRef.value?.loadData();
     }
-    onPage();
   });
 }
 
+const listRef = ref<any>(null);
 const list = ref<Recordable[]>([]);
-const listLoading = ref(false);
-const listFinished = ref(false);
-const listError = ref(false);
-const listFinishedText = ref('没有更多了');
-const listErrorText = ref('请求失败，点击重新加载');
-const listEmptyText = ref('暂无商品');
-const listEmptyImage = IMAGE_LIST_EMPTY;
-const pageCurrent = ref(1);
-const pageSize = ref(20);
+const pagination = reactive({
+  pageCurrent: 1,
+  pageSize: 10,
+});
+const listMeta = reactive({
+  loadingText: '努力加载中...',
+  emptyText: '暂无商品',
+  emptyImage: IMAGE_LIST_EMPTY,
+});
 
-function onPageLoad() {
-  if (listFinished.value) {
-    return;
-  }
-  pageCurrent.value += 1;
-  onPage();
-}
-
-function onPage() {
-  listLoading.value = true;
-
+function getGoodList() {
   const params = {
-    categoryId: categoryList.value[categoryIndex.value].id,
-    page: unref(pageCurrent),
-    pageSize: unref(pageSize),
+    categoryId: unref(categoryList.value)[categoryIndex.value].id,
+    page: pagination.pageCurrent,
+    pageSize: pagination.pageSize,
   };
 
-  API_GOODS.goodsList(params)
-    .then((res) => {
-      const records = res.data?.result ?? [];
-      const total = res.data?.totalRow ?? 0;
-
-      list.value = unref(pageCurrent) === 1 ? records : unref(list).concat(records);
-      listLoading.value = false;
-      listFinished.value = list.value.length >= total;
-    })
-    .catch((error) => {
-      console.error(error);
-      listLoading.value = false;
-      listError.value = true;
-    });
+  return API_GOODS.goodsList(params);
 }
 
 function onGoodClicked(id: number) {
@@ -92,38 +65,34 @@ function onGoodClicked(id: number) {
       <van-sidebar v-model="categoryIndex" class="sidebar" @change="onCategoryChange">
         <van-sidebar-item v-for="item in categoryList" :key="item.id" :title="item.name" />
       </van-sidebar>
-      <div class="right-content">
-        <van-list
-          v-model:loading="listLoading"
-          v-model:error="listError"
-          class="list"
-          :finished="listFinished"
-          :finished-text="listFinishedText"
-          :error-text="listErrorText"
-          :immediate-check="false"
-          @load="onPageLoad"
+      <div class="right-content scroller-y">
+        <ProList
+          ref="listRef"
+          v-model:dataSource="list"
+          mode="infinite"
+          :api="getGoodList"
+          :pagination="pagination"
+          :meta="listMeta"
         >
-          <div v-for="item in list" :key="item.id" class="list-col">
-            <div class="list-item" @click="onGoodClicked(item.id)">
-              <van-image class="list-item-photo" :src="item.pic" :alt="item.name" />
-              <div class="list-item-info">
-                <div class="list-item-title">{{ item.name }}</div>
-                <div class="list-item-price">
-                  <div class="price">
-                    <div class="price-current">
-                      <span class="price-current-symbol">¥</span>
-                      <span class="price-current-integer">{{ item.minPrice }}</span>
+          <div class="list">
+            <div v-for="item in list" :key="item.id" class="list-col">
+              <div class="list-item" @click="onGoodClicked(item.id)">
+                <van-image class="list-item-photo" :src="item.pic" :alt="item.name" />
+                <div class="list-item-info">
+                  <div class="list-item-title">{{ item.name }}</div>
+                  <div class="list-item-price">
+                    <div class="price">
+                      <div class="price-current">
+                        <span class="price-current-symbol">¥</span>
+                        <span class="price-current-integer">{{ item.minPrice }}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <template #finished>
-            <span v-if="list.length">{{ listFinishedText }}</span>
-            <van-empty v-else :image="listEmptyImage" :description="listEmptyText" />
-          </template>
-        </van-list>
+        </ProList>
       </div>
     </div>
     <!-- 底部导航栏 -->
@@ -133,34 +102,25 @@ function onGoodClicked(id: number) {
 
 <style lang="less" scoped>
 .main {
-  height: calc(100vh - 50px - constant(safe-area-inset-bottom));
-  height: calc(100vh - 50px - env(safe-area-inset-bottom));
+  height: calc(100vh - 50px - var(--safe-area-height-bottom));
   display: flex;
-  background: var(--white);
 }
 
 .sidebar {
   // margin-right: 10px;
   width: 100px;
   height: 100%;
-  background-color: var(--gray-color-1);
+  background-color: var(--color-bg-1);
 }
 
 .right-content {
   flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  background: var(--color-bg-2);
 }
 
 .list {
   display: flex;
   flex-wrap: wrap;
-
-  :deep(.van-list__loading),
-  :deep(.van-list__finished-text),
-  :deep(.van-list__error-text) {
-    width: 100%;
-  }
 
   &-col {
     width: 50%;
@@ -173,22 +133,6 @@ function onGoodClicked(id: number) {
   &-item {
     position: relative;
     overflow: hidden;
-    background: var(--white);
-
-    &-badge {
-      position: absolute;
-      top: 15px;
-      left: 0;
-      z-index: 20;
-      display: inline-block;
-      padding: 2px 4px;
-      color: var(--white);
-      background-color: var(--red-color);
-      font-size: 10px;
-      line-height: normal;
-      border-radius: 0 8px 8px 0;
-      padding-right: 6px;
-    }
 
     &-photo {
       display: flex;
@@ -202,7 +146,7 @@ function onGoodClicked(id: number) {
 
     &-title {
       font-size: 14px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
       min-height: 36px;
       line-height: 18px;
       display: -webkit-box;
@@ -231,7 +175,7 @@ function onGoodClicked(id: number) {
 
       &-current {
         margin-right: 5px;
-        color: var(--brand-color);
+        color: var(--color-primary);
 
         &-symbol {
           font-size: 12px;
@@ -247,7 +191,7 @@ function onGoodClicked(id: number) {
       &-origin {
         font-size: 12px;
         text-decoration: line-through;
-        color: var(--gray-color-6);
+        color: var(--color-text-3);
 
         &-label {
           margin-right: 2px;

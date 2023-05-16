@@ -1,29 +1,22 @@
-import '@/utils/helpers/vconsole';
 import { createApp } from 'vue';
 import App from './App.vue';
-import { router } from './router';
-import { createPageStackRouter } from 'vue-page-stack-router';
 import { store } from './store';
-
-// Vant
-import Vant, { Lazyload } from 'vant';
-import 'vant/lib/index.less';
-
+import { router } from './router';
+import { setupPageStackRouter } from './router/pageStack';
 // guard
 import './router/guard';
-
+// Vant
+import Vant, { Lazyload } from 'vant';
+import 'vant/lib/index.css';
 // global
 import './styles/index.less';
 
 // app
 const app = createApp(App);
 
-// pageStackRouter
-const pageStackRouter = createPageStackRouter({ router });
-
 app.use(Lazyload);
 app.use(Vant);
 app.use(router);
-app.use(pageStackRouter);
+setupPageStackRouter(app);
 app.use(store);
 app.mount('#app');

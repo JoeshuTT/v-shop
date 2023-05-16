@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, ref, unref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -21,7 +21,6 @@ const popupStyle = {
   'min-height': '50%',
   'overflow-y': 'visible',
   'font-size': '14px',
-  background: '#fff',
 };
 
 const list = ref<Recordable[]>([]);
@@ -98,7 +97,7 @@ function onSubmit() {
     width: 100%;
     font-size: 16px;
     font-weight: bold;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     height: 50px;
     line-height: 50px;
   }
@@ -107,7 +106,7 @@ function onSubmit() {
     min-height: 40vh;
     max-height: 80vh;
     overflow-y: auto;
-    background: var(--gray-color-1);
+    background: var(--color-bg-1);
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
   }

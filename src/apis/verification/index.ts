@@ -1,6 +1,6 @@
 import qs from 'qs';
 import { getAPI } from '@/utils';
-import { request } from '@/utils/request';
+import { createRequest as request } from '@/utils/request';
 
 /**
  * 校验邮件验证码是否正确

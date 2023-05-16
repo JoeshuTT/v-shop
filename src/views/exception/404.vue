@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 import IMAGE_404 from '@/assets/images/exception/404.png';
 
@@ -21,6 +21,6 @@ function goHome() {
 .container {
   box-sizing: border-box;
   min-height: 100vh;
-  background: var(--white);
+  background: var(--color-bg-1);
 }
 </style>

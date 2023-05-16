@@ -5,27 +5,33 @@
 body {
   font-family: @font-family-base;
   font-size: 16px;
-  color: var(--gray-color-8);
-  background-color: var(--gray-color-1);
+  color: var(--color-text-1);
+  background-color: var(--color-bg-1);
 }
 
-.text-brand-color {
-  color: var(--brand-color) !important;
-}
-
-// 按钮点击
-.button-active:active {
-  opacity: @active-opacity;
+.text-primary-color {
+  color: var(--color-primary) !important;
 }
 
 .container-full {
   box-sizing: border-box;
   min-height: 100vh;
-  background: var(--white);
+  background-color: var(--color-bg-2);
 }
 
 // html识别\n 换行
 .rich-text {
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+// 滚动容器
+.scroller-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroller-y {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }

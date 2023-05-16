@@ -1,7 +1,7 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import { useRouter } from 'vue-router';
-import { Toast } from 'vant';
+import { showToast } from 'vant';
 import Price from '@/components/Price/index.vue';
 import { decimalFormat } from '@/utils/format';
 
@@ -26,19 +26,19 @@ function onOrderClicked(item: Recordable) {
 }
 
 function onConcatService(_item: Recordable) {
-  Toast('未开放：客服');
+  showToast('未开放：客服');
 }
 
 function onOrderCancel(item: Recordable) {
   orderStore
     .closeOrder({ orderId: item.id })
     .then(() => {
-      Toast({ message: '取消订单成功', duration: 1500 });
+      showToast({ message: '取消订单成功', duration: 1500 });
       item.status = -1;
       item.statusStr = `订单关闭`;
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 
@@ -46,11 +46,11 @@ function onOrderDelete(item: Recordable, index: number) {
   orderStore
     .deleteOrder({ orderId: item.id })
     .then(() => {
-      Toast({ message: '删除订单成功', duration: 1500 });
+      showToast({ message: '删除订单成功', duration: 1500 });
       emit('delete', item, index);
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>
@@ -61,7 +61,7 @@ function onOrderDelete(item: Recordable, index: number) {
       <div class="list-item-header-hd">
         <span class="title">订单编号：{{ item.orderNumber }}</span>
       </div>
-      <div :class="['list-item-header-state', item.status !== -1 ? 'text-brand-color' : '']">
+      <div :class="['list-item-header-state', item.status !== -1 ? 'text-primary-color' : '']">
         {{ item.statusStr }}
       </div>
     </div>
@@ -125,7 +125,7 @@ function onOrderDelete(item: Recordable, index: number) {
 
     margin: 10px;
     border-radius: 8px;
-    background: #fff;
+    background: var(--color-bg-2);
     padding-bottom: 10px;
 
     &-header {
@@ -133,7 +133,7 @@ function onOrderDelete(item: Recordable, index: number) {
       padding: 10px 12px;
       align-items: center;
       font-size: 14px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
 
       &-hd {
         flex: 1;
@@ -142,13 +142,13 @@ function onOrderDelete(item: Recordable, index: number) {
 
       &-state {
         text-align: right;
-        color: var(--gray-color-6);
+        color: var(--color-text-3);
       }
     }
 
     &-more {
       font-size: 14px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
       padding: 5px;
       line-height: 28px;
       text-align: center;
@@ -157,7 +157,7 @@ function onOrderDelete(item: Recordable, index: number) {
     &-total {
       height: 48px;
       padding: 0 12px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -224,7 +224,7 @@ function onOrderDelete(item: Recordable, index: number) {
 
   &-title {
     font-size: 14px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -234,19 +234,19 @@ function onOrderDelete(item: Recordable, index: number) {
 
   &-prop {
     font-size: 12px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
     line-height: 16px;
     margin-top: 8px;
   }
 
   &-price {
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     letter-spacing: 0;
     font-size: 14px;
   }
 
   &-number {
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
     line-height: 16px;
     margin-top: 8px;
     font-size: 12px;

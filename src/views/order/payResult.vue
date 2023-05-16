@@ -4,7 +4,7 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import API_ORDER from '@/apis/order';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -37,8 +37,8 @@ function getDetail() {
     .then((res) => {
       orderInfo.value = res.data?.orderInfo ?? {};
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>
@@ -71,7 +71,7 @@ function getDetail() {
 <style lang="less" scoped>
 .container {
   padding: 10vh 20px 0;
-  background: var(--white);
+  background: var(--color-bg-2);
 }
 
 .result {
@@ -91,7 +91,7 @@ function getDetail() {
   }
 
   &-icon {
-    color: var(--brand-color);
+    color: var(--color-primary);
   }
 
   &-title {
@@ -99,7 +99,7 @@ function getDetail() {
     height: 25px;
     font-size: 22px;
     font-weight: bold;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     line-height: 25px;
     font-weight: bold;
     margin-bottom: 4px;
@@ -108,7 +108,7 @@ function getDetail() {
 
   &-title-sub {
     font-size: 12px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
   }
 }
 
@@ -125,15 +125,15 @@ function getDetail() {
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    color: var(--brand-color);
-    border: 1px solid var(--brand-color);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
     border-radius: 20px;
     background: none;
   }
 
   &-btn:first-child {
     color: #fff;
-    background: var(--brand-color);
+    background: var(--color-primary);
     margin-bottom: 35px;
   }
 }

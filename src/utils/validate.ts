@@ -1,56 +1,4 @@
-const toString = Object.prototype.toString;
-
-export function is(val: unknown, type: string) {
-  return toString.call(val) === `[object ${type}]`;
-}
-
-/**
- * 是否有值
- * @param {*} val
- */
-export function isDef<T = unknown>(val?: T): val is T {
-  return val !== undefined && val !== null;
-}
-
-/**
- * 是否是字符串
- * @param {*} str
- */
-export function isString(val: unknown): val is string {
-  return is(val, 'String');
-}
-
-/**
- * 是否是数字
- * @param {*} val
- */
-export function isNumber(val: unknown): val is number {
-  return is(val, 'Number');
-}
-
-/**
- * 是否是函数
- * @param {*} val
- */
-export function isFunction(val: unknown): val is Function {
-  return typeof val === 'function';
-}
-
-/**
- * 是否是对象
- * @param {*} val
- */
-export function isObject(val: any): val is Record<any, any> {
-  return val !== null && is(val, 'Object');
-}
-
-/**
- * 是否是数组
- * @param {*} val
- */
-export function isArray(val: any): val is Array<any> {
-  return val && Array.isArray(val);
-}
+import { isString, isArray, isObject } from './is';
 
 /**
  * 是否为空数据
@@ -72,27 +20,21 @@ export function isEmpty<T = unknown>(val: T): val is T {
 }
 
 /**
- * 是否是本地资源路径
+ * 是否是数值
+ * @param val
  */
-export function isSrc(val: string) {
-  const reg = /^https?/gi;
-  if (reg.test(val)) {
-    return false;
-  } else {
-    return true;
-  }
+export function isNumeric(val: number | string) {
+  return typeof val === 'number' || /^\d+(\.\d+)?$/.test(val);
 }
 
 /**
  * 是否是手机号
- * @description 国内有效手机号码，不包括（台湾+886、香港+852、澳门+853）
- *
+ * @description 手机号(mobile phone)中国(最宽松), 只要是1开头即可
  */
 export function isMobile(val: string) {
-  const value = val.replace(/[^-|\d]/g, '');
-  return /^((\+86)|(86))?(1)\d{10}$/.test(value) || /^0[0-9-]{10,13}$/.test(value);
+  const reg = /^(?:(?:\+|00)86)?1\d{10}$/;
+  return reg.test(val);
 }
-
 /**
  * 是否是邮箱
  */

@@ -1,9 +1,7 @@
-import { IGoodsMap } from './typings';
-
 /**
  *  订单列表
  */
-export function orderListModel(orderList: Recordable[], goodsMap: IGoodsMap) {
+export function orderListModel(orderList: Recordable[], goodsMap: { [key: string]: Recordable[] }) {
   const array: Recordable[] = [];
 
   orderList.forEach((item) => {

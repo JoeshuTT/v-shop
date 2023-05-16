@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 import IMAGE_RELOAD from '@/assets/images/exception/reload.png';
 
@@ -13,7 +13,7 @@ function onReload() {
   <div class="container">
     <img :src="IMAGE_RELOAD" class="image" />
     <div class="title">页面加载异常或服务器开小差了</div>
-    <div class="action button-active" @click="onReload">重新加载</div>
+    <div class="action van-haptics-feedback" @click="onReload">重新加载</div>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ function onReload() {
   box-sizing: border-box;
   min-height: 100vh;
   padding-top: 10vh;
-  background: var(--color-white);
+  background: var(--color-bg-1);
   text-align: center;
 }
 
@@ -42,5 +42,9 @@ function onReload() {
   height: 40px;
   line-height: 40px;
   color: #38f;
+}
+
+.dark .image {
+  opacity: 0.5;
 }
 </style>

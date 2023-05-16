@@ -1,7 +1,7 @@
-<script lang="ts" setup>
-import type { FieldTextAlign } from 'vant';
-import type { PropType } from 'vue';
+<script setup lang="ts">
 import { ref } from 'vue';
+import type { PropType } from 'vue';
+import type { FieldTextAlign } from 'vant';
 import { areaList } from '@vant/area-data';
 
 defineProps({

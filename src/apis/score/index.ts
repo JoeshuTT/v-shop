@@ -1,4 +1,4 @@
-import { request } from '@/utils/request';
+import { createRequest as request } from '@/utils/request';
 
 /**
  * 积分兑换成长值

@@ -4,10 +4,10 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed, onMounted, ref, unref } from 'vue';
 import { useRouter } from 'vue-router';
-import { Dialog, Toast } from 'vant';
+import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
 import NP from 'number-precision';
 import API_USER from '@/apis/user';
 import API_ORDER from '@/apis/order';
@@ -86,12 +86,12 @@ const totalPrice = computed(() =>
 
 function onSubmit() {
   if (unref(isNeedLogistics) && !unref(addressInfo).linkMan) {
-    Toast({ message: '地址栏不能为空', duration: 1500 });
+    showToast({ message: '地址栏不能为空', duration: 1500 });
     return;
   }
 
   if (unref(balance) < unref(totalPrice)) {
-    Dialog.confirm({
+    showConfirmDialog({
       title: '余额不足',
       message: '积分兑换成余额，再来消费',
       confirmButtonText: '我知道了',
@@ -136,7 +136,7 @@ async function createOrder() {
     params.autoDeliver = true; // 虚拟商品，自动发货
   }
 
-  Toast.loading({
+  showLoadingToast({
     forbidClick: true,
     message: '订单创建中...',
     duration: 0,
@@ -152,7 +152,7 @@ async function createOrder() {
 
     await payOrder(res.data.id);
 
-    Toast.clear();
+    closeToast();
     submitLoading.value = false;
     router.replace({
       path: '/order/payResult',
@@ -161,7 +161,7 @@ async function createOrder() {
       },
     });
   } catch (error) {
-    Toast.clear();
+    closeToast();
     submitLoading.value = false;
     console.error(error);
   }
@@ -180,8 +180,8 @@ function payOrder(orderId: number) {
 function cartEmptyHandle() {
   API_CART.shoppingCartEmpty()
     .then(() => {})
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 </script>
@@ -276,7 +276,7 @@ function cartEmptyHandle() {
   overflow: hidden;
   margin: 12px 10px;
   border-radius: 8px;
-  background-color: var(--white);
+  background-color: var(--color-bg-2);
 
   &-header {
     font-size: 14px;
@@ -309,14 +309,14 @@ function cartEmptyHandle() {
   justify-content: flex-end;
   height: 44px;
   font-size: 14px;
-  color: var(--gray-color-8);
+  color: var(--color-text-1);
 
   &-num {
     margin-right: 8px;
   }
 
   &-price {
-    color: var(--brand-color);
+    color: var(--color-primary);
     &-symbol {
       font-size: 12px;
       margin-right: 2px;
@@ -333,12 +333,11 @@ function cartEmptyHandle() {
   box-sizing: border-box;
   position: fixed;
   left: 0;
-  bottom: constant(safe-area-inset-bottom);
-  bottom: env(safe-area-inset-bottom);
+  bottom: var(--safe-area-height-bottom);
   z-index: 100;
   width: 100%;
   padding: 0 16px;
-  background-color: #fff;
+  background-color: var(--color-bg-2);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -347,8 +346,7 @@ function cartEmptyHandle() {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
 
   &-wrap {
-    height: calc(50px + constant(safe-area-inset-bottom));
-    height: calc(50px + env(safe-area-inset-bottom));
+    height: calc(50px + var(--safe-area-height-bottom));
   }
 
   &-hd {
@@ -356,11 +354,11 @@ function cartEmptyHandle() {
     display: flex;
     align-items: center;
     padding-right: 15px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
   }
 
   &-price {
-    color: var(--brand-color);
+    color: var(--color-primary);
     font-weight: bold;
 
     &-symbol {
@@ -383,7 +381,6 @@ function cartEmptyHandle() {
 .address {
   box-sizing: border-box;
   position: relative;
-  background-color: #fff;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -402,14 +399,14 @@ function cartEmptyHandle() {
 
   &-title {
     font-size: 17px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     font-weight: bold;
     margin: 8px 0;
   }
 
   &-sub {
     font-size: 13px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
   }
 
   &:before {

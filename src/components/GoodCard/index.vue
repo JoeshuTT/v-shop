@@ -84,7 +84,7 @@ export default defineComponent({
     &-title {
       font-size: 14px;
       line-height: 16px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
       display: -webkit-box;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -96,11 +96,11 @@ export default defineComponent({
       flex: 1;
       font-size: 12px;
       line-height: 20px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
 
     &-price {
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
       &-symbol {
         font-size: 12px;
         margin-right: 2px;
@@ -114,7 +114,7 @@ export default defineComponent({
 
     &-bottom {
       font-size: 12px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
   }
 }

@@ -1,21 +1,19 @@
-<script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue';
+<script setup lang="ts">
+import { reactive, ref } from 'vue';
 import API_SCORE from '@/apis/score';
-import ProList from '@/components/ProList/index.vue';
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/good.png';
 
-onMounted(() => {
-  //
-});
-
+const list = ref<Recordable[]>([]);
 const pagination = reactive({
   pageCurrent: 1,
   pageSize: 20,
 });
-const listEmptyText = ref('暂无交易记录');
-const listEmptyImage = IMAGE_LIST_EMPTY;
+const listMeta = reactive({
+  emptyText: '暂无交易记录',
+  emptyImage: IMAGE_LIST_EMPTY,
+});
 
-function loadList() {
+function getDataList() {
   const params = {
     page: pagination.pageCurrent,
     pageSize: pagination.pageSize,
@@ -27,9 +25,16 @@ function loadList() {
 
 <template>
   <div class="container">
-    <ProList :api="loadList" :pagination="pagination" :empty-text="listEmptyText" :empty-image="listEmptyImage">
-      <template #item="{ item }">
-        <div class="list-item van-hairline--bottom">
+    <ProList
+      v-model:dataSource="list"
+      mode="infinite"
+      :api="getDataList"
+      :pagination="pagination"
+      :meta="listMeta"
+      immediate
+    >
+      <div class="list">
+        <div v-for="(item, index) in list" :key="index" class="list-item van-hairline--bottom">
           <div class="list-item-hd">
             <div class="list-item-title">{{ item.typeStr }}</div>
             <div class="list-item-txt">{{ item.dateAdd }}</div>
@@ -39,7 +44,7 @@ function loadList() {
             <span>{{ item.score }}</span>
           </div>
         </div>
-      </template>
+      </div>
     </ProList>
   </div>
 </template>
@@ -51,7 +56,7 @@ function loadList() {
   justify-content: flex-start;
   align-items: center;
   padding: 10px 15px;
-  background: var(--white);
+  background: var(--color-bg-2);
 
   &-hd {
     flex: 1;
@@ -64,20 +69,20 @@ function loadList() {
   &-title {
     margin-bottom: 5px;
     font-size: 16px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
   }
 
   &-txt {
     font-size: 14px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
   }
 }
 
 .c-red {
-  color: var(--red-color);
+  color: var(--color-red);
 }
 
 .c-green {
-  color: var(--green-color);
+  color: var(--color-green);
 }
 </style>

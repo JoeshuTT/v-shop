@@ -1,13 +1,21 @@
 <template>
   <div class="container">
-    <ProList :api="loadList" :after-fetch="loadListAfter" :pagination="pagination" :empty-text="listEmptyText">
-      <template #item="{ item, index }">
-        <div :key="index" class="list-item">
+    <ProList
+      v-model:dataSource="list"
+      mode="infinite"
+      :api="getDataList"
+      :afterFetch="listAfterFetch"
+      :pagination="pagination"
+      :meta="listMeta"
+      immediate
+    >
+      <div class="list">
+        <div v-for="(item, index) in list" :key="index" class="list-item">
           <div class="list-item-header van-hairline--bottom">
             <div class="list-item-header-hd">
               <span class="title">订单编号：{{ item.orderInfo.orderNumber }}</span>
             </div>
-            <div :class="['list-item-header-state', item.status !== -1 ? 'text-brand-color' : '']">
+            <div :class="['list-item-header-state', item.status !== -1 ? 'text-primary-color' : '']">
               {{ item.orderInfo.statusStr }}
             </div>
           </div>
@@ -34,35 +42,31 @@
           </div>
           <!-- ▲ 操作按钮组 -->
         </div>
-      </template>
+      </div>
     </ProList>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import NP from 'number-precision';
 import API_ORDER from '@/apis/order';
-import ProList from '@/components/ProList/index.vue';
 import { orderAfterSaleListModel } from '@/model/modules/order/afterSale';
-import { decimalFormat } from '@/utils/format';
 
 export default {
-  components: { ProList },
-  filters: { decimalFormat },
   data() {
     return {
+      list: [] as Recordable[],
       pagination: {
         pageCurrent: 1,
-        pageSize: 10,
+        pageSize: 20,
       },
-      listEmptyText: '暂无售后',
+      listMeta: {
+        emptyText: '暂无售后',
+      },
     };
   },
-  created() {
-    //
-  },
   methods: {
-    loadList() {
+    getDataList() {
       const params = {
         statusBatch: `1,2,3,4`,
         page: this.pagination.pageCurrent,
@@ -71,7 +75,7 @@ export default {
 
       return API_ORDER.orderList(params);
     },
-    loadListAfter(data) {
+    listAfterFetch(data) {
       const records = orderAfterSaleListModel(data?.orderList ?? [], data?.goodsMap ?? []);
       return records;
     },
@@ -97,7 +101,7 @@ export default {
   padding: 0 15px;
   align-items: center;
   height: 60px;
-  background: #fff;
+  background: var(--color-bg-2);
 
   &-form {
     flex: 1;
@@ -111,7 +115,7 @@ export default {
     margin-right: 10px;
 
     :deep(.van-icon-search) {
-      color: var(--brand-color);
+      color: var(--color-primary);
       font-size: 17px;
     }
     :deep(.van-search) {
@@ -126,7 +130,7 @@ export default {
     height: 36px;
     line-height: 36px;
     border: 1px solid #c7c7c7;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     font-size: 14px;
   }
 }
@@ -140,7 +144,7 @@ export default {
 
     margin: 10px;
     border-radius: 8px;
-    background: #fff;
+    background: var(--color-bg-2);
     padding-bottom: 10px;
 
     &-header {
@@ -148,7 +152,7 @@ export default {
       padding: 10px 12px;
       align-items: center;
       font-size: 14px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
 
       &-hd {
         flex: 1;
@@ -157,7 +161,7 @@ export default {
 
       &-state {
         text-align: right;
-        color: var(--gray-color-6);
+        color: var(--color-text-3);
       }
     }
 
@@ -167,7 +171,7 @@ export default {
       justify-content: flex-end;
       padding: 10px 10px 0;
       font-size: 12px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
 
     &-action-btn {
@@ -203,7 +207,7 @@ export default {
 
   &-title {
     font-size: 14px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     display: -webkit-box;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -213,19 +217,19 @@ export default {
 
   &-prop {
     font-size: 12px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
     line-height: 16px;
     margin-top: 8px;
   }
 
   &-price {
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     letter-spacing: 0;
     font-size: 14px;
   }
 
   &-number {
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
     line-height: 16px;
     margin-top: 8px;
     font-size: 12px;

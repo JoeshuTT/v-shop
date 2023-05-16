@@ -28,5 +28,13 @@ module.exports = {
     'no-undef': 'off',
     // @typescript-eslint
     '@typescript-eslint/prefer-optional-chain': 'off',
+    // vue
+    'vue/no-duplicate-attributes': [
+      'error',
+      {
+        allowCoexistClass: true,
+        allowCoexistStyle: true,
+      },
+    ],
   },
 };

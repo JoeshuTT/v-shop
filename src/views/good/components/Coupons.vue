@@ -1,7 +1,8 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, ref, unref } from 'vue';
-import { Toast } from 'vant';
+import { showToast, showLoadingToast, closeToast } from 'vant';
 import API_DISCOUNTS from '@/apis/discounts';
+import { debounce } from '@/utils';
 
 defineProps({
   title: { type: String },
@@ -24,22 +25,22 @@ function onClose() {
 }
 
 function getCouponList() {
-  API_DISCOUNTS.discountsCoupons().then((res) => {
+  API_DISCOUNTS.discountsCoupons({ type: 'NO_PWD' }).then((res) => {
     if (res.data) {
       couponList.value = res.data;
     }
   });
 }
 
-function onItemClicked(index: number) {
+const onItemClicked = debounce((index: number) => {
   const coupon = unref(couponList)[index];
 
-  if (coupon.pwd) {
-    Toast({ message: '本券需要使用口令才能领取', duration: 1500 });
-    return;
-  }
+  // if (coupon.pwd) {
+  //   showToast({ message: '本券需要使用口令才能领取', duration: 1500 });
+  //   return;
+  // }
 
-  Toast.loading({
+  showLoadingToast({
     forbidClick: true,
     message: '加载中...',
     duration: 0,
@@ -50,16 +51,29 @@ function onItemClicked(index: number) {
   };
 
   API_DISCOUNTS.discountsFetch(params)
-    .then((res) => {
-      if (res.code === 0) {
-        Toast({ message: '恭喜,抢到了~', duration: 1500 });
-      }
+    .then(() => {
+      closeToast();
+      showToast({
+        message: '恭喜,抢到了~',
+        duration: 2000,
+      });
     })
-    .catch((error) => {
-      // Toast({ message: '很遗憾,没抢到~', duration: 1500 });
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
+      closeToast();
+      if (Number(err.code) === 700) {
+        showToast({
+          message: '很遗憾,没抢到~',
+          duration: 2000,
+        });
+      } else {
+        showToast({
+          message: err.msg,
+          duration: 2000,
+        });
+      }
     });
-}
+}, 1500);
 </script>
 
 <template>
@@ -103,7 +117,7 @@ function onItemClicked(index: number) {
     padding: 0 15px;
     width: 100%;
     font-size: 16px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     height: 50px;
     line-height: 50px;
   }

@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import API_SCORE from '@/apis/score';
 import { scoreDeductionRuleModel } from '@/model/modules/score/deductionRule';
@@ -131,12 +131,12 @@ function getDetail() {
 
       &-title {
         font-size: 14px;
-        color: var(--gray-color-8);
+        color: var(--color-text-1);
         margin-bottom: 4px;
       }
 
       &-desc {
-        color: var(--gray-color-6);
+        color: var(--color-text-3);
       }
     }
   }
@@ -156,7 +156,7 @@ function getDetail() {
         margin-bottom: 20px;
         padding-left: 16px;
         font-size: 14px;
-        color: var(--gray-color-8);
+        color: var(--color-text-1);
         line-height: 24px;
       }
 

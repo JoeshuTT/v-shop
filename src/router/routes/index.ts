@@ -9,6 +9,7 @@ const routes = [
     component: () => import('@/views/home/index.vue'),
     meta: {
       title: '首页',
+      showWindowBar: true,
     },
   },
   {
@@ -17,6 +18,7 @@ const routes = [
     component: () => import('@/views/category/index.vue'),
     meta: {
       title: '分类',
+      showWindowBar: true,
     },
   },
   {
@@ -33,6 +35,7 @@ const routes = [
     component: () => import('@/views/mine/index.vue'),
     meta: {
       title: '我的',
+      showWindowBar: true,
     },
   },
   {
@@ -200,6 +203,7 @@ const routes = [
     component: () => import('@/views/good/detail.vue'),
     meta: {
       title: '商品详情',
+      showWindowBar: true,
     },
   },
   {
@@ -208,6 +212,7 @@ const routes = [
     component: () => import('@/views/good/reputation.vue'),
     meta: {
       title: '全部评价',
+      showWindowBar: true,
     },
   },
   {

@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import API_GOODS from '@/apis/goods';
 import { goodReputationModel } from '@/model/modules/good/reputation';
@@ -64,7 +64,7 @@ function getGoodsReputation() {
 }
 
 .reputation {
-  background: #fff;
+  background: var(--color-bg-2);
 
   &-inner {
     padding: 0 15px;
@@ -76,7 +76,7 @@ function getGoodsReputation() {
       align-items: center;
       margin-bottom: 10px;
       font-size: 14px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
     }
 
     &-media {
@@ -97,9 +97,9 @@ function getGoodsReputation() {
     &-tag {
       padding: 2px 10px;
       border-radius: 10px;
-      border: 1px solid var(--gray-color-3);
+      border: 1px solid var(--color-border-1);
       font-size: 10px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
       margin-right: 10px;
     }
 
@@ -109,7 +109,7 @@ function getGoodsReputation() {
 
     &-ft {
       padding: 5px 0 10px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
 
     &-prop {

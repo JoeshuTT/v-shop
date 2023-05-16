@@ -50,13 +50,12 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .tabbar-wrap {
-  height: calc(50px + constant(safe-area-inset-bottom));
-  height: calc(50px + env(safe-area-inset-bottom));
+  height: calc(50px + var(--safe-area-height-bottom));
 }
 
 .tabbar {
   :deep(.van-tabbar-item--active) {
-    color: var(--brand-color);
+    color: var(--color-primary);
     .van-icon {
       animation: scale-icon 0.3s ease-in-out;
     }

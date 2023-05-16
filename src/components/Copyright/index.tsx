@@ -1,6 +1,8 @@
 import { defineComponent } from 'vue';
-import styles from './index.module.less';
 import dayjs from 'dayjs';
+
+// styles
+import styles from './index.module.less';
 
 export default defineComponent({
   name: 'Copyright',
@@ -16,7 +18,7 @@ export default defineComponent({
           </div>
           <div class={styles.copyrightP}>
             <a href="https://github.com/JoeshuTT/v-shop" target="_blank">
-              最后发布时间： {__APP_INFO__.lastBuildTime}
+              最后编译时间： {__APP_INFO__.lastBuildTime}
             </a>
           </div>
         </div>
