@@ -1,8 +1,5 @@
 interface ImportMetaEnv extends Readonly<Record<string, string>> {
   readonly VITE_APP_TITLE: string;
-  readonly VITE_PORT: number;
-  readonly VITE_APP_ENV: 'dev' | 'test' | 'pre' | 'prd';
-  readonly VITE_APP_API_HOST: string;
   // 更多环境变量...
 }
 
