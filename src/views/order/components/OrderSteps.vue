@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { PropType } from 'vue';
 
 defineProps({
@@ -14,32 +14,29 @@ const popupStyle = {
   'flex-direction': 'column',
   'align-items': 'stretch',
   'font-size': '14px',
-  background: '#fff',
 };
 
-function onClose() {
-  handleShowChange(false);
+function close() {
+  updateShow(false);
 }
 
-// function onOpen() {
-//   handleShowChange(true);
-// }
-
-function handleShowChange(v: boolean) {
-  emit('update:show', v);
+function open() {
+  updateShow(true);
 }
+
+function updateShow(value: boolean) {
+  emit('update:show', value);
+}
+
+defineExpose({
+  open,
+  close,
+  updateShow,
+});
 </script>
 
 <template>
-  <van-popup
-    :show="show"
-    round
-    closeable
-    position="bottom"
-    :style="popupStyle"
-    @click-close-icon="onClose"
-    @click-overlay="onClose"
-  >
+  <van-popup :show="show" round closeable position="bottom" :style="popupStyle" @update:show="updateShow">
     <div class="steps-header">订单跟踪</div>
     <div class="steps-body">
       <van-steps direction="vertical" :active="list.length - 1">
@@ -61,7 +58,7 @@ function handleShowChange(v: boolean) {
     width: 100%;
     font-size: 16px;
     font-weight: bold;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     height: 50px;
     line-height: 50px;
   }
@@ -70,11 +67,11 @@ function handleShowChange(v: boolean) {
     max-height: 80vh;
 
     :deep(.van-step__title) {
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
 
     :deep(.van-step__title--active) {
-      color: var(--green-color);
+      color: var(--color-green);
     }
   }
 }

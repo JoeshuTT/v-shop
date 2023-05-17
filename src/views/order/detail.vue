@@ -4,19 +4,20 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, ref, unref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Dialog, Toast } from 'vant';
+import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
 import dayjs from 'dayjs';
 import API_ORDER from '@/apis/order';
-import { setClipboardData } from '@/utils/helpers/clipboard';
+import { setClipboardData } from '@/utils/web/clipboard';
 import Price from '@/components/Price/index.vue';
 import OrderSteps from './components/OrderSteps.vue';
 import OrderRate from './components/OrderRate.vue';
 import { decimalFormat } from '@/utils/format';
 
 import { useOrderStore } from '@/store/modules/order';
+import { watchEffect } from 'vue';
 
 onMounted(() => {
   getDetail();
@@ -24,13 +25,6 @@ onMounted(() => {
 
 const router = useRouter();
 const route = useRoute();
-const orderStore = useOrderStore();
-
-const isLoading = ref(false);
-const orderInfo = ref<Recordable>({});
-const goods = ref<Recordable[]>([]);
-const logistics = ref<Recordable>({});
-const logList = ref<Recordable[]>([]);
 
 const stepsPopupShow = ref(false);
 function onStepsOpen() {
@@ -46,20 +40,16 @@ function onRateSuccess() {
   onRefresh();
 }
 
-const closeTime = ref(0);
-function onCountDownFinish() {
-  onRefresh();
-}
-
+const orderStore = useOrderStore();
 function onOrderCancel(orderId: number) {
   orderStore
     .closeOrder({ orderId })
     .then(() => {
-      Toast({ message: '取消订单成功', duration: 1500 });
+      showToast({ message: '取消订单成功', duration: 1500 });
       onRefresh();
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 
@@ -67,36 +57,37 @@ function onOrderDelete(orderId: number) {
   orderStore
     .deleteOrder({ orderId })
     .then(() => {
-      Toast({ message: '删除订单成功', duration: 1500 });
+      showToast({ message: '删除订单成功', duration: 1500 });
       router.back();
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 
 function onOrderPay(_orderId: number) {
-  Toast({ message: '未开放：收银台', duration: 1500 });
+  showToast({ message: '未开放：收银台', duration: 1500 });
 }
 
 function onConcatService(_orderId: number) {
-  Toast('未开放：客服');
+  showToast('未开放：客服');
 }
 
 function onOrderDelivery(orderId: number) {
-  Dialog.confirm({
+  showConfirmDialog({
     title: '提示',
     message: '确认您已收到商品？',
   })
     .then(() => {
       // on confirm
-      Toast.loading({
+      showLoadingToast({
         forbidClick: false,
         message: '加载中...',
         duration: 0,
       });
       API_ORDER.orderDelivery({ orderId }).then(() => {
-        Toast({ message: '确认收货成功', duration: 1500 });
+        closeToast();
+        showToast({ message: '确认收货成功', duration: 1500 });
         onRefresh();
       });
     })
@@ -116,7 +107,7 @@ function onGoodClicked(id: number) {
 
 function onCopy(text: string) {
   setClipboardData({ data: text }).then(() => {
-    Toast({
+    showToast({
       message: '复制成功',
       duration: 1500,
     });
@@ -126,6 +117,13 @@ function onCopy(text: string) {
 function onRefresh() {
   getDetail();
 }
+
+const isLoading = ref(false);
+const pullRefreshDisabled = ref(false);
+const orderInfo = ref<Recordable>({});
+const goods = ref<Recordable[]>([]);
+const logistics = ref<Recordable>({});
+const logList = ref<Recordable[]>([]);
 
 function getDetail() {
   API_ORDER.orderDetail({ orderNumber: route.query.orderNumber })
@@ -146,11 +144,25 @@ function getDetail() {
       isLoading.value = false;
     });
 }
+
+const closeTime = ref(0);
+function onCountDownFinish() {
+  onRefresh();
+}
+
+watchEffect(() => {
+  if (unref(stepsPopupShow) || unref(ratePopupShow)) {
+    pullRefreshDisabled.value = true;
+  } else {
+    pullRefreshDisabled.value = false;
+  }
+});
+// pullRefreshDisabled
 </script>
 
 <template>
-  <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-    <div class="container">
+  <div class="container">
+    <van-pull-refresh v-model="isLoading" :disabled="pullRefreshDisabled" @refresh="onRefresh">
       <div class="header">
         <div :class="['order-status', `order-status--${orderInfo.status}`]">
           <div class="order-status-title">{{ orderInfo.statusStr }}</div>
@@ -206,7 +218,7 @@ function getDetail() {
                 </div>
               </div>
               <div class="list-item-bottom">
-                <div class="list-item-price text-brand-color">
+                <div class="list-item-price text-primary-color">
                   <span class="list-item-price-symbol">¥</span>
                   <span class="list-item-price-integer">{{ decimalFormat(item.amountSingle) }}</span>
                 </div>
@@ -276,47 +288,46 @@ function getDetail() {
           </div>
         </div>
       </div>
-
-      <!-- 底部操作栏 -->
-      <div class="action-bar-wrap">
-        <div class="action-bar">
-          <!-- ▼ 操作按钮组（一行最好不要超过3个） -->
-          <template v-if="orderInfo.status === -1 || orderInfo.status === 3 || orderInfo.status === 4">
-            <van-button class="action-bar-btn" round @click.stop="onOrderDelete(orderInfo.id)"> 删除订单 </van-button>
-          </template>
-          <template v-if="orderInfo.status === 0">
-            <div class="action-bar-hd">
-              <span class="action-bar-total">合计：</span>
-              <div class="action-bar-price">
-                <span class="action-bar-price-symbol">¥</span>
-                <span class="action-bar-price-integer">{{ decimalFormat(orderInfo.amountReal) }}</span>
-              </div>
+    </van-pull-refresh>
+    <!-- 底部操作栏 -->
+    <div class="action-bar-wrap">
+      <div class="action-bar">
+        <!-- ▼ 操作按钮组（一行最好不要超过3个） -->
+        <template v-if="orderInfo.status === -1 || orderInfo.status === 3 || orderInfo.status === 4">
+          <van-button class="action-bar-btn" round @click.stop="onOrderDelete(orderInfo.id)"> 删除订单 </van-button>
+        </template>
+        <template v-if="orderInfo.status === 0">
+          <div class="action-bar-hd">
+            <span class="action-bar-total">合计：</span>
+            <div class="action-bar-price">
+              <span class="action-bar-price-symbol">¥</span>
+              <span class="action-bar-price-integer">{{ decimalFormat(orderInfo.amountReal) }}</span>
             </div>
-            <van-button class="action-bar-btn" round plain @click.stop="onOrderCancel(orderInfo.id)">
-              取消订单
-            </van-button>
-            <van-button class="action-bar-btn" round type="primary" @click.stop="onOrderPay(orderInfo.id)">
-              去支付
-            </van-button>
-          </template>
-          <template v-if="orderInfo.status === 1">
-            <van-button icon="service" class="action-bar-btn" round @click.stop="onConcatService(orderInfo.id)">
-              联系客服
-            </van-button>
-          </template>
-          <template v-if="orderInfo.status === 2">
-            <van-button class="action-bar-btn" round @click.stop="onOrderDelivery(orderInfo.id)">确认收货</van-button>
-          </template>
-          <template v-if="orderInfo.status === 3">
-            <van-button class="action-bar-btn" round @click.stop="onOrderReputation">评价</van-button>
-          </template>
-          <!-- ▲ 操作按钮组 -->
-        </div>
+          </div>
+          <van-button class="action-bar-btn" round plain @click.stop="onOrderCancel(orderInfo.id)">
+            取消订单
+          </van-button>
+          <van-button class="action-bar-btn" round type="primary" @click.stop="onOrderPay(orderInfo.id)">
+            去支付
+          </van-button>
+        </template>
+        <template v-if="orderInfo.status === 1">
+          <van-button icon="service" class="action-bar-btn" round @click.stop="onConcatService(orderInfo.id)">
+            联系客服
+          </van-button>
+        </template>
+        <template v-if="orderInfo.status === 2">
+          <van-button class="action-bar-btn" round @click.stop="onOrderDelivery(orderInfo.id)">确认收货</van-button>
+        </template>
+        <template v-if="orderInfo.status === 3">
+          <van-button class="action-bar-btn" round @click.stop="onOrderReputation">评价</van-button>
+        </template>
+        <!-- ▲ 操作按钮组 -->
       </div>
-      <!-- 评价弹层 -->
-      <OrderRate v-model:show="ratePopupShow" :goods="goods" :order-info="orderInfo" @success="onRateSuccess" />
     </div>
-  </van-pull-refresh>
+    <!-- 评价弹层 -->
+    <OrderRate v-model:show="ratePopupShow" :goods="goods" :order-info="orderInfo" @success="onRateSuccess" />
+  </div>
 </template>
 
 <style lang="less" scoped>
@@ -324,7 +335,7 @@ function getDetail() {
   box-sizing: border-box;
   position: relative;
   padding: 0 15px;
-  background: #fff;
+  background: var(--color-bg-2);
 }
 
 .order-status {
@@ -351,18 +362,18 @@ function getDetail() {
   &-title {
     font-size: 14px;
     font-weight: bold;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
   }
 
   &-desc {
     font-size: 12px;
-    color: var(--gray-color-7);
+    color: var(--color-text-2);
   }
 
   .count-down {
     display: inline-flex;
     font-size: 12px;
-    color: var(--gray-color-7);
+    color: var(--color-text-2);
   }
 }
 
@@ -371,7 +382,7 @@ function getDetail() {
   top: 50%;
   transform: translateY(-50%);
   right: 10px;
-  color: var(--gray-color-6);
+  color: var(--color-text-3);
   font-size: 14px;
 
   &-icon {
@@ -387,7 +398,7 @@ function getDetail() {
   // justify-content: flex-start;
   // align-items: center;
   padding: 8px 15px;
-  background: #fff;
+  background: var(--color-bg-2);
   &-hd {
     flex: 1;
     // padding:0 10px;
@@ -493,7 +504,7 @@ function getDetail() {
     &-title {
       font-size: 14px;
       line-height: 16px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
       display: -webkit-box;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -505,11 +516,11 @@ function getDetail() {
       flex: 1;
       font-size: 12px;
       line-height: 20px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
 
     &-price {
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
       &-symbol {
         font-size: 12px;
         margin-right: 2px;
@@ -523,7 +534,7 @@ function getDetail() {
 
     &-bottom {
       font-size: 12px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
   }
 }
@@ -534,7 +545,7 @@ function getDetail() {
   overflow: hidden;
   margin: 12px 0;
   // border-radius: 8px;
-  background-color: var(--white);
+  background-color: var(--color-bg-2);
 
   &-header {
     font-size: 14px;
@@ -567,14 +578,14 @@ function getDetail() {
   justify-content: flex-end;
   height: 44px;
   font-size: 14px;
-  color: var(--gray-color-8);
+  color: var(--color-text-1);
 
   &-num {
     margin-right: 8px;
   }
 
   &-price {
-    color: var(--brand-color);
+    color: var(--color-primary);
     &-symbol {
       font-size: 12px;
       margin-right: 2px;
@@ -590,10 +601,10 @@ function getDetail() {
 .cell {
   font-size: 14px;
   .van-cell__title {
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
   }
   .van-cell__value {
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
   }
 }
 
@@ -605,26 +616,26 @@ function getDetail() {
 
   &-hd {
     margin-right: 10px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
   }
   &-bd {
     flex: 1;
     margin-left: 10px;
     text-align: right;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
   }
 
   &-total-price {
     height: 48px;
     padding: 0 15px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     display: flex;
     justify-content: flex-end;
     align-items: center;
     font-size: 12px;
 
     &-price {
-      color: var(--brand-color);
+      color: var(--color-primary);
     }
   }
 }
@@ -638,11 +649,11 @@ function getDetail() {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
 
     &-value {
       margin-left: 10px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
     }
   }
 
@@ -655,12 +666,11 @@ function getDetail() {
   box-sizing: border-box;
   position: fixed;
   left: 0;
-  bottom: constant(safe-area-inset-bottom);
-  bottom: env(safe-area-inset-bottom);
+  bottom: var(--safe-area-height-bottom);
   z-index: 100;
   width: 100%;
   padding: 0 16px;
-  background-color: #fff;
+  background-color: var(--color-bg-2);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -668,8 +678,7 @@ function getDetail() {
   font-size: 14px;
 
   &-wrap {
-    height: calc(50px + constant(safe-area-inset-bottom));
-    height: calc(50px + env(safe-area-inset-bottom));
+    height: calc(50px + var(--safe-area-height-bottom));
   }
 
   &-hd {
@@ -678,11 +687,11 @@ function getDetail() {
     align-items: center;
     justify-content: flex-start;
     padding-right: 15px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
   }
 
   &-price {
-    color: var(--brand-color);
+    color: var(--color-primary);
     font-weight: bold;
 
     &-symbol {

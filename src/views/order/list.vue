@@ -4,30 +4,26 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>
-import { reactive, ref, unref, nextTick } from 'vue';
+<script setup lang="ts">
+import { reactive, ref, unref } from 'vue';
 import { useRoute } from 'vue-router';
 
 import API_ORDER from '@/apis/order';
-import ProList from '@/components/ProList/index.vue';
 import OrderItem from './components/OrderItem.vue';
 import { orderListModel } from '@/model/modules/order/list';
 import { usePage } from '@/hooks/shared/usePage';
 
-const { onPageLoad } = usePage();
+const route = useRoute();
+const { onMountedOrActivated } = usePage();
 
-onPageLoad(() => {
+onMountedOrActivated(() => {
   const { status } = route.query;
   if (status) {
     active.value = unref(tabList).findIndex((item) => item.status === status);
   }
 
-  nextTick(() => {
-    listRef.value?.loadData();
-  });
+  listRef.value?.loadData();
 });
-
-const route = useRoute();
 
 const tabList = ref<Recordable[]>([
   { name: '全部', status: '' },
@@ -51,35 +47,39 @@ function onSearch() {
 }
 
 const listRef = ref<any>(null);
-
+const list = ref<Recordable[]>([]);
 const pagination = reactive({
   pageCurrent: 1,
   pageSize: 10,
 });
 const listQueryType = ref('query');
-const listEmptyText = ref('暂无订单');
 
-function onOrderDelete(_item, index) {
-  listRef.value?.deleteItemByIndex(index);
+const listMeta = reactive({
+  loadingText: '订单加载中...',
+  emptyText: '暂无订单',
+});
+
+function onOrderItemDelete(_item, index: number) {
+  list.value.splice(index, 1);
 }
 
-function loadList() {
-  const params: Recordable = {
+function getOrderList() {
+  const params = {
     page: pagination.pageCurrent,
     pageSize: pagination.pageSize,
     status: unref(tabList)[unref(active)].status,
   };
 
   if (unref(keyword)) {
-    params.orderNumber = unref(keyword); // 订单编号
+    params['orderNumber'] = unref(keyword); // 订单编号
   }
 
-  listEmptyText.value = unref(listQueryType) === 'search' ? '未找到符合条件数据' : '暂无订单';
+  listMeta.emptyText = unref(listQueryType) === 'search' ? '未找到符合条件数据' : '暂无订单';
 
   return API_ORDER.orderList(params);
 }
 
-function loadListAfter(data) {
+function listAfterFetch(data) {
   const records = orderListModel(data?.orderList ?? [], data?.goodsMap ?? []);
   return records;
 }
@@ -111,19 +111,26 @@ function loadListAfter(data) {
 
     <ProList
       ref="listRef"
-      :api="loadList"
-      :after-fetch="loadListAfter"
+      v-model:dataSource="list"
+      mode="infinite"
+      :api="getOrderList"
+      :afterFetch="listAfterFetch"
       :pagination="pagination"
-      :empty-text="listEmptyText"
-      :immediate="false"
+      :meta="listMeta"
     >
-      <template #item="{ item, index }">
-        <OrderItem :key="item.id" :item="item" :index="index" @delete="onOrderDelete" />
-      </template>
+      <div class="list">
+        <OrderItem
+          v-for="(item, index) in list"
+          :key="item.id"
+          :item="item"
+          :index="index"
+          @delete="onOrderItemDelete"
+        />
+      </div>
     </ProList>
   </div>
 </template>
 
 <style lang="less" scoped>
-//
+// ...
 </style>

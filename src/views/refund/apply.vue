@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import { showToast, showConfirmDialog } from 'vant';
 import API_ORDER from '@/apis/order';
 
 export default {
@@ -163,13 +164,13 @@ export default {
       };
 
       API_ORDER.orderRefundApplyCancel(params).then((res) => {
-        this.$toast('撤销申请成功');
+        showToast('撤销申请成功');
         this.$router.back();
       });
     },
     onRefundApplySubmit() {
       if (!this.reason) {
-        this.$toast('请选择退换货原因');
+        showToast('请选择退换货原因');
         return;
       }
       const params = {
@@ -183,19 +184,18 @@ export default {
       };
 
       API_ORDER.orderRefundApplyApply(params).then((res) => {
-        this.$dialog
-          .confirm({
-            title: '提示',
-            message: '提交成功，请耐心等待我们处理！',
-            showCancelButton: false,
-            confirmButtonText: '我知道了',
-          })
+        showConfirmDialog({
+          title: '提示',
+          message: '提交成功，请耐心等待我们处理！',
+          showCancelButton: false,
+          confirmButtonText: '我知道了',
+        })
           .then(() => {
             // on confirm
             this.$router.back();
           })
-          .catch((error) => {
-            console.error(error);
+          .catch(() => {
+            // on cancel
           });
       });
     },
@@ -215,7 +215,7 @@ export default {
   height: 100px;
   text-align: center;
   padding-top: 40px;
-  background: var(--brand-color);
+  background: var(--color-primary);
   &-title {
     font-size: 20px;
     font-weight: bold;
@@ -224,8 +224,7 @@ export default {
 }
 
 .affix-bar {
-  height: calc(44px + constant(safe-area-inset-bottom));
-  height: calc(44px + env(safe-area-inset-bottom));
+  height: calc(44px + var(--safe-area-height-bottom));
 
   &__bar {
     position: fixed;
@@ -238,8 +237,7 @@ export default {
     align-items: center;
     justify-content: flex-end;
     height: 44px;
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: var(--safe-area-height-bottom);
     font-size: 14px;
   }
   &__button {

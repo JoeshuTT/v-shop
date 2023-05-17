@@ -3,12 +3,12 @@ export default {
   name: 'Sku',
 };
 </script>
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import { computed, unref } from 'vue';
-import { IInitialSku, ISku, ISelectedSkuComb, ISelectedPropItem } from './typings';
+import { IInitialSku, ISku, ISelectedSkuComb, ISelectedPropItem } from './types';
 import { priceIntegerFormat } from '@/utils/format';
-import { Toast } from 'vant';
+import { showToast } from 'vant';
 
 const props = defineProps({
   show: { type: Boolean, default: false },
@@ -26,7 +26,6 @@ const popupStyle = {
   'min-height': '50%',
   'overflow-y': 'visible',
   'font-size': '14px',
-  background: '#fff',
 };
 
 /**
@@ -90,18 +89,6 @@ const selectedSkuComb = computed((): ISelectedSkuComb => {
   }
 });
 
-function onClose() {
-  handleShowChange(false);
-}
-
-// function onOpen() {
-//   handleShowChange(true);
-// }
-
-function handleShowChange(v: boolean) {
-  emit('update:show', v);
-}
-
 function onPropClicked(index: number, i: number) {
   const item = props.sku.propList[index];
   const v = item.childsCurGoods[i];
@@ -130,7 +117,7 @@ function onPropClicked(index: number, i: number) {
 
 function onSubmit() {
   if (props.initialSku.selectedNum > unref(selectedSkuComb).stock) {
-    Toast({
+    showToast({
       message: '库存不足',
       duration: 1500,
     });
@@ -138,7 +125,7 @@ function onSubmit() {
   }
 
   if (unref(hasSku) && !unref(skuValue)) {
-    Toast({
+    showToast({
       message: '请选择商品规格',
       duration: 1500,
     });
@@ -152,18 +139,28 @@ function onSubmit() {
 
   emit('confirm', data);
 }
+
+function close() {
+  updateShow(false);
+}
+
+function open() {
+  updateShow(true);
+}
+
+function updateShow(value: boolean) {
+  emit('update:show', value);
+}
+
+defineExpose({
+  open,
+  close,
+  updateShow,
+});
 </script>
 
 <template>
-  <van-popup
-    :show="show"
-    round
-    closeable
-    position="bottom"
-    :style="popupStyle"
-    @click-close-icon="onClose"
-    @click-overlay="onClose"
-  >
+  <van-popup :show="show" round closeable position="bottom" :style="popupStyle" @update:show="updateShow">
     <div v-if="sku.goodInfo" class="sku-header van-hairline--bottom">
       <van-image class="sku-header-pic" :src="sku.goodInfo.pic" fit="cover" />
       <div class="sku-header-good-info">
@@ -241,7 +238,7 @@ function onSubmit() {
 
     &-good-price {
       margin-left: -2px;
-      color: var(--brand-color);
+      color: var(--color-primary);
       line-height: 1.15;
 
       &-symbol {
@@ -258,7 +255,7 @@ function onSubmit() {
 
     &-item {
       margin-top: 5px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
       font-size: 12px;
       line-height: 16px;
     }
@@ -275,7 +272,7 @@ function onSubmit() {
     padding-top: 10px;
     margin: 0 15px 10px;
     font-size: 14px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
 
     &-hd {
       padding-bottom: 12px;
@@ -296,7 +293,7 @@ function onSubmit() {
         font-size: 12px;
         line-height: 16px;
         overflow: hidden;
-        color: var(--gray-color-8);
+        color: var(--color-text-1);
         border-radius: 4px;
 
         &::before {
@@ -306,7 +303,7 @@ function onSubmit() {
           left: 0;
           width: 100%;
           height: 100%;
-          background: var(--gray-color-1);
+          background: var(--color-bg-1);
         }
 
         &-name {
@@ -315,7 +312,7 @@ function onSubmit() {
         }
 
         &.active {
-          color: var(--brand-color);
+          color: var(--color-primary);
         }
 
         &.active::before {

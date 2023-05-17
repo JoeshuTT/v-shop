@@ -1,31 +1,17 @@
 import { defineStore } from 'pinia';
 import { store } from '@/store';
 import storage from 'good-storage';
-import { Toast, Dialog } from 'vant';
+import { showLoadingToast, showConfirmDialog } from 'vant';
 import { router } from '@/router';
 import API_ORDER from '@/apis/order';
 
-export interface ITradeGoodItem {
-  goodsId: string;
-  name: string;
-  number: number;
-  pic: string;
-  price: number;
-  logisticsId: number;
-  propertyList: Array<any>;
-}
-export interface ITradeGoods {
-  origin: string;
-  list: ITradeGoodItem[];
-}
-
-export interface AppStore {
+export interface OrderState {
   tradeGoods: NonNullable<ITradeGoods>;
 }
 
 export const useOrderStore = defineStore({
   id: 'order',
-  state: () => ({
+  state: (): OrderState => ({
     tradeGoods: storage.get('tradeGoods', {}),
   }),
   getters: {
@@ -79,14 +65,14 @@ export const useOrderStore = defineStore({
     async deleteOrder(payload: Recordable = {}) {
       const { orderId } = payload;
 
-      await Dialog.confirm({
+      await showConfirmDialog({
         title: '确定删除订单？',
         message: '删除订单后无法恢复，无法处理您的售后问题，请慎重考虑。',
         cancelButtonText: '在考虑下',
         confirmButtonText: '删除',
       });
 
-      Toast.loading({
+      showLoadingToast({
         forbidClick: true,
         message: '加载中...',
         duration: 0,
@@ -101,14 +87,14 @@ export const useOrderStore = defineStore({
     async closeOrder(payload: Recordable = {}) {
       const { orderId } = payload;
 
-      await Dialog.confirm({
+      await showConfirmDialog({
         title: '确定取消订单？',
         message: '订单还未付款,确定要取消吗？',
         cancelButtonText: '在考虑下',
         confirmButtonText: '取消订单',
       });
 
-      Toast.loading({
+      showLoadingToast({
         forbidClick: true,
         message: '加载中...',
         duration: 0,
@@ -121,4 +107,18 @@ export const useOrderStore = defineStore({
 
 export function useOrderStoreWithOut() {
   return useOrderStore(store);
+}
+
+export interface ITradeGoodItem {
+  goodsId: string;
+  name: string;
+  number: number;
+  pic: string;
+  price: number;
+  logisticsId: number;
+  propertyList: Array<any>;
+}
+export interface ITradeGoods {
+  origin: string;
+  list: ITradeGoodItem[];
 }

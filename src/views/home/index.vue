@@ -4,8 +4,8 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>
-import { onMounted, ref, unref } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import API_GOODS from '@/apis/goods';
 import API_BANNER from '@/apis/banner';
@@ -13,7 +13,7 @@ import IMAGE_LIST_EMPTY from '@/assets/images/empty/good.png';
 
 onMounted(() => {
   getBannerList();
-  onPage();
+  listRef.value?.loadData();
 });
 
 const router = useRouter();
@@ -32,48 +32,25 @@ function onBannerClicked(linkUrl: string) {
   }
 }
 
+const listRef = ref<any>(null);
 const list = ref<Recordable[]>([]);
-const listLoading = ref(false);
-const listFinished = ref(false);
-const listError = ref(false);
-const listFinishedText = ref('没有更多了');
-const listErrorText = ref('请求失败，点击重新加载');
-const listEmptyText = ref('暂无商品');
-const listEmptyImage = IMAGE_LIST_EMPTY;
-const pageCurrent = ref(1);
-const pageSize = ref(10);
+const pagination = reactive({
+  pageCurrent: 1,
+  pageSize: 10,
+});
+const listMeta = reactive({
+  loadingText: '努力加载中...',
+  emptyText: '暂无商品',
+  emptyImage: IMAGE_LIST_EMPTY,
+});
 
-function onPageLoad() {
-  if (unref(listFinished)) {
-    return;
-  }
-
-  pageCurrent.value += 1;
-  onPage();
-}
-
-function onPage() {
-  listLoading.value = true;
-
+function getGoodList() {
   const params = {
-    page: unref(pageCurrent),
-    pageSize: unref(pageSize),
+    page: pagination.pageCurrent,
+    pageSize: pagination.pageSize,
   };
 
-  API_GOODS.goodsList(params)
-    .then((res) => {
-      const records = res.data?.result ?? [];
-      const total = res.data?.totalRow ?? 0;
-
-      list.value = unref(pageCurrent) === 1 ? records : unref(list).concat(records);
-      listLoading.value = false;
-      listFinished.value = list.value.length >= total;
-    })
-    .catch((error) => {
-      console.error(error);
-      listLoading.value = false;
-      listError.value = true;
-    });
+  return API_GOODS.goodsList(params);
 }
 
 function onGoodClicked(id: number) {
@@ -97,43 +74,39 @@ function onGoodClicked(id: number) {
     </div>
     <div class="main">
       <Plate class="section-header" title="商品列表" />
-      <van-list
-        v-model:loading="listLoading"
-        v-model:error="listError"
-        class="list"
-        :finished="listFinished"
-        :finished-text="listFinishedText"
-        :error-text="listErrorText"
-        :immediate-check="false"
-        @load="onPageLoad"
+      <ProList
+        ref="listRef"
+        v-model:dataSource="list"
+        mode="infinite"
+        :api="getGoodList"
+        :pagination="pagination"
+        :meta="listMeta"
       >
-        <div v-for="item in list" :key="item.id" class="list-col">
-          <div class="list-item" @click="onGoodClicked(item.id)">
-            <div v-if="item.recommendStatus" class="list-item-badge">推荐</div>
-            <van-image class="list-item-photo" :src="item.pic" :alt="item.name" />
-            <div class="list-item-info">
-              <div class="list-item-title">{{ item.name }}</div>
-              <div class="list-item-price">
-                <div class="price">
-                  <div class="price-current">
-                    <span class="price-current-symbol">¥</span>
-                    <span class="price-current-integer">{{ item.minPrice }}</span>
+        <div class="list">
+          <div v-for="item in list" :key="item.id" class="list-col">
+            <div class="list-item" @click="onGoodClicked(item.id)">
+              <div v-if="item.recommendStatus" class="list-item-badge">推荐</div>
+              <van-image class="list-item-photo" :src="item.pic" :alt="item.name" />
+              <div class="list-item-info">
+                <div class="list-item-title">{{ item.name }}</div>
+                <div class="list-item-price">
+                  <div class="price">
+                    <div class="price-current">
+                      <span class="price-current-symbol">¥</span>
+                      <span class="price-current-integer">{{ item.minPrice }}</span>
+                    </div>
+                    <div v-if="item.originalPrice > 0" class="price-origin">
+                      <span class="price-origin-symbol">¥</span>
+                      <span class="price-origin-integer">{{ item.originalPrice }}</span>
+                    </div>
                   </div>
-                  <div v-if="item.originalPrice > 0" class="price-origin">
-                    <span class="price-origin-symbol">¥</span>
-                    <span class="price-origin-integer">{{ item.originalPrice }}</span>
-                  </div>
+                  <van-button type="primary" plain class="buy-btn">购买</van-button>
                 </div>
-                <van-button type="primary" plain class="buy-btn">购买</van-button>
               </div>
             </div>
           </div>
         </div>
-        <template #finished>
-          <span v-if="list.length">{{ listFinishedText }}</span>
-          <van-empty v-else :image="listEmptyImage" :description="listEmptyText" />
-        </template>
-      </van-list>
+      </ProList>
     </div>
     <!-- 底部导航栏 -->
     <Tabbar />
@@ -159,12 +132,6 @@ function onGoodClicked(id: number) {
   padding-left: 5px;
   padding-right: 5px;
 
-  :deep(.van-list__loading),
-  :deep(.van-list__finished-text),
-  :deep(.van-list__error-text) {
-    width: 100%;
-  }
-
   &-col {
     width: 50%;
     box-sizing: border-box;
@@ -177,7 +144,7 @@ function onGoodClicked(id: number) {
     position: relative;
     text-align: left;
     overflow: hidden;
-    background: var(--white);
+    background: var(--color-bg-2);
     border-radius: 8px;
     // box-shadow: 0px 2px 4px 3px rgba(243, 243, 243, 0.5);
 
@@ -188,8 +155,8 @@ function onGoodClicked(id: number) {
       z-index: 20;
       display: inline-block;
       padding: 2px 4px;
-      color: var(--white);
-      background-color: var(--red-color);
+      color: #fff;
+      background-color: var(--color-red);
       font-size: 10px;
       line-height: normal;
       border-radius: 0 8px 8px 0;
@@ -208,7 +175,7 @@ function onGoodClicked(id: number) {
 
     &-title {
       font-size: 14px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
       min-height: 36px;
       line-height: 18px;
       display: -webkit-box;
@@ -237,7 +204,7 @@ function onGoodClicked(id: number) {
 
       &-current {
         margin-right: 5px;
-        color: var(--brand-color);
+        color: var(--color-primary);
 
         &-symbol {
           font-size: 12px;
@@ -253,7 +220,7 @@ function onGoodClicked(id: number) {
       &-origin {
         font-size: 12px;
         text-decoration: line-through;
-        color: var(--gray-color-6);
+        color: var(--color-text-3);
 
         &-label {
           margin-right: 2px;

@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, ref, unref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -21,7 +21,6 @@ const popupStyle = {
   'min-height': '50%',
   'overflow-y': 'visible',
   'font-size': '14px',
-  background: '#fff',
 };
 
 const list = ref<Recordable[]>([]);
@@ -32,13 +31,9 @@ onMounted(() => {
   getList();
 });
 
-function onClose() {
-  emit('update:modelValue', false);
-}
-
 function onSelect(item: Recordable, index: number) {
   emit('select', item, index);
-  onClose();
+  close();
 }
 
 function getList() {
@@ -60,18 +55,28 @@ function getList() {
 function onSubmit() {
   router.push({ path: '/address', query: { origin: 'selected' } });
 }
+
+function close() {
+  updateShow(false);
+}
+
+function open() {
+  updateShow(true);
+}
+
+function updateShow(value: boolean) {
+  emit('update:modelValue', value);
+}
+
+defineExpose({
+  open,
+  close,
+  updateShow,
+});
 </script>
 
 <template>
-  <van-popup
-    :show="modelValue"
-    round
-    closeable
-    position="bottom"
-    :style="popupStyle"
-    @click-close-icon="onClose"
-    @click-overlay="onClose"
-  >
+  <van-popup :show="modelValue" round closeable position="bottom" :style="popupStyle" @update:show="updateShow">
     <div class="address-header">选择收货地址</div>
     <div class="address-body">
       <AddressList
@@ -98,7 +103,7 @@ function onSubmit() {
     width: 100%;
     font-size: 16px;
     font-weight: bold;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     height: 50px;
     line-height: 50px;
   }
@@ -107,7 +112,7 @@ function onSubmit() {
     min-height: 40vh;
     max-height: 80vh;
     overflow-y: auto;
-    background: var(--gray-color-1);
+    background: var(--color-bg-1);
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
   }

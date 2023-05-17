@@ -1,5 +1,3 @@
-import { IGoodsMap } from './typings';
-
 /**
  * 售后服务标题
  * @param {*} data
@@ -48,7 +46,7 @@ export const afterSale = {
 /**
  * 商品售后服务
  */
-export function orderAfterSaleListModel(orderList: Recordable[], goodsMap: IGoodsMap) {
+export function orderAfterSaleListModel(orderList: Recordable[], goodsMap: { [key: string]: Recordable[] }) {
   const array: Recordable[] = [];
 
   orderList.forEach((item) => {

@@ -4,23 +4,21 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed, onMounted, ref, unref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Dialog, Toast } from 'vant';
+import { showConfirmDialog, showToast } from 'vant';
 import API_GOODS from '@/apis/goods';
 import API_CART from '@/apis/cart';
-import { shoppingCartAddParams } from '@/apis/cart/typings';
-import Plate from '@/components/Plate/index.vue';
-import Sku from '@/components/Sku/index.vue';
-import { ISku, IInitialSku } from '@/components/Sku/typings';
+import { shoppingCartAddParams } from '@/apis/cart/types';
+import { ISku, IInitialSku } from '@/components/Sku/types';
 import Coupons from './components/Coupons.vue';
 import Reputations from './components/Reputations.vue';
 import { decimalFormat, priceIntegerFormat } from '@/utils/format';
+import { debounce } from '@/utils';
 import { getAfterSaleTitle } from '@/model/modules/order/afterSale';
 
 import { useOrderStore } from '@/store/modules/order';
-import { useThrottleFn } from '@vueuse/core';
 import { usePage } from '@/hooks/shared/usePage';
 
 onMounted(() => {
@@ -72,19 +70,23 @@ function getGoodsDetail() {
 
     // 商品已下架
     if (unref(basicInfo).status === 1) {
-      Toast(unref(basicInfo).statusStr);
+      showToast(unref(basicInfo).statusStr);
       return;
     }
     // 商品库存为0
     if (unref(basicInfo).stores === 0) {
-      Dialog.confirm({
+      showConfirmDialog({
         title: '提示',
         message: '该商品已售罄,去看看其他商品吧！',
         showCancelButton: false,
-      }).then(() => {
-        // on confirm
-        router.replace({ path: '/home' });
-      });
+      })
+        .then(() => {
+          // on confirm
+          router.replace({ path: '/home' });
+        })
+        .catch(() => {
+          // on cancel
+        });
       return;
     }
 
@@ -135,31 +137,27 @@ function onSkuShow(type: string) {
   skuShow.value = true;
 }
 
-const onSkuConfirm = useThrottleFn(
-  (data) => {
-    skuShow.value = false;
-    if (unref(skuNextActionType) === 'addCart') {
-      addCartHandle();
-    } else {
-      orderStore.setTradeGoods({
-        origin: 'buy',
-        list: [
-          {
-            goodsId: unref(sku).goodsId,
-            name: unref(sku).goodInfo.name,
-            number: unref(initialSku).selectedNum,
-            pic: unref(sku).goodInfo.pic,
-            price: data.selectedSkuComb.price,
-            logisticsId: unref(basicInfo).logisticsId,
-            propertyList: unref(initialSku).selectedPropList,
-          },
-        ],
-      });
-    }
-  },
-  1000,
-  false,
-);
+const onSkuConfirm = debounce((data) => {
+  skuShow.value = false;
+  if (unref(skuNextActionType) === 'addCart') {
+    addCartHandle();
+  } else {
+    orderStore.setTradeGoods({
+      origin: 'buy',
+      list: [
+        {
+          goodsId: unref(sku).goodsId,
+          name: unref(sku).goodInfo.name,
+          number: unref(initialSku).selectedNum,
+          pic: unref(sku).goodInfo.pic,
+          price: data.selectedSkuComb.price,
+          logisticsId: unref(basicInfo).logisticsId,
+          propertyList: unref(initialSku).selectedPropList,
+        },
+      ],
+    });
+  }
+}, 1500);
 
 function getSkuData(basicInfo: Recordable, properties: Recordable[], skuList: Recordable[]) {
   sku.value = {
@@ -178,7 +176,7 @@ function getSkuData(basicInfo: Recordable, properties: Recordable[], skuList: Re
 }
 
 function onConcatService() {
-  Toast('未开放：客服');
+  showToast('未开放：客服');
 }
 
 // 售后服务
@@ -212,11 +210,11 @@ function addCartHandle() {
 
   API_CART.shoppingCartAdd(params)
     .then(() => {
-      Toast('已成功加入购物车');
+      showToast('已成功加入购物车');
       getCartCount();
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>
@@ -299,7 +297,7 @@ function addCartHandle() {
   display: flex;
   flex-direction: column;
   padding: 0 15px 10px;
-  background: #fff;
+  background: var(--color-bg-2);
 }
 
 .swiper {
@@ -322,7 +320,7 @@ function addCartHandle() {
     align-items: center;
     margin-right: 8px;
     font-size: 16px;
-    color: var(--brand-color);
+    color: var(--color-primary);
 
     &-symbol {
       font-size: 14px;
@@ -343,7 +341,7 @@ function addCartHandle() {
     margin-right: 8px;
     font-size: 12px;
     line-height: 18px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
 
     &-label {
       margin-right: 4px;
@@ -377,7 +375,7 @@ function addCartHandle() {
 
   &-brief {
     margin-top: 4px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
     font-size: 12px;
     word-break: break-all;
   }
@@ -389,13 +387,13 @@ function addCartHandle() {
   display: flex;
   justify-content: space-between;
   padding: 10px 15px;
-  background: #fff;
+  background: var(--color-bg-2);
   margin-bottom: 10px;
 
   &-item {
     flex: 1;
     font-size: 12px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
 
     &:last-child {
       text-align: right;
@@ -405,11 +403,11 @@ function addCartHandle() {
 
 .goods-content {
   box-sizing: border-box;
-  background: #fff;
+  background: var(--color-bg-2);
   padding: 0 10px;
   padding-top: 10px;
   overflow: hidden;
-  color: var(--color-gray-8);
+  color: var(--color-text-1);
   font-size: 16px;
   line-height: 1.5;
   text-align: left;
@@ -437,12 +435,12 @@ function addCartHandle() {
 
 .cell-bar {
   display: flex;
-  color: var(--gray-color-8);
+  color: var(--color-text-1);
 
   &-title {
     flex-shrink: 0;
     margin-right: 12px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
   }
 
   &-txt {
@@ -454,7 +452,6 @@ function addCartHandle() {
 }
 
 .action-bar-perch {
-  height: calc(50px + constant(safe-area-inset-bottom));
-  height: calc(50px + env(safe-area-inset-bottom));
+  height: calc(50px + var(--safe-area-height-bottom));
 }
 </style>

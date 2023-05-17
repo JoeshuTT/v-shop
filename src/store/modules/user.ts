@@ -5,17 +5,6 @@ import { router } from '@/router';
 import API_USER from '@/apis/user';
 import { loginProviderType } from '@/constants/modules/user';
 
-export interface UserInfo {
-  id?: number;
-  nick?: string;
-  avatar?: string;
-  [key: string]: any;
-}
-export interface UserLevel {
-  id?: number;
-  [key: string]: any;
-}
-
 export interface UserState {
   token: string;
   userInfo: NonNullable<UserInfo>;
@@ -86,4 +75,15 @@ export const useUserStore = defineStore({
 
 export function useUserStoreWithOut() {
   return useUserStore(store);
+}
+
+export interface UserInfo {
+  id?: number;
+  nick?: string;
+  avatar?: string;
+  [key: string]: any;
+}
+export interface UserLevel {
+  id?: number;
+  [key: string]: any;
 }

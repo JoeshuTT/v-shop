@@ -6,16 +6,25 @@
     "source.fixAll.stylelint": true
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.inlayHints.enabled": "off",
+  "volar.inlayHints.eventArgumentInInlineHandlers": false,
   // eslint
   "eslint.validate": ["javascript", "javascriptreact", "vue", "typescript", "typescriptreact"],
   // typescript
   "typescript.tsdk": "node_modules/typescript/lib",
+  // 内联参数显示提示
+  "javascript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  //
+
+  //
   "cSpell.words": [
     "avic",
     "browserslist",
     "compressorjs",
     "flashdeliver",
     "groupon",
+    "gsap",
     "Lazyload",
     "Localforage",
     "openid",

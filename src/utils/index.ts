@@ -1,4 +1,8 @@
 export { throttle, debounce, deepClone } from './lodash';
+import { getBrowserInfo } from './web/getBrowserInfo';
+import type { BrowserInfo } from './web/getBrowserInfo';
+
+const clientInfo: Readonly<BrowserInfo> = getBrowserInfo();
 
 /**
  * 获取链接某个参数
@@ -6,8 +10,10 @@ export { throttle, debounce, deepClone } from './lodash';
  * @param {string} [url]  链接
  * @returns {string} 返回参数值
  * @example
+ * ```js
  * getQueryString('name');
- * getQueryString('name', 'http://www.baidu.com?name=1&age=2');
+ * getQueryString('name', 'http://www.baidu.com?name=1&age=2'); // 1
+ * ```
  */
 export function getQueryString(key: string, url: string): string {
   const reg = new RegExp(`([?&]+)${key}=([^&#]*)`);
@@ -23,10 +29,14 @@ export function getQueryString(key: string, url: string): string {
  * @param {string} [url]  链接
  * @returns {Record<string, string>} 返回包含当前URL参数的对象
  * @example
+ * ```js
  * getURLParameters();
+ *
  * getURLParameters('http://www.baidu.com?name=1&age=2#/demoPage?weight=3&o=4');
+ * // => {name: "1", age: "2", weight: "3", o: "4"}
+ * ```
  */
-export function getURLParameters(url: string) {
+export function getURLParameters(url: string): Record<string, string> {
   const reg = /([^?=&]+)(=([^&#]*))/g;
   const href = url || window.location.href;
   const matchList = href.match(reg) || [];
@@ -40,35 +50,16 @@ export function getURLParameters(url: string) {
 }
 
 /**
- * 客户端平台
+ * 客户端信息
  */
-export function getDevicePlatform(): Record<string, boolean> {
-  const ua = navigator.userAgent;
-  const platform = navigator.platform;
-
-  const isAndroid = /android/i.test(ua);
-  const isIOS = /iphone|ipad|ipod|ios/i.test(ua);
-  const isMobile = Boolean(isAndroid || isIOS);
-  const isDesktop = /(Win32|Win64|MacIntel|Linux x86_64)/i.test(platform);
-  const isInWeChatApp = /micromessenger/i.test(ua); // 是否微信内打开
-  const isInMiniProgram = /miniProgram/i.test(ua); // 是否小程序内打开
-  const isInWeChatDevTools = /wechatdevtools/i.test(ua); // 是否微信开发者工具内打开
-
-  return {
-    isAndroid,
-    isIOS,
-    isMobile,
-    isDesktop,
-    isInWeChatApp,
-    isInMiniProgram,
-    isInWeChatDevTools,
-  };
+export function getClientInfo() {
+  return clientInfo;
 }
 
 /**
  * rpx2px
  * @param {number} n
- * @param {number} destWidth 设计稿基准屏幕宽度
+ * @param {number} [destWidth] 设计稿基准屏幕宽度
  */
 export function rpx2px(n: number, destWidth = 375) {
   const ratio = document.documentElement.clientWidth / destWidth;
@@ -99,12 +90,11 @@ export function getEnv() {
 
 /**
  * 获取接口前缀
- * @param {string} code api, host, origin
  */
 export function getAPI(code = 'api') {
   const host: string = import.meta.env.PROD ? import.meta.env.VITE_APP_API_HOST : location.host;
   const origin = `${location.protocol}//${host}`;
-  const basePath = import.meta.env.PROD ? '/xiaochengxu' : '/dev-api';
+  const basePath = import.meta.env.PROD ? `/${import.meta.env.VITE_APP_SUB_DOMAIN}` : '/dev-api';
   const api = `${origin}${basePath}`; // 基础接口
 
   switch (code) {
@@ -115,4 +105,11 @@ export function getAPI(code = 'api') {
     default:
       return api;
   }
+}
+
+/**
+ * 动态引入静态资源
+ */
+export function getAssetsUrl(name: string) {
+  return new URL(`/src/assets/${name}`, import.meta.url).href;
 }

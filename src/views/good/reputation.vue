@@ -1,8 +1,16 @@
 <template>
   <div class="container">
-    <ProList :api="loadList" :after-fetch="loadListAfter" :pagination="pagination" :empty-text="listEmptyText">
-      <template #item="{ item }">
-        <div class="list-item">
+    <ProList
+      v-model:dataSource="list"
+      mode="infinite"
+      :api="getDataList"
+      :afterFetch="listAfterFetch"
+      :pagination="pagination"
+      :meta="listMeta"
+      immediate
+    >
+      <div class="list">
+        <div v-for="(item, index) in list" :key="index" class="list-item">
           <div class="list-item-header van-hairline--bottom">
             <div class="list-item-avatar"><van-image :src="item.avatarUrl" alt="" /></div>
             <div class="list-item-inner">
@@ -18,33 +26,30 @@
             <div v-if="item.property" class="list-item-prop">{{ item.property }}</div>
           </div>
         </div>
-      </template>
+      </div>
     </ProList>
   </div>
 </template>
 
 <script lang="ts">
 import API_GOODS from '@/apis/goods';
-import ProList from '@/components/ProList/index.vue';
 import { goodReputationModel } from '@/model/modules/good/reputation';
 
 export default {
-  name: 'GoodReputation',
-  components: { ProList },
   data() {
     return {
+      list: [] as Recordable[],
       pagination: {
         pageCurrent: 1,
         pageSize: 20,
       },
-      listEmptyText: '暂无评价',
+      listMeta: {
+        emptyText: '暂无评价',
+      },
     };
   },
-  created() {
-    //
-  },
   methods: {
-    loadList() {
+    getDataList() {
       const params = {
         goodsId: this.$route.query.goodsId,
         page: this.pagination.pageCurrent,
@@ -53,8 +58,9 @@ export default {
 
       return API_GOODS.goodsReputation(params);
     },
-    loadListAfter(data) {
+    listAfterFetch(data) {
       const records = goodReputationModel(data?.result ?? []);
+
       return records;
     },
   },
@@ -63,8 +69,8 @@ export default {
 
 <style lang="less" scoped>
 .list-item {
-  background: #fff;
   margin-bottom: 10px;
+  background: var(--color-bg-2);
 
   &-avatar {
     width: 40px;
@@ -76,7 +82,7 @@ export default {
 
   &-name {
     font-size: 14px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     line-height: 1;
   }
 
@@ -87,7 +93,7 @@ export default {
 
   &-date {
     font-size: 12px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
   }
 
   &-header {
@@ -99,7 +105,7 @@ export default {
 
   &-content {
     padding: 10px 15px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
     font-size: 14px;
     line-height: 18px;
   }

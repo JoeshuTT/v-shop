@@ -1,45 +1,80 @@
-<script lang="ts" setup>
-import { computed, onMounted, ref, unref } from 'vue';
+<script setup lang="ts">
+import { computed, ref, unref } from 'vue';
 import { useRouter } from 'vue-router';
 import { palettes } from '@/constants/modules/app';
 
 import { useAppStore } from '@/store/modules/app';
 import { usePage } from '@/hooks/shared/usePage';
-
-onMounted(() => {
-  list.value = palettes.map((v) => ({
-    ...v,
-    colorList: [v.colors.brandColor, v.colors.viceColor, '#fff'],
-  }));
-
-  active.value = unref(list).findIndex((v) => v.value === unref(theme).brandColor);
-});
+import { getAssetsUrl } from '@/utils';
 
 const router = useRouter();
 const appStore = useAppStore();
 const { theme } = usePage();
 
-const list = ref<Recordable[]>([]);
-const active = ref(-1);
+const modeList = ref<Recordable[]>([
+  {
+    value: 'light',
+    label: '浅色',
+    pic: getAssetsUrl('images/theme/light.svg'),
+  },
+  {
+    value: 'dark',
+    label: '深色',
+    pic: getAssetsUrl('images/theme/dark.svg'),
+  },
+  {
+    value: 'system',
+    label: '系统',
+    pic: getAssetsUrl('images/theme/system.svg'),
+  },
+]);
 
+function onThemeModeChange(value: string) {
+  appStore.updateTheme({
+    mode: value,
+  });
+}
+
+const list = ref<Recordable[]>(
+  palettes.map((v) => ({
+    ...v,
+    colorList: [v.colors.primary, v.colors.vice, '#fff'],
+  })),
+);
+const active = ref(-1);
+active.value = unref(list).findIndex((v) => v.value === unref(theme).colors.primary);
 const current = computed(() => unref(list)[unref(active)] || {});
 
-function onThemeChange(index: number) {
+function onThemeColorChange(index: number) {
   active.value = index;
+  const { colors } = unref(list)[unref(active)];
+  appStore.updateTheme({ colors });
 }
 
 function onSubmit() {
-  const { colors } = unref(list)[unref(active)];
-  appStore.updateTheme({ colors });
   router.back();
 }
 </script>
 
 <template>
   <div class="container">
+    <div class="h2">选择主题</div>
+    <div class="mode-list">
+      <div
+        v-for="(item, index) in modeList"
+        :key="index"
+        :class="['mode-item', theme.mode === item.value ? 'active' : '']"
+        @click="onThemeModeChange(item.value)"
+      >
+        <img class="mode-item-pic" :src="item.pic" :alt="item.label" />
+        <span class="mode-item-title">
+          {{ item.label }}
+        </span>
+      </div>
+    </div>
     <div class="h2">选择配色</div>
-    <div class="palettes">
-      <van-cell v-for="(item, index) in list" :key="index" :title="item.label" @click="onThemeChange(index)">
+    <div class="color-list">
+      <van-cell v-for="(item, index) in list" :key="index" :title="item.label" @click="onThemeColorChange(index)">
         <template #label>
           <div :class="['color', active === index ? 'active' : '']">
             <div
@@ -54,78 +89,52 @@ function onSubmit() {
       <div class="tips">
         <div class="tips-h2">tips：</div>
         <div>1. 商品详情页面可查看最佳效果。</div>
-        <div>2. 只在当前页面生效，如果需要持久化生效，请点击底部按钮【保存】即可。</div>
       </div>
     </div>
 
-    <div class="submit-bar-wrap">
-      <div class="submit-bar">
-        <van-button class="submit-bar-button" block type="primary" round :color="current.value" @click="onSubmit">
-          保存
-        </van-button>
-      </div>
-    </div>
+    <AffixBar>
+      <van-button class="submit-bar-button" block type="primary" round :color="current.value" @click="onSubmit">
+        返回
+      </van-button>
+    </AffixBar>
   </div>
 </template>
 
 <style lang="less" scoped>
-.global-themes {
-  margin-top: 5px;
-  margin-left: -3px;
-  width: 370px;
-}
-
-.global-themes .theme-item {
-  float: left;
-  padding: 2px;
-  margin: 0 20px 5px 0;
-  height: 16px;
-  border: 1px solid #fff;
-  cursor: pointer;
-}
-
-.global-themes .theme-item.active {
-  border: 1px solid #0080f9;
-}
-
-.global-themes .theme-item .color-item {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-}
-
-.affix-bar {
-  height: calc(50px + constant(safe-area-inset-bottom));
-  height: calc(50px + env(safe-area-inset-bottom));
-
-  &-action {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
+.mode {
+  &-list {
     display: flex;
-    align-items: center;
-    box-sizing: content-box;
-    height: 50px;
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
-    background-color: var(--white);
+    margin: 0 15px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--color-bg-2);
+  }
 
-    .van-button {
-      flex: 1;
+  &-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+    color: var(--color-text-1);
+    padding: 10px 15px;
+
+    &.active &-pic {
+      box-shadow: var(--color-white) 0 0 0 1px, var(--color-primary) 0 0 0 5px;
+    }
+
+    &-pic {
+      box-sizing: border-box;
+      width: 20vw;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      overflow: hidden;
+      margin-bottom: 10px;
     }
   }
 }
 
-.tips {
-  margin-top: 5px;
-  margin-bottom: 20px;
-  font-size: 12px;
-  line-height: 16px;
-  color: var(--gray-color-6);
-}
-
-.palettes {
+.color-list {
   margin: 0 15px;
   overflow: hidden;
   border-radius: 8px;
@@ -134,7 +143,7 @@ function onSubmit() {
 .h2 {
   margin: 0;
   padding: 15px 15px 10px;
-  color: var(--gray-color-6);
+  color: var(--color-text-3);
   font-weight: normal;
   font-size: 14px;
   line-height: 16px;
@@ -143,7 +152,8 @@ function onSubmit() {
 .color {
   display: inline-flex;
   align-items: center;
-  border: 1px solid #eee;
+  border: 1px solid var(--color-border-2);
+  transition: all 0.3s;
 
   &-item {
     width: 16px;
@@ -151,31 +161,19 @@ function onSubmit() {
   }
 
   &.active {
-    border: 1px solid #0080f9;
+    box-shadow: var(--color-white) 0px 0px 0px 1px, var(--color-primary) 0px 0px 0px 5px;
   }
 }
 
+.tips {
+  margin-top: 5px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-text-3);
+}
+
 .submit-bar {
-  &-wrap {
-    height: calc(50px + constant(safe-area-inset-bottom));
-    height: calc(50px + env(safe-area-inset-bottom));
-  }
-
-  box-sizing: border-box;
-  position: fixed;
-  left: 0;
-  bottom: constant(safe-area-inset-bottom);
-  bottom: env(safe-area-inset-bottom);
-  z-index: 100;
-  width: 100%;
-  padding: 0 16px;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  font-size: 14px;
-
   &-button {
     width: 80%;
     height: 34px;

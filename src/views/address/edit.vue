@@ -30,6 +30,7 @@
 import API_USER from '@/apis/user';
 import { isEmpty, isMobile } from '@/utils/validate';
 import AreaField from '@/components/AreaField/index.vue';
+import { showToast } from 'vant';
 
 export default {
   components: {
@@ -100,21 +101,21 @@ export default {
     },
     onSubmit() {
       if (isEmpty(this.form.name)) {
-        this.$toast('收货人不能为空');
+        showToast('收货人不能为空');
         return;
       }
 
       if (!isMobile(this.form.mobile)) {
-        this.$toast('请填写正确的电话');
+        showToast('请填写正确的电话');
         return;
       }
 
       if (isEmpty(this.form.province)) {
-        this.$toast('所在地不能为空');
+        showToast('所在地不能为空');
         return;
       }
       if (isEmpty(this.form.address)) {
-        this.$toast('详细地址不能为空');
+        showToast('详细地址不能为空');
         return;
       }
 
@@ -128,7 +129,7 @@ export default {
         districtId: this.form.countyCode,
       };
 
-      this.$toast.loading({
+      this.$showLoadingToast({
         forbidClick: true,
         message: '地址数据提交中...',
         duration: 0,
@@ -138,25 +139,25 @@ export default {
         params.id = this.form.id;
         API_USER.userShoppingAddressUpdate(params)
           .then(() => {
-            this.$toast(this.form.id ? '修改成功' : '添加成功');
+            showToast(this.form.id ? '修改成功' : '添加成功');
             this.$router.back();
           })
-          .catch((error) => {
-            console.error(error);
+          .catch((err) => {
+            console.error(err);
           });
       } else {
         API_USER.userShoppingAddressAdd(params)
           .then(() => {
-            this.$toast(this.form.id ? '修改成功' : '添加成功');
+            showToast(this.form.id ? '修改成功' : '添加成功');
             this.$router.back();
           })
-          .catch((error) => {
-            console.error(error);
+          .catch((err) => {
+            console.error(err);
           });
       }
     },
     onDelete() {
-      this.$toast.loading({
+      this.$showLoadingToast({
         forbidClick: true,
         message: '加载中...',
         duration: 0,
@@ -166,11 +167,11 @@ export default {
         id: this.form.id,
       })
         .then(() => {
-          this.$toast('删除成功');
+          showToast('删除成功');
           this.$router.back();
         })
-        .catch((error) => {
-          console.error(error);
+        .catch((err) => {
+          console.error(err);
         });
     },
   },
@@ -186,7 +187,6 @@ export default {
   overflow: hidden;
   margin-bottom: 10px;
   border-radius: 8px;
-  background-color: var(--white);
 }
 
 .btn-submit {

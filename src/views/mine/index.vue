@@ -4,7 +4,7 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed, onMounted, ref, unref } from 'vue';
 import API_USER from '@/apis/user';
 import API_DISCOUNTS from '@/apis/discounts';
@@ -13,7 +13,8 @@ import MineSvgWaveBg from '@/components/MineSvgWaveBg/index.vue';
 import { countPair } from '@/utils/format';
 import { assets } from '@/constants';
 import ICON_ART from '@/assets/images/icon_art.png';
-
+import ICON_DEVICE from '@/assets/images/icon_device.png';
+import { showClientInfoPopup } from '@/components/AppClientInfoPopup';
 import { useUserStore } from '@/store/modules/user';
 import { usePage } from '@/hooks/shared/usePage';
 
@@ -84,8 +85,19 @@ const toolList = ref<Recordable[]>([
   { icon: 'location-o', title: '收货地址', path: '/address' },
   { icon: 'setting-o', title: '设置', path: '/setting' },
   { icon: ICON_ART, title: '主题', path: '/theme' },
+  { icon: ICON_DEVICE, title: '我的设备', value: 'device' },
 ]);
 
+function onToolClicked(item) {
+  if (item.path) {
+    goPage(item.path);
+    return;
+  }
+
+  if (item.value === 'device') {
+    showClientInfoPopup();
+  }
+}
 const userInfo = computed(() => userStore.getUserInfo);
 const userLevel = computed(() => userStore.getUserLevel);
 
@@ -188,7 +200,7 @@ function getCounts() {
           <div class="group-header-hd">常用功能</div>
         </div>
         <div class="tool-list">
-          <div v-for="(item, index) in toolList" :key="index" class="tool-list-item" @click="goPage(item.path)">
+          <div v-for="(item, index) in toolList" :key="index" class="tool-list-item" @click="onToolClicked(item)">
             <van-icon class="tool-list-item-icon" :name="item.icon" :badge="item.count" />
             <div class="tool-list-item-title">{{ item.title }}</div>
           </div>
@@ -207,7 +219,7 @@ function getCounts() {
   box-sizing: border-box;
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
+  background: var(--color-bg-2);
 }
 
 .header {
@@ -216,7 +228,7 @@ function getCounts() {
   width: 100%;
   height: 180px;
   color: #fff;
-  background-color: var(--brand-color);
+  background-color: var(--color-primary);
   overflow: hidden;
 
   &-bg {
@@ -340,7 +352,7 @@ function getCounts() {
     padding: 0 15px;
 
     &-hd {
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
       text-align: left;
       font-size: 14px;
       font-weight: bold;
@@ -352,7 +364,7 @@ function getCounts() {
       align-items: center;
       justify-content: flex-end;
       font-size: 12px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
 
     &-arrow {
@@ -380,7 +392,7 @@ function getCounts() {
       }
 
       &-title {
-        color: var(--gray-color-8);
+        color: var(--color-text-1);
         font-size: 12px;
       }
     }
@@ -406,7 +418,7 @@ function getCounts() {
       }
 
       &-title {
-        color: var(--gray-color-8);
+        color: var(--color-text-1);
         font-size: 12px;
       }
     }
@@ -432,7 +444,7 @@ function getCounts() {
       }
 
       &-title {
-        color: var(--gray-color-7);
+        color: var(--color-text-2);
         font-size: 14px;
       }
     }
@@ -462,9 +474,22 @@ function getCounts() {
 
       &-label {
         font-size: 12px;
-        color: var(--gray-color-7);
+        color: var(--color-text-2);
       }
     }
+  }
+}
+
+.dark {
+  .count-list-item-value {
+    color: var(--van-text-color);
+  }
+
+  .header {
+    background-color: var(--color-bg-2);
+  }
+  .header-tag {
+    background-color: rgba(255, 255, 255, 0.2);
   }
 }
 </style>

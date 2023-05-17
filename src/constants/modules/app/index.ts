@@ -1,3 +1,5 @@
+import type { IPalette, ITheme } from './types';
+
 /**
  * app
  */
@@ -6,47 +8,74 @@ export const app = {
   link: 'https://github.com/JoeshuTT/v-shop/',
 };
 
-export interface ITheme {
-  assetsUrl: string;
-  brandColor: string;
-  viceColor: string;
-  viceTextColor: string;
-  colors: {
-    brandColor: string;
-    [key: string]: string;
-  };
-}
-
 /**
- * theme
+ * 主题
  */
 export const theme: ITheme = {
+  version: '2',
+  mode: 'light',
   assetsUrl: '',
-  brandColor: '#1ba784',
-  viceColor: '#d9f6ef',
-  viceTextColor: '#1ba784',
+  /**
+   * 主题基础颜色变量
+   */
   colors: {
-    brandColor: '#1ba784',
-    viceColor: '#d9f6ef',
-    viceTextColor: '#1ba784',
     black: '#000',
     white: '#fff',
+    primary: '#1ba784',
+    vice: '#d9f6ef',
+
+    red: '#ee0a24',
+    blue: '#1989fa',
+    orange: '#ff976a',
+    'orange-dark': '#ed6a0c',
+    'orange-light': '#fffbe8',
+    green: '#07c160',
+  },
+  /**
+   *  覆盖Vant 的基础变量
+   */
+  vanThemeOverrides: {
+    black: 'black',
+    white: 'white',
+    'gray-1': '#f7f8fa',
+    'gray-2': '#f2f3f5',
+    blue: 'primary',
   },
 };
 
-export interface ITabBar {
-  color: string;
-  selectedColor: string;
-  list: {
-    text: string;
-    [key: string]: string;
-  }[];
-}
+/**
+ * 深色主题
+ */
+export const darkTheme: ITheme = {
+  mode: 'dark',
+  /**
+   * 主题基础颜色变量
+   */
+  colors: {
+    black: '#000',
+    white: '#fff',
+    primary: '#1ba784',
+    vice: '#d9f6ef',
+  },
+  /**
+   *  覆盖Vant 的基础变量
+   */
+  vanThemeOverrides: {
+    'text-color': 'rgba(255, 255, 255, 0.9)',
+    'text-color-2': 'rgba(255, 255, 255, 0.7)',
+    'text-color-3': 'rgba(255, 255, 255, 0.5)',
+    'border-color': '#3a3a3c',
+    'active-color': '#3a3a3c',
+    background: '#17171a',
+    'background-2': '#232324',
+    'background-3': '#2a2a2b',
+  },
+};
 
 /**
- * tabBar
+ * 底部导航栏
  */
-export const tabBar: ITabBar = {
+export const tabBar = {
   color: '#c0c0c0',
   selectedColor: '#1ba784',
   list: [
@@ -80,68 +109,61 @@ export const tabBar: ITabBar = {
 /**
  * 调色板
  */
-export const palettes = [
+export const palettes: IPalette[] = [
   {
     value: '#ff5179',
     label: '粉色系列',
     colors: {
-      brandColor: '#ff5179',
-      viceColor: '#ffe6e8',
-      viceTextColor: '#ff5179',
+      primary: '#ff5179',
+      vice: '#ffe6e8',
     },
   },
   {
     value: '#ffaa00',
     label: '黄色系列',
     colors: {
-      brandColor: '#ffaa00',
-      viceColor: '#1d262e',
-      viceTextColor: '#fff',
+      primary: '#ffaa00',
+      vice: '#1d262e',
     },
   },
   {
     value: '#c3a769',
     label: '棕色系列',
     colors: {
-      brandColor: '#c3a769',
-      viceColor: '#ebecf2',
-      viceTextColor: '#c3a769',
+      primary: '#c3a769',
+      vice: '#ebecf2',
     },
   },
   {
     value: '#2f2f34',
     label: '黑色系列',
     colors: {
-      brandColor: '#2f2f34',
-      viceColor: '#ebecf2',
-      viceTextColor: '#2f2f34',
+      primary: '#2f2f34',
+      vice: '#ebecf2',
     },
   },
   {
     value: '#0080ff',
     label: '蓝色系列',
     colors: {
-      brandColor: '#0080ff',
-      viceColor: '#d6e9fc',
-      viceTextColor: '#0080ff',
+      primary: '#0080ff',
+      vice: '#d6e9fc',
     },
   },
   {
     value: '#884cff',
     label: '紫色系列',
     colors: {
-      brandColor: '#884cff',
-      viceColor: '#efe6ff',
-      viceTextColor: '#884cff',
+      primary: '#884cff',
+      vice: '#efe6ff',
     },
   },
   {
     value: '#ee0a24',
     label: '红色系列（Vant 默认主色）',
     colors: {
-      brandColor: '#ee0a24',
-      viceColor: '#ffd01e',
-      viceTextColor: '#fff',
+      primary: '#ee0a24',
+      vice: '#ffd01e',
     },
   },
   {
@@ -149,9 +171,8 @@ export const palettes = [
     label: '绿色系列（v-shop 默认色系列）',
     link: 'http://zhongguose.com/', // 取自中国色 竹绿
     colors: {
-      brandColor: '#1ba784',
-      viceColor: '#d9f6ef',
-      viceTextColor: '#1ba784',
+      primary: '#1ba784',
+      vice: '#d9f6ef',
     },
   },
 ];

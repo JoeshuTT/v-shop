@@ -1,6 +1,6 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, ref, unref } from 'vue';
-import { Toast } from 'vant';
+import { showToast, showLoadingToast, closeToast } from 'vant';
 import API_DISCOUNTS from '@/apis/discounts';
 
 defineProps({
@@ -15,16 +15,8 @@ onMounted(() => {
 const show = ref(false);
 const couponList = ref<Recordable[]>([]);
 
-function onOpen() {
-  show.value = true;
-}
-
-function onClose() {
-  show.value = false;
-}
-
 function getCouponList() {
-  API_DISCOUNTS.discountsCoupons().then((res) => {
+  API_DISCOUNTS.discountsCoupons({ type: 'NO_PWD' }).then((res) => {
     if (res.data) {
       couponList.value = res.data;
     }
@@ -34,12 +26,12 @@ function getCouponList() {
 function onItemClicked(index: number) {
   const coupon = unref(couponList)[index];
 
-  if (coupon.pwd) {
-    Toast({ message: '本券需要使用口令才能领取', duration: 1500 });
-    return;
-  }
+  // if (coupon.pwd) {
+  //   showToast({ message: '本券需要使用口令才能领取', duration: 1500 });
+  //   return;
+  // }
 
-  Toast.loading({
+  showLoadingToast({
     forbidClick: true,
     message: '加载中...',
     duration: 0,
@@ -50,21 +42,52 @@ function onItemClicked(index: number) {
   };
 
   API_DISCOUNTS.discountsFetch(params)
-    .then((res) => {
-      if (res.code === 0) {
-        Toast({ message: '恭喜,抢到了~', duration: 1500 });
-      }
+    .then(() => {
+      closeToast();
+      showToast({
+        message: '恭喜,抢到了~',
+        duration: 2000,
+      });
     })
-    .catch((error) => {
-      // Toast({ message: '很遗憾,没抢到~', duration: 1500 });
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
+      closeToast();
+      if (Number(err.code) === 700) {
+        showToast({
+          message: '很遗憾,没抢到~',
+          duration: 2000,
+        });
+      } else {
+        showToast({
+          message: err.msg,
+          duration: 2000,
+        });
+      }
     });
 }
+
+function close() {
+  toggle(false);
+}
+
+function open() {
+  toggle(true);
+}
+
+function toggle(value: boolean) {
+  show.value = value;
+}
+
+defineExpose({
+  open,
+  close,
+  toggle,
+});
 </script>
 
 <template>
   <div class="coupons">
-    <van-cell v-if="couponList.length" class="mb10" :title="title" is-link @click="onOpen" />
+    <van-cell v-if="couponList.length" class="mb10" :title="title" is-link @click="open" />
     <!-- 弹层 -->
     <van-popup v-model:show="show" round closeable position="bottom">
       <div class="coupons-header van-hairline--bottom">优惠券</div>
@@ -88,8 +111,8 @@ function onItemClicked(index: number) {
           </div>
         </div>
       </div>
-      <div class="coupons-footer" @click="onClose">
-        <van-button type="primary" round block @click="onClose">完成</van-button>
+      <div class="coupons-footer" @click="close">
+        <van-button type="primary" round block @click="close">完成</van-button>
       </div>
     </van-popup>
   </div>
@@ -103,7 +126,7 @@ function onItemClicked(index: number) {
     padding: 0 15px;
     width: 100%;
     font-size: 16px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     height: 50px;
     line-height: 50px;
   }

@@ -4,9 +4,9 @@ export default {
 };
 </script>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed, onMounted, ref, unref } from 'vue';
-import { Dialog, Toast } from 'vant';
+import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
 import NP from 'number-precision';
 import { useDebounceFn } from '@vueuse/core';
 import API_CART from '@/apis/cart';
@@ -85,7 +85,7 @@ const onGoodChange = useDebounceFn((number, index) => {
 
 function onDelete() {
   if (!unref(selectedList).length) {
-    Toast({
+    showToast({
       message: '您还没有选择商品哦',
       duration: 1500,
     });
@@ -95,7 +95,7 @@ function onDelete() {
   const type = unref(selectedList).length === unref(list).length ? 'empty' : 'remove';
   const message = type === 'empty' ? `确定要清空购物车吗？` : `确定要删除这${unref(selectedList).length}个商品吗？`;
 
-  Dialog.confirm({
+  showConfirmDialog({
     message: message,
   })
     .then(() => {
@@ -105,13 +105,13 @@ function onDelete() {
         cartRemoveHandle();
       }
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 
 function cartNumberHandle(_index: number, { key, number }) {
-  Toast.loading({
+  showLoadingToast({
     forbidClick: true,
     message: '修改中...',
     duration: 0,
@@ -119,11 +119,11 @@ function cartNumberHandle(_index: number, { key, number }) {
 
   API_CART.shoppingCartModifyNumber({ number, key })
     .then((res) => {
-      Toast.clear();
+      closeToast();
       list.value = res.data?.items ?? [];
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 
@@ -132,8 +132,8 @@ function cartEmptyHandle() {
     .then(() => {
       list.value = [];
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 
@@ -145,14 +145,14 @@ function cartRemoveHandle() {
     .then((res) => {
       list.value = res.data?.items ?? [];
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 }
 
 function onSubmit() {
   if (!unref(selectedList).length) {
-    Toast({
+    showToast({
       message: '您还没有选择商品哦',
       duration: 1500,
     });
@@ -160,7 +160,7 @@ function onSubmit() {
   }
 
   if (unref(selectedList).some((v) => v.status === 1)) {
-    Toast({
+    showToast({
       message: '请删除掉失效商品',
       duration: 1500,
     });
@@ -204,7 +204,7 @@ function onSubmit() {
               <van-image fit="contain" class="list-item-pic" :src="item.pic" />
               <div class="list-item-content">
                 <div class="list-item-title">
-                  <span v-if="item.status === 1" style="color: var(--gray-color-5)">【失效】</span>
+                  <span v-if="item.status === 1" style="color: var(--color-text-4)">【失效】</span>
                   {{ item.name }}
                 </div>
                 <div class="list-item-desc">
@@ -275,7 +275,7 @@ function onSubmit() {
   overflow: hidden;
   margin: 12px 10px;
   border-radius: 8px;
-  background-color: var(--white);
+  background-color: var(--color-bg-2);
 
   &-header {
     box-sizing: border-box;
@@ -357,7 +357,7 @@ function onSubmit() {
     &-title {
       font-size: 14px;
       line-height: 18px;
-      color: var(--gray-color-8);
+      color: var(--color-text-1);
       display: -webkit-box;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -369,11 +369,11 @@ function onSubmit() {
       flex: 1;
       font-size: 12px;
       line-height: 20px;
-      color: var(--gray-color-6);
+      color: var(--color-text-3);
     }
 
     &-price {
-      color: var(--brand-color);
+      color: var(--color-primary);
       &-symbol {
         font-size: 12px;
         margin-right: 2px;
@@ -391,12 +391,11 @@ function onSubmit() {
   box-sizing: border-box;
   position: fixed;
   left: 0;
-  bottom: calc(50px + constant(safe-area-inset-bottom));
-  bottom: calc(50px + env(safe-area-inset-bottom));
+  bottom: calc(50px + var(--safe-area-height-bottom));
   z-index: 100;
   width: 100%;
   padding: 0 16px;
-  background-color: #fff;
+  background-color: var(--color-bg-2);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -404,8 +403,7 @@ function onSubmit() {
   font-size: 14px;
 
   &-wrap {
-    height: calc(50px + constant(safe-area-inset-bottom));
-    height: calc(50px + env(safe-area-inset-bottom));
+    height: calc(50px + var(--safe-area-height-bottom));
   }
 
   &-hd {
@@ -414,11 +412,11 @@ function onSubmit() {
     align-items: center;
     justify-content: flex-end;
     padding-right: 15px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
   }
 
   &-price {
-    color: var(--brand-color);
+    color: var(--color-primary);
     font-weight: bold;
 
     &-symbol {
@@ -444,12 +442,12 @@ function onSubmit() {
   &-title {
     margin-bottom: 8px;
     font-size: 14px;
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
   }
 
   &-txt {
     font-size: 14px;
-    color: var(--gray-color-6);
+    color: var(--color-text-3);
   }
 
   &-btn {
@@ -459,6 +457,12 @@ function onSubmit() {
     font-size: 14px;
     margin: 10px auto 0;
     border-radius: 16px;
+  }
+}
+
+.dark {
+  .goods-header-cart {
+    display: none;
   }
 }
 </style>

@@ -1,15 +1,12 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed, ref, unref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Toast } from 'vant';
-import Captcha from '@/components/Captcha/index.vue';
+import { showToast } from 'vant';
 import { loginProviderType } from '@/constants/modules/user';
+import { getClientInfo } from '@/utils';
 import { isMobile } from '@/utils/validate';
-import deviceId from '@/utils/helpers/deviceId';
-import deviceModel from '@/utils/helpers/deviceModel';
 
 import { useUserStore } from '@/store/modules/user';
-import { useSmsCode } from '@/hooks/shared/useSmsCode';
 
 const userStore = useUserStore();
 const route = useRoute();
@@ -27,8 +24,9 @@ function onLoginTypeChange() {
   loginType.value = loginType.value === 'sms' ? 'system' : 'sms';
 }
 
-const { mobile, smsCode, smsTimer, smsText, captchaShow, onSmsBtnClicked, onSmsSend } = useSmsCode();
+const mobile = ref('');
 const pwd = ref('');
+const smsCode = ref('');
 const agree = ref(true);
 
 function goPage(path: string) {
@@ -46,14 +44,14 @@ const submitted = computed(() => {
 
 function onSubmit() {
   if (!isMobile(unref(mobile))) {
-    Toast('手机号格式错误');
+    showToast('手机号格式错误');
     return;
   }
 
   const params: Recordable = {
     mobile: unref(mobile),
-    deviceId: deviceId(),
-    deviceName: deviceModel(),
+    deviceId: getClientInfo().deviceId,
+    deviceName: getClientInfo().deviceType,
   };
 
   if (unref(loginType) === 'system') {
@@ -71,12 +69,15 @@ function onSubmit() {
     .login({ provider: unref(loginType), params })
     .then(() => {
       submitLoading.value = false;
-      router.replace({ path: '/mine' });
-      Toast.success('登录成功');
+      route.query.redirect ? router.replace({ path: route.query.redirect as string }) : router.replace({ path: '/' });
+      showToast({
+        type: 'success',
+        message: '登录成功',
+      });
     })
-    .catch((error) => {
+    .catch((err) => {
+      console.error(err);
       submitLoading.value = false;
-      console.error(error);
     });
 }
 </script>
@@ -86,7 +87,7 @@ function onSubmit() {
     <div class="main">
       <div class="h2">{{ loginProvider.h2 }}</div>
       <div class="safe-tips">为了你的帐号安全，请用手机号登录</div>
-      <div class="form">
+      <form class="form">
         <div class="form-item">
           <div class="form-item-country">中国 +86</div>
           <van-field
@@ -95,34 +96,32 @@ function onSubmit() {
             :border="false"
             type="tel"
             placeholder="请输入手机号"
+            autocomplete="username"
             clearable
           />
+          <input type="text" hidden autocomplete="username" />
         </div>
         <div v-if="loginType === 'system'" class="form-item">
-          <van-field
+          <PwdField
             v-model="pwd"
             class="form-field"
             :border="false"
-            type="password"
             placeholder="请输入密码"
+            autocomplete="current-password"
             clearable
           />
         </div>
         <div v-if="loginType === 'sms'" class="form-item">
-          <van-field
+          <CaptchaCodeField
             v-model="smsCode"
+            :mobile="mobile"
             class="form-field"
             :border="false"
             type="number"
+            maxlength="4"
             placeholder="请输入4位验证码"
             clearable
           />
-          <template v-if="smsTimer">
-            <span class="sms-btn countdown">{{ smsText }}</span>
-          </template>
-          <template v-else>
-            <span class="sms-btn" @click="onSmsBtnClicked">{{ smsText }}</span>
-          </template>
         </div>
         <van-button
           class="form-submit"
@@ -134,7 +133,7 @@ function onSubmit() {
           @click="onSubmit"
           >登录</van-button
         >
-      </div>
+      </form>
       <div class="check-type">
         <div class="check-type-hd">
           <span class="check-type-btn" @click="onLoginTypeChange">{{ checkTypeText }}</span>
@@ -156,128 +155,11 @@ function onSubmit() {
         >
       </div>
     </div>
-    <!-- 图形验证码 -->
-    <Captcha v-model:show="captchaShow" @success="onSmsSend" />
   </div>
 </template>
 
 <style lang="less" scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 0 30px;
-}
+@import '@/styles/mixins/login.less';
 
-.h2 {
-  margin-top: 40px;
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--gray-color-8);
-  line-height: 24px;
-}
-
-.safe-tips {
-  font-size: 14px;
-  color: var(--gray-color-6);
-  margin-top: 20px;
-  line-height: 14px;
-}
-
-.main {
-  flex: 1;
-  min-height: 420px;
-}
-
-.form {
-  &-item {
-    padding: 20px 0 10px;
-    border-bottom: 1px solid @border-color;
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-
-    &-country {
-      padding-right: 10px;
-      margin-right: 10px;
-      color: var(--gray-color-8);
-      position: relative;
-
-      &::after {
-        display: block;
-        content: ' ';
-        width: 1px;
-        height: 14px;
-        background: @border-color;
-        position: absolute;
-        top: 50%;
-        margin-top: -7px;
-        right: 0;
-      }
-    }
-  }
-
-  &-field {
-    flex: 1;
-    background: none;
-    padding: 0;
-  }
-
-  &-submit {
-    margin-top: 30px;
-    font-size: 16px;
-  }
-}
-
-.sms-btn {
-  color: #38f;
-  font-size: 14px;
-  margin-left: 10px;
-
-  &.countdown {
-    font-size: 12px;
-    color: var(--gray-color-6);
-  }
-}
-
-.check-type {
-  box-sizing: border-box;
-  padding: 20px 0;
-  font-size: 12px;
-  color: #38f;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  &-separate {
-    display: inline-flex;
-    color: @border-color;
-    margin: 0 5px 0 5px;
-  }
-}
-
-.footer {
-  margin-bottom: 30px;
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
-
-  &-agreement {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    color: var(--gray-color-6);
-
-    .van-checkbox {
-      margin-right: 6px;
-    }
-
-    a {
-      color: #38f;
-    }
-  }
-}
+.login();
 </style>

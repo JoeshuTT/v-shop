@@ -1,31 +1,31 @@
 import { computed, defineComponent, unref } from 'vue';
+import type { ConfigProviderThemeVars } from 'vant';
 import { useAppStore } from '@/store/modules/app';
+import AppWindowBar from '../AppWindowBar/index.vue';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'AppProvider',
-  setup(_props, { slots }) {
+  setup(_, { slots }) {
     const appStore = useAppStore();
+    const route = useRoute();
     const theme = computed(() => appStore.getTheme);
 
-    const themeVars = computed(() => {
+    const themeVars = computed<ConfigProviderThemeVars>(() => {
       return {
-        black: unref(theme).colors.black,
-        white: unref(theme).colors.white,
-        // Tabs
-        'tabs-default-color': unref(theme).brandColor,
-        'tabs-bottom-bar-color': unref(theme).brandColor,
-        // Sidebar
-        'sidebar-selected-border-color': unref(theme).brandColor,
-        // Dialog
-        'dialog-confirm-button-text-color': unref(theme).brandColor,
         // ActionBar
-        'action-bar-button-warning-color': unref(theme).viceColor,
-        'action-bar-button-danger-color': unref(theme).brandColor,
+        ActionBarButtonWarningColor: unref(theme).colors.vice,
+        actionBarButtonDangerColor: unref(theme).colors.primary,
       };
     });
 
     return () => {
-      return <van-config-provider themeVars={unref(themeVars)}>{slots.default?.()}</van-config-provider>;
+      return (
+        <van-config-provider theme={unref(theme).mode} themeVars={unref(themeVars)}>
+          {slots.default?.()}
+          {route.meta.showWindowBar && <AppWindowBar />}
+        </van-config-provider>
+      );
     };
   },
 });

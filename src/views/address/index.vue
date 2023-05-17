@@ -4,14 +4,12 @@
       <AddressList v-if="list.length" :list="list" />
       <van-empty v-else class="empty" :description="listEmptyText"> </van-empty>
     </SpainList>
-    <div class="affix-bar">
-      <div class="affix-bar-action">
-        <van-button class="affix-bar-button" type="primary" round @click="onAdd">
-          <van-icon name="plus" />
-          新建收货地址
-        </van-button>
-      </div>
-    </div>
+    <AffixBar>
+      <van-button class="submit-bar-button" type="primary" round @click="onAdd">
+        <van-icon name="plus" />
+        新建收货地址
+      </van-button>
+    </AffixBar>
   </div>
 </template>
 
@@ -85,7 +83,6 @@ export default {
   display: flex;
   align-items: center;
   padding: 12px;
-  background-color: #fff;
   border-radius: 8px;
   margin-bottom: 10px;
 
@@ -105,7 +102,7 @@ export default {
     line-height: 14px;
     margin-left: 8px;
     border-radius: 999px;
-    background-color: var(--brand-color);
+    background-color: var(--color-primary);
   }
 
   &-name {
@@ -117,7 +114,7 @@ export default {
   }
 
   &-address {
-    color: var(--gray-color-8);
+    color: var(--color-text-1);
     font-size: 13px;
     line-height: 18px;
   }
@@ -134,26 +131,10 @@ export default {
   }
 }
 
-.affix-bar {
-  height: calc(50px + constant(safe-area-inset-bottom));
-  height: calc(50px + env(safe-area-inset-bottom));
-
-  &-action {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 50px;
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
+.submit-bar {
   &-button {
     width: 80%;
-    height: 36px;
+    height: 34px;
     letter-spacing: 2px;
   }
 }

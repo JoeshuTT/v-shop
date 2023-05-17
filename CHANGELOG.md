@@ -2,6 +2,31 @@
 
 > 记录下重大改动
 
+## v3.5.1(2023-05-17)
+
+主要改动
+
+- 请求封装增加扩展配置项
+- types 目录调整
+- 主题支持**暗黑模式**
+- 通用列表重构，支持组件和 hooks 两种方式使用
+  - 组件`AppList`, `AppInfiniteScroller`, `ProList` 使用查看
+    页面 coupon,order,wallet 等等
+- utils 新增更多工具函数
+  - 更新`Web API`相关方法，`utils/web`目录下，废弃
+    getDevicePlatform deviceId.js deviceModel.js，使用 getClientInfo, getBrowserInfo
+- 短信验证码逻辑重构，使用组件形式
+- 升级 Vite 到 3.x 版本，并对相关的 Vite 插件进行升级
+- 升级 Vant 到 4.x 版本，相关使用方式同步更新
+- 配置文件增加注释说明
+- 优化代码逻辑和其他细节完善
+
+## v3.1.3(2023-03-20)
+
+主要改动
+
+- 优化代码逻辑和其他细节完善
+
 ## v3.1.2(2022-08-16)
 
 主要改动

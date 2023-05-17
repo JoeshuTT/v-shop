@@ -49,16 +49,14 @@ export function debounce(fn: any, delay: number) {
 
 /**
  * 深拷贝
- * @param {*} sources 源对象
- * @returns {*} 拷贝后的新对象
+ * @param {*} source 源对象
+ * @returns 拷贝后的新对象
  */
-export function deepClone(sources: any): any {
-  const target = Array.isArray(sources) ? [] : {};
-  for (const key in sources) {
-    if (Object.hasOwn(sources, key)) {
-      // @ts-ignore
-      target[key] = sources[key] !== null && typeof sources[key] === 'object' ? deepClone(sources[key]) : sources[key];
-    }
+export function deepClone<T = any>(source: {}): T {
+  const target: any = Array.isArray(source) ? [] : {};
+  // eslint-disable-next-line guard-for-in
+  for (const key in source) {
+    target[key] = source[key] !== null && typeof source[key] === 'object' ? deepClone(source[key]) : source[key];
   }
 
   return target;
@@ -68,7 +66,10 @@ export function deepClone(sources: any): any {
  * 生成指定两个整数范围内的随机整数
  * @param {number} m
  * @param {number} n
- * @example random(0, 10)
+ * @example
+ * ```js
+ * random(0, 10)  // 1
+ * ```
  */
 export const randomIntegerInRange = function (m: number, n: number) {
   return m + Math.floor(Math.random() * (n - m));
@@ -83,4 +84,17 @@ export function fromCamelCase(str: string, separator = '_') {
     .replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2')
     .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2')
     .toLowerCase();
+}
+
+/**
+ * 将源对象中属性名与目标对象相同的属性值映射到目标对象中
+ */
+export function mapMatchingProperties(target: {}, source: {}) {
+  Object.keys(target).forEach((key) => {
+    if (key in source) {
+      target[key] = source[key];
+    }
+  });
+
+  return target;
 }

@@ -1,9 +1,8 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, ref, unref } from 'vue';
-import { Toast } from 'vant';
+import { showToast, showLoadingToast, closeToast } from 'vant';
 import API_USER from '@/apis/user';
 import API_SCORE from '@/apis/score';
-import AffixBarAction from '@/components/AffixBarAction/index.vue';
 import { scoreDeductionRuleModel } from '@/model/modules/score/deductionRule';
 import { countPair } from '@/utils/format';
 
@@ -30,7 +29,7 @@ function getDetail() {
 
 function onSubmit() {
   if (unref(type) === 2 && !unref(scoreNumber)) {
-    Toast('请输入积分');
+    showToast('请输入积分');
     return;
   }
 
@@ -39,7 +38,7 @@ function onSubmit() {
     deductionScore: unref(scoreNumber),
   };
 
-  Toast.loading({
+  showLoadingToast({
     forbidClick: true,
     message: '加载中...',
     duration: 0,
@@ -47,11 +46,12 @@ function onSubmit() {
 
   API_SCORE.scoreExchangeCash(params)
     .then(() => {
-      Toast('兑换成功');
+      closeToast();
+      showToast('兑换成功');
       getDetail();
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 }
 </script>
@@ -66,8 +66,9 @@ function onSubmit() {
     </div>
     <van-field v-model="scoreNumber" type="digit" label="兑换现金" placeholder="你希望用多少积分来兑换余额" />
     <div v-if="rule.desc" class="tips">规则：{{ rule.desc }}</div>
-    <!-- 完成 -->
-    <AffixBarAction button-text="立即兑换" @submit="onSubmit" />
+
+    <!-- 立即兑换 -->
+    <AffixBar size="medium" text="立即兑换" @click-btn="onSubmit" />
   </div>
 </template>
 
@@ -106,6 +107,6 @@ function onSubmit() {
 .tips {
   padding: 10px 15px;
   font-size: 12px;
-  color: var(--gray-color-6);
+  color: var(--color-text-3);
 }
 </style>

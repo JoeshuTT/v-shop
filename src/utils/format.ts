@@ -1,4 +1,4 @@
-import { isDef } from './validate';
+import { isDef } from './is';
 
 /**
  * 保留小数点（原生toFixed）
