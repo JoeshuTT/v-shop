@@ -1,6 +1,5 @@
 import { router } from '@/router';
-import { getDevicePlatform } from '@/utils';
-import deviceModel from '@/utils/helpers/deviceModel';
+import { getClientInfo } from '@/utils';
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { useAppStoreWithOut } from '@/store/modules/app';
 
@@ -23,16 +22,16 @@ router.beforeEach(async (to, from, next) => {
 
     console.info(
       '[用户信息] 设备信息：',
-      '设备型号',
-      deviceModel(),
+      '设备类型',
+      getClientInfo().deviceType,
       '是否Android',
-      getDevicePlatform().isAndroid,
+      getClientInfo().isAndroid,
       '是否iOS',
-      getDevicePlatform().isIOS,
+      getClientInfo().isIOS,
       '是否微信内打开',
-      getDevicePlatform().isInWeChatApp,
+      getClientInfo().isInWeChatApp,
       '是否小程序内打开',
-      getDevicePlatform().isInMiniProgram,
+      getClientInfo().isInMiniProgram,
     );
 
     // PC 浏览提示

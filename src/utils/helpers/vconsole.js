@@ -5,7 +5,6 @@
  * 1. 支持 vConsole 面板展示
  * 2. 支持 url 带参数（vconsole=show）唤起
  */
-// import { getDevicePlatform } from '@/utils';
 
 if (show()) {
   let storeList = [];
