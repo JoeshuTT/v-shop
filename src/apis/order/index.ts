@@ -1,4 +1,4 @@
-import { request } from '@/utils/request';
+import { createRequest as request } from '@/utils/request';
 
 /**
  * 读取配送费设置

@@ -1,40 +1,63 @@
 import type { AxiosRequestConfig, AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import axios from 'axios';
 import qs from 'qs';
-import { Toast } from 'vant';
 import { getAPI } from '@/utils';
-import { ServiceResult } from './types';
-
+import { CustomRequestConfig, RequestOptions, ServiceResultCodeEnum, ServiceResult, ContentTypeEnum } from './types';
+import { httpErrorHandle, serviceErrorHandel } from './helper';
 import { useUserStoreWithOut } from '@/store/modules/user';
 
-function createRequest<T = ServiceResult>(config: AxiosRequestConfig): Promise<T> {
+/**
+ * 创建 request 实例
+ */
+export function createRequest<T = ServiceResult>(config: CustomRequestConfig): Promise<T> {
+  /**
+   * 扩展请求配置项，下面的选项都可以在独立的接口请求中覆盖
+   */
+  const requestOptions = {
+    // 需要对返回数据进行处理
+    isTransformResponse: true,
+    // 是否返回原生响应，有用户
+    isReturnNativeResponse: false,
+    // 消息提示类型
+    errorMessageMode: 'message',
+    ...config.requestOptions,
+  };
+
   /**
    * 创建 axios 实例
    */
   const instance: AxiosInstance = axios.create({
+    // 基础接口地址
     baseURL: getAPI(),
+    // 请求超时事件
     timeout: 1000 * 5,
-    transformRequest: [
-      (data, headers) => {
-        if (headers['Content-Type']?.includes('form-data')) {
-          return data;
-        } else {
-          const userStore = useUserStoreWithOut();
-          return qs.stringify({ ...data, token: userStore.getToken }); // 序列化请求参数
-        }
-      },
-    ],
+    // 使用 form-urlencoded 格式，即伪表单
+    headers: {
+      'Content-Type': ContentTypeEnum.FORM_URLENCODED,
+    },
   });
 
   /**
    * 请求拦截器
    */
   instance.interceptors.request.use((config: AxiosRequestConfig) => {
-    // store.getters.token && (config.headers.token = store.getters.token);
+    // 追加token
+    // userStore.getToken && (config.headers.token = userStore.getToken);
+    const userStore = useUserStoreWithOut();
+    const joinPayloadData = (data: any) => {
+      return { ...data, token: userStore.getToken };
+    };
 
-    if (config.method === 'get') {
-      const userStore = useUserStoreWithOut();
-      config.params = { ...config.params, token: userStore.getToken };
+    // 序列化数据
+    const contentType = config.headers?.['Content-Type'];
+    if (contentType === ContentTypeEnum.FORM_URLENCODED) {
+      if (['post', 'put', 'patch'].includes(config.method as string)) {
+        config.data = qs.stringify(joinPayloadData(config.data));
+      }
+
+      if (['delete', 'get', 'head'].includes(config.method as string)) {
+        config.params = joinPayloadData(config.params);
+      }
     }
 
     return config;
@@ -48,13 +71,23 @@ function createRequest<T = ServiceResult>(config: AxiosRequestConfig): Promise<T
       const result: ServiceResult = response.data;
       const { code } = result;
 
-      if (Number(code) === 0) {
+      // 不进行任何处理，直接返回原生响应
+      if (requestOptions.isReturnNativeResponse) {
+        return response;
+      }
+
+      // 不进行任何处理，直接返回数据
+      if (!requestOptions.isTransformResponse) {
         return result;
-      } else if (Number(code) === 700) {
+      }
+
+      if (Number(code) === ServiceResultCodeEnum.SUCCESS) {
+        return result;
+      } else if (Number(code) === ServiceResultCodeEnum.NO_DATA) {
         result.data = null;
         return result;
       } else {
-        serviceErrorHandel(result);
+        serviceErrorHandel(result, requestOptions as RequestOptions);
         return Promise.reject(result);
       }
     },
@@ -75,68 +108,3 @@ function createRequest<T = ServiceResult>(config: AxiosRequestConfig): Promise<T
       });
   });
 }
-
-/**
- * 业务错误
- * @param {*} res 业务约定的返回数据
- * @param {number} res.code 业务约定的错误码
- * @param {string} res.msg 业务上的错误信息
- * @param {*} res.data
- */
-function serviceErrorHandel(res: ServiceResult) {
-  const { code, msg } = res;
-  if (Number(code) === 2000) {
-    Toast.clear();
-    const userStore = useUserStoreWithOut();
-    userStore.logout({ goLogin: true });
-  } else {
-    Toast({
-      message: msg || 'Result Error',
-      duration: 1000 * 3,
-    });
-  }
-}
-
-/**
- * HTTP 错误
- */
-function httpErrorHandle(error: AxiosError) {
-  // console.log('[httpErrorHandle]', error);
-  // console.log('[httpErrorHandle]', error.toString());
-
-  let msg = '';
-
-  if (error?.response) {
-    const { status } = error.response;
-
-    switch (status) {
-      case 403:
-        msg = `${status} 网络请求被拒绝`;
-        break;
-      case 404:
-        msg = `${status} 网络请求不存在`;
-        break;
-      case 500:
-        msg = `${status} 服务器内部错误`;
-        break;
-      default:
-        msg = `${status || error.message}`;
-        break;
-    }
-  }
-
-  if (error.message.includes('timeout')) {
-    msg = '请求超时';
-  }
-
-  if (error.message.includes('Network Error')) {
-    msg = '当前网络不可用，请检查你的网络设置';
-  }
-
-  Toast({
-    message: msg || error.toString(),
-    duration: 1000 * 3,
-  });
-}
-
-export const request = createRequest;
