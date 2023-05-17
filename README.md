@@ -13,6 +13,7 @@ v-shop 是一个前端免费开源的企业级移动端（H5）商城，使用 `
 - 🍭 使用 [TypeScript](https://github.com/microsoft/TypeScript) 开发
 - 🍭 使用 [AlloyTeam ESLint](https://github.com/AlloyTeam/eslint-config-alloy) 规则， 规范项目代码
 - 🍭 支持页面栈导航体验，使用 [vue-page-stack-router](https://github.com/JoeshuTT/vue-page-stack-router)实现
+- 🍭 使用 [postcss-mobile-forever](https://github.com/wswmsword/postcss-mobile-forever) 限制视口单位最大值，提升桌面端可访问性
 - 🎨 支持动态切换主题，支持动态加载 vconsole 面板
 
 ## 🔥 预览
