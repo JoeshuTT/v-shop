@@ -1,43 +1,54 @@
+/* Visit https://aka.ms/tsconfig to read more about this file */
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "noLib": false,
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "strictFunctionTypes": false,
+    /* Projects */
+    //  ...
+
+    /* Language and Environment */
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
     "jsx": "preserve",
-    "baseUrl": ".",
-    "sourceMap": true,
-    "esModuleInterop": true,
+
+    /* Modules */
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["node", "vite/client"],
     "resolveJsonModule": true,
+
+    /* JavaScript Support */
+    // ...
+
+    /* Emit */
+    "sourceMap": true,
+    "removeComments": true,
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+    "noImplicitAny": false,
+    "strictFunctionTypes": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "experimentalDecorators": true,
-    "lib": ["dom", "esnext"],
-    "noImplicitAny": false,
-    "skipLibCheck": true,
-    "types": ["node", "vite/client"],
-    "removeComments": true,
-    "outDir": "./",
-    "paths": {
-      "@/*": ["src/*"],
-      "#/*": ["types/*"]
-    }
+
+    /* Completeness */
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "types/**/*.ts",
-    "types/**/*.d.ts",
     "build/**/*.ts",
     "build/**/*.d.ts",
     "mock/**/*.ts",
-    "vite.config.ts"
+    "vite.config.*"
   ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }
