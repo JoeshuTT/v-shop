@@ -40,7 +40,7 @@ specifiers:
   vite-plugin-html: ^3.2.0
   vue: ^3.2.37
   vue-eslint-parser: ^9.0.3
-  vue-page-stack-router: ^3.2.5
+  vue-page-stack-router: ^3.2.6
   vue-router: ^4.1.3
   vue-tsc: ^0.31.4
 
@@ -58,7 +58,7 @@ dependencies:
   qs: 6.11.0
   vant: 4.1.2_vue@3.2.37
   vue: 3.2.37
-  vue-page-stack-router: 3.2.5_45jhv7el6g2ztux7wgm2ofrf4e
+  vue-page-stack-router: 3.2.6_45jhv7el6g2ztux7wgm2ofrf4e
   vue-router: 4.1.3_vue@3.2.37
 
 devDependencies:
@@ -4530,8 +4530,8 @@ packages:
       - supports-color
     dev: true
 
-  /vue-page-stack-router/3.2.5_45jhv7el6g2ztux7wgm2ofrf4e:
-    resolution: {integrity: sha512-MK/x2/wEkq/xNU1TjOQQpifRv7nCubMyyqwWR4U0HGeelyuUCMrBXDkwbO11Xhe2X2l++0Vnu6MI2SoxvRgczg==}
+  /vue-page-stack-router/3.2.6_45jhv7el6g2ztux7wgm2ofrf4e:
+    resolution: {integrity: sha512-ORFFIbiGhdCgYj501jihwNmmlAAEONNKGd/KFu1JKYF1rALsghAR/tK6OkhSVjVOo3Zoj3as8HpCV/Oudl23kA==}
     engines: {node: '>=14'}
     peerDependencies:
       vue: ^3.0.0
