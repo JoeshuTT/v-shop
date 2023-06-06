@@ -6,21 +6,25 @@ const clientInfo: Readonly<BrowserInfo> = getBrowserInfo();
 
 /**
  * 获取链接某个参数
+ * @description 兼容search，hash并存情况
  * @param {string} key 参数名称
  * @param {string} [url]  链接
  * @returns {string} 返回参数值
  * @example
  * ```js
- * getQueryString('name');
+ * getQueryString('name'); // null
  * getQueryString('name', 'http://www.baidu.com?name=1&age=2'); // 1
  * ```
  */
-export function getQueryString(key: string, url: string): string {
+export function getQueryString(key: string, url: string) {
   const reg = new RegExp(`([?&]+)${key}=([^&#]*)`);
   const href = url || window.location.href;
-  const matches = href.substring(1).match(reg);
+  const results = href.substring(1).match(reg);
 
-  return matches ? decodeURIComponent(matches[2]) : '';
+  if (!results) return null;
+  if (!results[2]) return '';
+
+  return decodeURIComponent(results[2]);
 }
 
 /**
