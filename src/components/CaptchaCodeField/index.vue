@@ -1,10 +1,3 @@
-<script lang="ts">
-export default {
-  name: 'CaptchaCodeField',
-  inheritAttrs: false,
-};
-</script>
-
 <script setup lang="ts">
 import { reactive, unref, watch } from 'vue';
 import { showToast } from 'vant';
@@ -14,11 +7,9 @@ import { isMobile } from '@/utils/validate';
 import { useCountDown } from '@/hooks/shared/useCountDown';
 
 const props = defineProps({
-  modelValue: [String, Number],
   mobile: [String, Number],
 });
 
-defineEmits(['update:modelValue']);
 const { count: smsCount, start: countdown } = useCountDown();
 
 const state = reactive({
@@ -72,7 +63,7 @@ watch(smsCount, () => {
 </script>
 
 <template>
-  <van-field v-bind="$attrs">
+  <van-field>
     <template #button>
       <span v-if="smsCount" class="sms-btn countdown">{{ state.smsText }}</span>
       <span v-else class="sms-btn" @click="onSmsBtnClicked">{{ state.smsText }}</span>
