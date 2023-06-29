@@ -30,7 +30,7 @@
 import API_USER from '@/apis/user';
 import { isEmpty, isMobile } from '@/utils/validate';
 import AreaField from '@/components/AreaField/index.vue';
-import { showToast } from 'vant';
+import { showToast, showLoadingToast } from 'vant';
 
 export default {
   components: {
@@ -85,11 +85,11 @@ export default {
     }
   },
   methods: {
-    onAreaChange(values) {
-      this.form.provinceCode = values[0].code;
-      this.form.cityCode = values[1].code;
-      this.form.countyCode = values[2].code;
-      this.form.areaStr = this.formatAreaStr(values[0].name, values[1].name, values[2].name);
+    onAreaChange({ selectedOptions }) {
+      this.form.provinceCode = selectedOptions[0].value;
+      this.form.cityCode = selectedOptions[1].value;
+      this.form.countyCode = selectedOptions[2].value;
+      this.form.areaStr = this.formatAreaStr(selectedOptions[0].text, selectedOptions[1].text, selectedOptions[2].text);
     },
     formatAreaStr(provinceStr, cityStr, countyStr) {
       let str = provinceStr;
@@ -129,7 +129,7 @@ export default {
         districtId: this.form.countyCode,
       };
 
-      this.$showLoadingToast({
+      showLoadingToast({
         forbidClick: true,
         message: '地址数据提交中...',
         duration: 0,
@@ -157,7 +157,7 @@ export default {
       }
     },
     onDelete() {
-      this.$showLoadingToast({
+      showLoadingToast({
         forbidClick: true,
         message: '加载中...',
         duration: 0,

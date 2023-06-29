@@ -5,7 +5,6 @@ import API_USER from '@/apis/user';
 import UploadAvatar from '@/components/UploadAvatar/index.vue';
 import { isEmpty } from '@/utils/validate';
 import { assets } from '@/constants';
-import AreaField from '@/components/AreaField/index.vue';
 
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/store/modules/user';
