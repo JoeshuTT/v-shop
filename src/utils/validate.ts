@@ -4,6 +4,10 @@ import { isString, isArray, isObject } from './is';
  * 是否为空数据
  */
 export function isEmpty<T = unknown>(val: T): val is T {
+  if (val === null || val === undefined) {
+    return true;
+  }
+
   if (isArray(val) || isString(val)) {
     return val.length === 0;
   }
