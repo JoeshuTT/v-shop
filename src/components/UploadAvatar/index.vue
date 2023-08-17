@@ -6,7 +6,7 @@ import API_DFS from '@/apis/dfs';
 import { blobToFile } from '@/utils/file';
 
 export default defineComponent({
-  name: 'Upload',
+  name: 'UploadAvatar',
   emits: ['success', 'error'],
   setup(_props, { emit }) {
     function beforeRead(file: File): Promise<any> {
@@ -16,9 +16,7 @@ export default defineComponent({
           quality: 0.8,
           maxWidth: 1024,
           success: async (result) => {
-            const resultFile = await blobToFile(result, file.name, {
-              type: file.type, // 使用原图文件类型
-            });
+            const resultFile = blobToFile(result, file.name);
 
             resolve(resultFile);
           },
