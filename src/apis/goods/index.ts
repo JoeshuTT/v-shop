@@ -1,4 +1,4 @@
-import { createRequest as request } from '@/utils/request';
+import { request } from '@/utils/request';
 
 /**
  * 抢占秒杀名额

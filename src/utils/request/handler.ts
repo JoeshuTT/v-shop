@@ -1,7 +1,8 @@
 import type { AxiosError } from 'axios';
-import { RequestOptions, ServiceResultCodeEnum, ServiceResult } from './types';
+import { ServiceResultCodeEnum, ServiceResult } from './types';
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { showToast, closeToast } from 'vant';
+import { requestOptions } from './index';
 
 /**
  * 业务错误
@@ -10,7 +11,7 @@ import { showToast, closeToast } from 'vant';
  * @param {string} res.msg 业务上的错误信息
  * @param {*} res.data
  */
-export function serviceErrorHandel(res: ServiceResult, requestOptions: RequestOptions) {
+export function serviceErrorHandle(res: ServiceResult) {
   const { code, msg } = res;
   if (Number(code) === ServiceResultCodeEnum.LOGIN_EXPIRED) {
     closeToast();
@@ -64,7 +65,7 @@ export function httpErrorHandle(error: AxiosError) {
   }
 
   showToast({
-    message: msg || error.toString(),
+    message: msg || 'Http Error',
     duration: 1000 * 3,
   });
 }
