@@ -11,6 +11,7 @@ import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant
 import dayjs from 'dayjs';
 import API_ORDER from '@/apis/order';
 import { setClipboardData } from '@/utils/web/clipboard';
+import { makePhoneCall } from '@/utils/web/makePhoneCall';
 import Price from '@/components/Price/index.vue';
 import OrderSteps from './components/OrderSteps.vue';
 import OrderRate from './components/OrderRate.vue';
@@ -69,8 +70,10 @@ function onOrderPay(_orderId: number) {
   showToast({ message: '未开放：收银台', duration: 1500 });
 }
 
-function onConcatService(_orderId: number) {
-  showToast('未开放：客服');
+function onConcatService() {
+  makePhoneCall({
+    phoneNumber: '10086', // 模拟打电话
+  });
 }
 
 function onOrderDelivery(orderId: number) {
@@ -312,9 +315,7 @@ watchEffect(() => {
           </van-button>
         </template>
         <template v-if="orderInfo.status === 1">
-          <van-button icon="service" class="action-bar-btn" round @click.stop="onConcatService(orderInfo.id)">
-            联系客服
-          </van-button>
+          <van-button icon="service" class="action-bar-btn" round @click.stop="onConcatService"> 联系客服 </van-button>
         </template>
         <template v-if="orderInfo.status === 2">
           <van-button class="action-bar-btn" round @click.stop="onOrderDelivery(orderInfo.id)">确认收货</van-button>
