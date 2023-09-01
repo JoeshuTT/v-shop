@@ -1,8 +1,9 @@
-export { throttle, debounce, deepClone } from './lodash';
+export * from './lodash';
+export * from './is';
+export * from './validate';
 import { getBrowserInfo } from './web/getBrowserInfo';
-import type { BrowserInfo } from './web/getBrowserInfo';
 
-const clientInfo: Readonly<BrowserInfo> = getBrowserInfo();
+const clientInfo = getBrowserInfo();
 
 /**
  * 获取链接某个参数
