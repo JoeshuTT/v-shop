@@ -3,8 +3,8 @@
   "version": "3.5.1",
   "private": true,
   "engines": {
-    "node": ">= 14",
-    "pnpm": ">= 7"
+    "node": ">= 16",
+    "pnpm": ">= 8"
   },
   "scripts": {
     "dev": "vite",
