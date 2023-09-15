@@ -10,6 +10,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import IconPaySuccess from '@/components/icons/IconPaySuccess.vue';
 import IconPayFail from '@/components/icons/IconPayFail.vue';
+import { decimalFormat } from '@/utils/format';
 
 onMounted(() => {
   getDetail();
@@ -45,25 +46,32 @@ function getDetail() {
 
 <template>
   <div class="container container-full">
-    <div class="result">
+    <div class="result" v-if="orderInfo.orderNumber">
       <div class="result-hd">
         <div class="result-icon">
           <template v-if="orderInfo.isPay">
-            <IconPaySuccess class="result-svg-icon" />
+            <IconPaySuccess class="result-icon-svg" />
           </template>
           <template v-else>
-            <IconPayFail class="result-svg-icon" />
+            <IconPayFail class="result-icon-svg" />
           </template>
         </div>
+        <div class="result-status">
+          <div class="result-title">{{ orderInfo.isPay ? '支付成功' : '支付失败' }}</div>
+          <div class="result-title-sub">{{ orderInfo.isPay ? '感谢您的支持' : '再试试支付吧' }}</div>
+        </div>
       </div>
-      <div class="result-bd">
-        <div class="result-title">{{ orderInfo.isPay ? '支付成功' : '支付失败' }}</div>
-        <div class="result-title-sub">{{ orderInfo.isPay ? '感谢您的支持' : '再试试支付吧' }}</div>
+      <div class="result-bd" v-if="orderInfo.amountReal">
+        <div class="result-merchant">付款给商家</div>
+        <div class="result-amount">
+          <span class="result-amount-unit">¥</span>
+          <span class="result-amount-value"> {{ decimalFormat(orderInfo.amountReal) }}</span>
+        </div>
       </div>
-    </div>
-    <div class="action">
-      <van-button class="action-btn" @click="goOrder">查看订单</van-button>
-      <van-button class="action-btn" plain @click="goHome">返回首页</van-button>
+      <div class="result-action">
+        <van-button class="result-action-btn" @click="goOrder">查看订单</van-button>
+        <van-button class="result-action-btn" plain @click="goHome">返回首页</van-button>
+      </div>
     </div>
   </div>
 </template>
@@ -76,14 +84,13 @@ function getDetail() {
 
 .result {
   display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
+  flex-direction: column;
+  align-items: center;
 
-  &-svg-icon {
-    width: 41px;
-    height: 47.5px;
-    fill: currentColor;
-    overflow: hidden;
+  &-hd {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10vh;
   }
 
   &-bd {
@@ -92,6 +99,12 @@ function getDetail() {
 
   &-icon {
     color: var(--color-primary);
+    margin-right: 10px;
+
+    &-svg {
+      width: 42px;
+      fill: currentColor;
+    }
   }
 
   &-title {
@@ -110,31 +123,52 @@ function getDetail() {
     font-size: 12px;
     color: var(--color-text-3);
   }
-}
 
-.action {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 50vh;
-
-  &-btn {
-    width: 150px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &-merchant {
+    color: var(--color-text-2);
     font-size: 16px;
-    color: var(--color-primary);
-    border: 1px solid var(--color-primary);
-    border-radius: 20px;
-    background: none;
+    margin-bottom: 10px;
   }
 
-  &-btn:first-child {
-    color: #fff;
-    background: var(--color-primary);
-    margin-bottom: 35px;
+  &-amount {
+    margin-bottom: 30vh;
+
+    &-unit {
+      font-weight: bold;
+      font-size: 18px;
+      margin-right: 4px;
+    }
+
+    &-value {
+      font-weight: bold;
+      font-size: 30px;
+      font-family: DINAlternate-Bold, DINAlternate;
+    }
+  }
+
+  &-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-btn {
+      width: 150px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--color-primary);
+      border: 1px solid var(--color-primary);
+      border-radius: 20px;
+      background: none;
+    }
+
+    &-btn:first-child {
+      color: #fff;
+      background: var(--color-primary);
+      margin-bottom: 35px;
+    }
   }
 }
 </style>
