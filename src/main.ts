@@ -1,22 +1,23 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import { store } from './store';
-import { router } from './router';
+import { setupRouter } from './router';
 import { setupPageStackRouter } from './router/pageStack';
-// guard
-import './router/guard';
-// Vant
-import Vant, { Lazyload } from 'vant';
-import 'vant/lib/index.css';
+import { setupStore } from './store';
+import { setupVant } from './components/registerVant';
+
 // global
 import './styles/index.less';
 
-// app
-const app = createApp(App);
+async function bootstrap() {
+  // app
+  const app = createApp(App);
 
-app.use(Lazyload);
-app.use(Vant);
-app.use(router);
-setupPageStackRouter(app);
-app.use(store);
-app.mount('#app');
+  setupRouter(app);
+  setupPageStackRouter(app);
+  setupStore(app);
+  setupVant(app);
+
+  app.mount('#app');
+}
+
+bootstrap();
