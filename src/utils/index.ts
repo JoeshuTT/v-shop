@@ -1,5 +1,7 @@
-export * from './lodash';
+export * from './file';
+export * from './format';
 export * from './is';
+export * from './lodash';
 export * from './validate';
 import { getBrowserInfo } from './web/getBrowserInfo';
 
