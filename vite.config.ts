@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import legacy from '@vitejs/plugin-legacy';
-import Components from 'unplugin-vue-components/vite';
+import AutoComponents from 'unplugin-vue-components/vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 
 /**
@@ -40,10 +40,10 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     plugins: [
       vue(),
       vueJsx(),
-      Components({
-        dirs: ['src/components'],
+      AutoComponents({
+        dirs: ['./src/components'],
         extensions: ['vue', 'jsx', 'tsx'],
-        dts: 'src/components.d.ts',
+        dts: './src/auto-components.d.ts',
       }),
       createHtmlPlugin({
         inject: {
@@ -94,7 +94,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       preprocessorOptions: {
         less: {
           modifyVars: {
-            hack: `true; @import '/src/styles/variable.less';`,
+            hack: `true; @import './src/styles/variable.less';`,
           },
           javascriptEnabled: true,
         },
