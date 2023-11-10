@@ -5,6 +5,7 @@ import API_VERIFICATION from '@/apis/verification';
 import { sms } from '@/constants/modules/user';
 import { isMobile } from '@/utils/validate';
 import { useCountDown } from '@/hooks/shared/useCountDown';
+import { app as appConfig } from '@/constants/modules/app';
 
 const props = defineProps({
   mobile: [String, Number],
@@ -30,15 +31,31 @@ function onSmsBtnClicked() {
     return;
   }
 
-  state.captchaShow = true;
+  if (appConfig.isNeedPiCode) {
+    state.captchaShow = true;
+  } else {
+    sendSmsCode();
+  }
 }
 
-function onCaptchaConfirm({ requestId, code }) {
-  API_VERIFICATION.verificationSmsGet({
+function onCaptchaConfirm(options: Record<string, string>) {
+  sendSmsCode({ picCodeParams: options });
+}
+
+function sendSmsCode(options: Record<string, any> = {}) {
+  const { picCodeParams } = options;
+
+  const params = {
     mobile: unref(props.mobile),
-    key: requestId,
-    picCode: code,
-  })
+    ...(appConfig.isNeedPiCode
+      ? {
+          key: picCodeParams.requestId,
+          picCode: picCodeParams.code,
+        }
+      : null),
+  };
+
+  API_VERIFICATION.verificationSmsGet(params)
     .then(() => {
       state.captchaShow = false;
       showToast({

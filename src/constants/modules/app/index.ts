@@ -6,6 +6,11 @@ import type { IPalette, ITheme } from './types';
 export const app = {
   name: 'v-shop',
   link: 'https://github.com/JoeshuTT/v-shop/',
+  /**
+   * 是否需要图形验证码
+   * @description 需要与后台-短信设置-验证码设置-图形验证码是否增加，一起使用
+   */
+  isNeedPiCode: true,
 };
 
 /**
