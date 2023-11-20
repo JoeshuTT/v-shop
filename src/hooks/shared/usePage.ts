@@ -14,12 +14,12 @@ export function usePage() {
   const hasLogin = computed(() => !!unref(token));
   const theme = computed(() => appStore.getTheme);
 
-  function goPage(path) {
+  function goPage(path: string) {
     router.push({ path });
   }
 
   function goLogin() {
-    router.push('/login');
+    router.replace('/login');
   }
 
   function goHome() {
