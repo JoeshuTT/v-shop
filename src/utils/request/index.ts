@@ -80,7 +80,14 @@ instance.interceptors.response.use(
     }
   },
   (error: AxiosError) => {
-    httpErrorHandle(error);
+    const result = error?.response?.data;
+
+    if (result) {
+      serviceErrorHandle(result);
+    } else {
+      httpErrorHandle(error);
+    }
+
     return Promise.reject(error);
   },
 );
@@ -93,6 +100,7 @@ export function request<T = ServiceResult>(config: CustomRequestConfig): Promise
     isTransformResponse: true,
     isReturnNativeResponse: false,
     errorMessageMode: 'message',
+    networkErrorMessageMode: 'message',
     ...config.requestOptions,
   };
 

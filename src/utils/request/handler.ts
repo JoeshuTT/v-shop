@@ -35,37 +35,43 @@ export function httpErrorHandle(error: AxiosError) {
   // console.log('[httpErrorHandle]', error);
   // console.log('[httpErrorHandle]', error.toString());
 
-  let msg = '';
+  let errMessage = ''; // Http Error
 
   if (error?.response) {
     const { status } = error.response;
 
     switch (status) {
       case 403:
-        msg = `${status} 网络请求被拒绝`;
+        errMessage = `${status} 网络请求被拒绝`;
         break;
       case 404:
-        msg = `${status} 网络请求不存在`;
+        errMessage = `${status} 网络请求不存在`;
         break;
       case 500:
-        msg = `${status} 服务器内部错误`;
+        errMessage = `${status} 服务器内部错误`;
         break;
       default:
-        msg = `${status || error.message}`;
+        errMessage = `${status || error.message}`;
         break;
     }
   }
 
-  if (error.message.includes('timeout')) {
-    msg = '请求超时';
+  // 网络出错
+  if (error?.message) {
+    if (error.message.includes('timeout')) {
+      errMessage = '请求超时';
+    }
+    if (error.message.includes('Network Error')) {
+      errMessage = '当前网络不可用，请检查你的网络设置';
+    }
   }
 
-  if (error.message.includes('Network Error')) {
-    msg = '当前网络不可用，请检查你的网络设置';
+  if (errMessage) {
+    if (requestOptions.networkErrorMessageMode === 'message') {
+      showToast({
+        message: errMessage,
+        duration: 1000 * 3,
+      });
+    }
   }
-
-  showToast({
-    message: msg || 'Http Error',
-    duration: 1000 * 3,
-  });
 }

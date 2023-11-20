@@ -13,6 +13,8 @@ export interface RequestOptions {
   isReturnNativeResponse?: boolean;
   /** 消息提示类型 */
   errorMessageMode?: ErrorMessageMode;
+  /** 网络消息提示类型 */
+  networkErrorMessageMode?: ErrorMessageMode;
 }
 
 export enum ContentTypeEnum {
