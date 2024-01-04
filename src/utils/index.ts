@@ -1,5 +1,6 @@
 export * from './file';
 export * from './format';
+export * from './goodStorage';
 export * from './is';
 export * from './lodash';
 export * from './mobileConsole';

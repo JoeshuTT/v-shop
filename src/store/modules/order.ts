@@ -1,8 +1,8 @@
+import { showLoadingToast, showConfirmDialog } from 'vant';
 import { defineStore } from 'pinia';
 import { store } from '@/store';
-import storage from 'good-storage';
-import { showLoadingToast, showConfirmDialog } from 'vant';
 import { router } from '@/router';
+import { goodStorage } from '@/utils';
 import API_ORDER from '@/apis/order';
 
 export interface OrderState {
@@ -12,7 +12,7 @@ export interface OrderState {
 export const useOrderStore = defineStore({
   id: 'order',
   state: (): OrderState => ({
-    tradeGoods: storage.get('tradeGoods', {}),
+    tradeGoods: goodStorage.get('tradeGoods', {}),
   }),
   getters: {
     getTradeGoods: (state): ITradeGoods => state.tradeGoods,
@@ -54,7 +54,7 @@ export const useOrderStore = defineStore({
         list: goodList,
       };
       this.tradeGoods = tradeGoods;
-      storage.set('tradeGoods', tradeGoods);
+      goodStorage.set('tradeGoods', tradeGoods);
 
       goOrder && router.push('/order/submit');
     },

@@ -1,11 +1,9 @@
 import { defineStore } from 'pinia';
 import { store } from '@/store';
-import storage from 'good-storage';
 import { theme, tabBar } from '@/constants/modules/app';
 import type { ITheme } from '@/constants/modules/app/types';
-import { deepClone, fromCamelCase } from '@/utils/lodash';
+import { goodStorage, getClientInfo, deepClone, fromCamelCase } from '@/utils';
 import { appendStyle } from '@/utils/web';
-import { getClientInfo } from '@/utils';
 
 export interface AppStore {
   theme: NonNullable<ITheme>;
@@ -51,7 +49,7 @@ export const useAppStore = defineStore({
       appendStyle(cssText, 'theme');
 
       this.theme = myTheme;
-      storage.set('theme', myTheme);
+      goodStorage.set('theme', myTheme);
     },
     /**
      * 切换暗黑模式
@@ -69,7 +67,7 @@ export function useAppStoreWithOut() {
 }
 
 function getLocalTheme() {
-  const result = storage.get('theme', theme);
+  const result = goodStorage.get('theme', theme);
   if (result.version === theme.version) {
     return result;
   } else {

@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import { store } from '@/store';
-import storage from 'good-storage';
 import { router } from '@/router';
-import API_USER from '@/apis/user';
 import { loginProviderType } from '@/constants/modules/user';
+import { goodStorage } from '@/utils';
+import API_USER from '@/apis/user';
 
 export interface UserState {
   token: string;
@@ -14,8 +14,8 @@ export interface UserState {
 export const useUserStore = defineStore({
   id: 'user',
   state: (): UserState => ({
-    token: storage.get('token', ''),
-    userInfo: storage.get('userInfo', {}),
+    token: goodStorage.get('token', ''),
+    userInfo: goodStorage.get('userInfo', {}),
     userLevel: {},
   }),
   getters: {
@@ -35,7 +35,7 @@ export const useUserStore = defineStore({
         const { token } = res.data;
 
         this.token = token;
-        storage.set('token', token);
+        goodStorage.set('token', token);
         return res.data;
       } catch (error) {
         return Promise.reject(error);
@@ -53,9 +53,9 @@ export const useUserStore = defineStore({
       }
 
       this.token = '';
-      storage.set('token', '');
+      goodStorage.set('token', '');
       this.userInfo = {};
-      storage.set('userInfo', {});
+      goodStorage.set('userInfo', {});
       goLogin && router.push('/login');
     },
     async getUserDetail() {
@@ -64,7 +64,7 @@ export const useUserStore = defineStore({
         const { base = {}, userLevel = {} } = res.data;
 
         this.userInfo = base;
-        storage.set('userInfo', base);
+        goodStorage.set('userInfo', base);
         this.userLevel = userLevel;
       } catch (error) {
         console.error('获取用户详情失败', error);
