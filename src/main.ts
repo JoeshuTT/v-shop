@@ -4,7 +4,7 @@ import { setupRouter } from './router';
 import { setupPageStackRouter } from './router/pageStack';
 import { setupStore } from './store';
 import { setupVant } from './components/registerVant';
-import { loadMobileConsole } from './utils';
+import { loadMobileConsole, consoleAppInfo } from './utils';
 
 // global
 import './styles/index.less';
@@ -18,6 +18,8 @@ async function bootstrap() {
   } else if (location.href.indexOf('eruda=show') > -1 || localStorage.getItem('eruda') === 'show') {
     await loadMobileConsole('eruda');
   }
+  // 应用信息
+  consoleAppInfo();
   // app
   const app = createApp(App);
 

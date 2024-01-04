@@ -58,6 +58,28 @@ export function getURLParameters(url: string): Record<string, string> {
 }
 
 /**
+ * 打印应用信息
+ */
+export function consoleAppInfo() {
+  console.info('[app] onLaunch');
+  console.info('[app] version:', __APP_INFO__.version);
+  console.info('[app] URL:', window.location.href);
+  console.info(
+    '[用户信息] 设备信息：',
+    '设备类型',
+    getClientInfo().deviceType,
+    '是否Android',
+    getClientInfo().isAndroid,
+    '是否iOS',
+    getClientInfo().isIOS,
+    '是否微信内打开',
+    getClientInfo().isInWeChatApp,
+    '是否小程序内打开',
+    getClientInfo().isInMiniProgram,
+  );
+}
+
+/**
  * 客户端信息
  */
 export function getClientInfo() {
