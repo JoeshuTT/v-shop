@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import API_USER from '@/apis/user';
-import { countPair } from '@/utils/format';
-import { mapMatchingProperties } from '@/utils/lodash';
 import { gsap } from 'gsap';
+import { useRouter } from 'vue-router';
+import { onMounted, ref, unref } from 'vue';
+import { countPair } from '@/utils/format';
+import API_USER from '@/apis/user';
 
 const router = useRouter();
 
-let detail = reactive<Recordable>({
-  // balance: 0, 数字动画展示
-  freeze: 0,
-  totleConsumed: 0,
-});
+const detailInfo = ref<Recordable>({ balance: 0, freeze: 0, consumed: 0 });
 
 onMounted(() => {
   getDetail();
@@ -24,8 +19,9 @@ function onCellClicked() {
 
 function getDetail() {
   API_USER.userAmount().then((res) => {
-    gsap.to(detail, { duration: 0.5, balance: Number(res.data.balance) });
-    detail = mapMatchingProperties(detail, res.data);
+    gsap.to(unref(detailInfo), { duration: 0.5, balance: Number(res.data.balance) });
+    detailInfo.value.freeze = res.data.freeze;
+    detailInfo.value.consumed = res.data.totleConsumed;
   });
 }
 </script>
@@ -38,15 +34,15 @@ function getDetail() {
       <div class="amount">
         <div class="amount-item">
           <div class="amount-item-label">可用余额</div>
-          <div class="amount-item-value">{{ countPair(detail.balance) }}</div>
+          <div class="amount-item-value">{{ countPair(detailInfo.balance) }}</div>
         </div>
         <div class="amount-item">
           <div class="amount-item-label">冻结余额</div>
-          <div class="amount-item-value">{{ countPair(detail.freeze) }}</div>
+          <div class="amount-item-value">{{ countPair(detailInfo.freeze) }}</div>
         </div>
         <div class="amount-item">
           <div class="amount-item-label">累计消费</div>
-          <div class="amount-item-value">{{ countPair(detail.totleConsumed) }}</div>
+          <div class="amount-item-value">{{ countPair(detailInfo.totleConsumed) }}</div>
         </div>
       </div>
     </div>
