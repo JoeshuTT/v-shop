@@ -1,3 +1,6 @@
+export * from './clipboard';
+export * from './getBrowserInfo';
+export * from './makePhoneCall';
 export * from './scroll';
 
 export function stopPropagation(event: Event) {
