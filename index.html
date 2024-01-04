@@ -9,9 +9,6 @@
     <%= title %>
   </title>
   <link rel="icon" href="/favicon.ico" />
-  <% if (VITE_MOBILE_CONSOLE=='true' ) { %>
-    <script>(/vconsole=show/.test(location.href) || localStorage.getItem('vconsole') == 'show') && (document.write('<script src="//fastly.jsdelivr.net/npm/vconsole/dist/vconsole.min.js"><\/script>'), document.write("<script>var vConsole = new VConsole();<\/script>"));</script>
-    <% } %>
 </head>
 
 <body>
