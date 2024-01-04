@@ -1,8 +1,7 @@
+import type { App } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import routes from './routes';
 import { setupRouterGuard } from './guard';
-// types
-import type { App } from 'vue';
 
 export const router = createRouter({
   history: createWebHashHistory(),

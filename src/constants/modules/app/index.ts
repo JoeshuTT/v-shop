@@ -78,6 +78,15 @@ export const darkTheme: ITheme = {
 };
 
 /**
+ * pageEnum
+ */
+export const pageEnum = {
+  HOME: '/home',
+  LOGIN: '/login',
+  NO_LOGIN: '/noLogin',
+};
+
+/**
  * 底部导航栏
  */
 export const tabBar = {
