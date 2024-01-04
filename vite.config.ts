@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url';
 import type { UserConfig, ConfigEnv } from 'vite';
-import { loadEnv } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import pkg from './package.json';
 import dayjs from 'dayjs';
 import vue from '@vitejs/plugin-vue';
@@ -32,7 +32,7 @@ const __APP_INFO__ = {
  *
  * @see https://vitejs.dev/config/
  */
-export default ({ mode }: ConfigEnv): UserConfig => {
+export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, root);
 
   return {
@@ -101,4 +101,4 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       },
     },
   };
-};
+});
