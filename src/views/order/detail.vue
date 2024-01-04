@@ -5,20 +5,19 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { onMounted, ref, unref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
 import dayjs from 'dayjs';
+import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
+import { useRoute, useRouter } from 'vue-router';
+import { onMounted, ref, unref, watchEffect } from 'vue';
+import { makePhoneCall, setClipboardData } from '@/utils/web';
 import API_ORDER from '@/apis/order';
-import { setClipboardData } from '@/utils/web/clipboard';
-import { makePhoneCall } from '@/utils/web/makePhoneCall';
-import Price from '@/components/Price/index.vue';
+// components
 import OrderSteps from './components/OrderSteps.vue';
 import OrderRate from './components/OrderRate.vue';
+import Price from '@/components/Price/index.vue';
 import { decimalFormat } from '@/utils/format';
-
+// store
 import { useOrderStore } from '@/store/modules/order';
-import { watchEffect } from 'vue';
 
 onMounted(() => {
   getDetail();
@@ -160,7 +159,6 @@ watchEffect(() => {
     pullRefreshDisabled.value = false;
   }
 });
-// pullRefreshDisabled
 </script>
 
 <template>

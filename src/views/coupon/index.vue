@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { reactive, ref, unref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { onMounted, reactive, ref, unref } from 'vue';
 import API_DISCOUNTS from '@/apis/discounts';
+// components
 import ExchangeCoupon from './components/ExchangeCoupon/index.vue';
+// assets
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/coupon.png';
 
 const router = useRouter();

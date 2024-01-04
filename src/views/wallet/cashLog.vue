@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import API_USER from '@/apis/user';
 import { countPair } from '@/utils/format';
+import API_USER from '@/apis/user';
 import IMAGE_EMPTY_TRADE from '@/assets/images/empty/trade.png';
 
 const list = ref<Recordable[]>([]);

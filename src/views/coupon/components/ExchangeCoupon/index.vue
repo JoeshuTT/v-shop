@@ -5,8 +5,8 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, ref, unref } from 'vue';
 import { showToast, showLoadingToast, closeToast } from 'vant';
+import { computed, ref, unref } from 'vue';
 import API_DISCOUNTS from '@/apis/discounts';
 
 defineProps({

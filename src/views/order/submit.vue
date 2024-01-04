@@ -5,17 +5,18 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, unref } from 'vue';
-import { useRouter } from 'vue-router';
-import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
 import NP from 'number-precision';
+import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
+import { useRouter } from 'vue-router';
+import { computed, onMounted, ref, unref } from 'vue';
 import API_USER from '@/apis/user';
 import API_ORDER from '@/apis/order';
 import API_CART from '@/apis/cart';
 import { decimalFormat, mobileShow } from '@/utils/format';
+// components
 import SelectAddress from './components/SelectAddress.vue';
 import GoodCard from '@/components/GoodCard/index.vue';
-
+// store
 import { useOrderStore } from '@/store/modules/order';
 
 onMounted(() => {

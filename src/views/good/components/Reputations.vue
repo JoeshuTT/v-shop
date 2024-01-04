@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import API_GOODS from '@/apis/goods';
 import { goodReputationModel } from '@/model/modules/good/reputation';
+import API_GOODS from '@/apis/goods';
 
 const props = defineProps({
   goodsId: { type: [String, Number] },

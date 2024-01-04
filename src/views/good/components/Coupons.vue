@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, unref } from 'vue';
 import { showToast, showLoadingToast, closeToast } from 'vant';
+import { onMounted, ref, unref } from 'vue';
 import API_DISCOUNTS from '@/apis/discounts';
 
 defineProps({

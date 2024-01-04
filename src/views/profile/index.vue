@@ -1,12 +1,11 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import { computed, onMounted, ref, unref } from 'vue';
 import { showToast, showLoadingToast, closeToast } from 'vant';
-import API_USER from '@/apis/user';
-import UploadAvatar from '@/components/UploadAvatar/index.vue';
 import { isEmpty } from '@/utils/validate';
 import { assets } from '@/constants';
-
-import { useRouter } from 'vue-router';
+import API_USER from '@/apis/user';
+// store
 import { useUserStore } from '@/store/modules/user';
 
 onMounted(() => {

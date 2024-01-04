@@ -5,17 +5,19 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, unref } from 'vue';
-import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
 import NP from 'number-precision';
+import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
 import { useDebounceFn } from '@vueuse/core';
-import API_CART from '@/apis/cart';
+import { computed, onMounted, ref, unref } from 'vue';
 import { decimalFormat } from '@/utils/format';
+import API_CART from '@/apis/cart';
+// store
+import { useOrderStore } from '@/store/modules/order';
+// hooks
+import { usePage } from '@/hooks/shared/usePage';
+// assets
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/cart.png';
 import ICON_SHOPPING_CART from '@/assets/videos/shopping-cart.mp4';
-
-import { useOrderStore } from '@/store/modules/order';
-import { usePage } from '@/hooks/shared/usePage';
 
 onMounted(() => {
   if (unref(hasLogin)) {

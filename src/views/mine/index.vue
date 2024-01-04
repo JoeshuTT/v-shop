@@ -6,17 +6,21 @@ export default {
 
 <script setup lang="ts">
 import { computed, onMounted, ref, unref } from 'vue';
+import { countPair } from '@/utils/format';
+import { assets } from '@/constants';
 import API_USER from '@/apis/user';
 import API_DISCOUNTS from '@/apis/discounts';
 import API_ORDER from '@/apis/order';
+// components
+import { showClientInfoPopup } from '@/components/AppClientInfoPopup';
 import MineSvgWaveBg from '@/components/MineSvgWaveBg/index.vue';
-import { countPair } from '@/utils/format';
-import { assets } from '@/constants';
+// store
+import { useUserStore } from '@/store/modules/user';
+// hooks
+import { usePage } from '@/hooks/shared/usePage';
+// assets
 import ICON_ART from '@/assets/images/icon_art.png';
 import ICON_DEVICE from '@/assets/images/icon_device.png';
-import { showClientInfoPopup } from '@/components/AppClientInfoPopup';
-import { useUserStore } from '@/store/modules/user';
-import { usePage } from '@/hooks/shared/usePage';
 
 onMounted(() => {
   if (unref(hasLogin)) {

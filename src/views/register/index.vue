@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, unref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import { showToast } from 'vant';
+import { useRoute, useRouter } from 'vue-router';
+import { computed, ref, unref } from 'vue';
 import { isMobile, isPassWord, isSame } from '@/utils/validate';
 import { fakeNickName } from '@/model';
-
+// store
 import { useUserStore } from '@/store/modules/user';
 
 const userStore = useUserStore();

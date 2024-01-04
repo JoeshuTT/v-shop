@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, ref, unref } from 'vue';
 import { useRouter } from 'vue-router';
-import { palettes } from '@/constants/modules/app';
-
-import { useAppStore } from '@/store/modules/app';
-import { usePage } from '@/hooks/shared/usePage';
+import { computed, ref, unref } from 'vue';
 import { getAssetsUrl } from '@/utils';
+import { palettes } from '@/constants/modules/app';
+// store
+import { useAppStore } from '@/store/modules/app';
+// hooks
+import { usePage } from '@/hooks/shared/usePage';
 
 const router = useRouter();
 const appStore = useAppStore();

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, ref, unref } from 'vue';
-import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
-import API_USER from '@/apis/user';
+import { useRouter } from 'vue-router';
+import { computed, ref, unref } from 'vue';
 import { isMobile, isPassWord, isSame } from '@/utils/validate';
+import API_USER from '@/apis/user';
 
 const router = useRouter();
 

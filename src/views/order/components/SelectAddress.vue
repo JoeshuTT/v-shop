@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, unref } from 'vue';
 import { useRouter } from 'vue-router';
-
+import { onMounted, ref, unref } from 'vue';
 import API_USER from '@/apis/user';
 import AddressList from '@/components/AddressList/index.vue';
 

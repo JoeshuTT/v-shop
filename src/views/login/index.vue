@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, unref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import { showToast } from 'vant';
-import { loginProviderType } from '@/constants/modules/user';
+import { useRoute, useRouter } from 'vue-router';
+import { computed, ref, unref } from 'vue';
 import { getClientInfo } from '@/utils';
 import { isMobile } from '@/utils/validate';
-
+import { loginProviderType } from '@/constants/modules/user';
+// store
 import { useUserStore } from '@/store/modules/user';
 
 const userStore = useUserStore();

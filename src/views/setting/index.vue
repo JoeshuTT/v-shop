@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Copyright from '@/components/Copyright';
+import { ref } from 'vue';
 import { getClientInfo } from '@/utils';
 import { useUserStore } from '@/store/modules/user';
 

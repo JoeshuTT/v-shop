@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref, unref } from 'vue';
 import { showToast, showLoadingToast, closeToast } from 'vant';
+import { onMounted, ref, unref } from 'vue';
 import API_USER from '@/apis/user';
 import API_SCORE from '@/apis/score';
-import { scoreDeductionRuleModel } from '@/model/modules/score/deductionRule';
 import { countPair } from '@/utils/format';
+import { scoreDeductionRuleModel } from '@/model/modules/score/deductionRule';
 
 onMounted(() => {
   getDetail();

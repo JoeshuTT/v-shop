@@ -5,12 +5,13 @@ export default {
 </script>
 
 <script setup lang="ts">
-import API_ORDER from '@/apis/order';
-import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { onMounted, ref } from 'vue';
+import { decimalFormat } from '@/utils/format';
+import API_ORDER from '@/apis/order';
+// components
 import IconPaySuccess from '@/components/icons/IconPaySuccess.vue';
 import IconPayFail from '@/components/icons/IconPayFail.vue';
-import { decimalFormat } from '@/utils/format';
 
 onMounted(() => {
   getDetail();
@@ -46,7 +47,7 @@ function getDetail() {
 
 <template>
   <div class="container container-full">
-    <div class="result" v-if="orderInfo.orderNumber">
+    <div v-if="orderInfo.orderNumber" class="result">
       <div class="result-hd">
         <div class="result-icon">
           <template v-if="orderInfo.isPay">
@@ -61,7 +62,7 @@ function getDetail() {
           <div class="result-title-sub">{{ orderInfo.isPay ? '感谢您的支持' : '再试试支付吧' }}</div>
         </div>
       </div>
-      <div class="result-bd" v-if="orderInfo.amountReal">
+      <div v-if="orderInfo.amountReal" class="result-bd">
         <div class="result-merchant">付款给商家</div>
         <div class="result-amount">
           <span class="result-amount-unit">¥</span>

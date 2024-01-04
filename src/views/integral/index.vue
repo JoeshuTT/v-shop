@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
 import { showToast } from 'vant';
-import API_USER from '@/apis/user';
+import { onMounted, ref } from 'vue';
 import { countPair } from '@/utils/format';
-
+import API_USER from '@/apis/user';
 import { usePage } from '@/hooks/shared/usePage';
 
 onMounted(() => {

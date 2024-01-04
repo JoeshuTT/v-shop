@@ -5,18 +5,15 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { reactive, ref, unref } from 'vue';
 import { useRoute } from 'vue-router';
-
+import { onMounted, reactive, ref, unref } from 'vue';
+import { orderListModel } from '@/model/modules/order/list';
 import API_ORDER from '@/apis/order';
 import OrderItem from './components/OrderItem.vue';
-import { orderListModel } from '@/model/modules/order/list';
-import { usePage } from '@/hooks/shared/usePage';
 
 const route = useRoute();
-const { onMountedOrActivated } = usePage();
 
-onMountedOrActivated(() => {
+onMounted(() => {
   const { status } = route.query;
   if (status) {
     active.value = unref(tabList).findIndex((item) => item.status === status);

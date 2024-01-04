@@ -5,20 +5,22 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, unref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import { showConfirmDialog, showToast } from 'vant';
+import { useRoute, useRouter } from 'vue-router';
+import { computed, onMounted, ref, unref } from 'vue';
+import type { shoppingCartAddParams } from '@/apis/cart/types';
+import type { ISku, IInitialSku } from '@/components/Sku/types';
+import { debounce } from '@/utils';
+import { decimalFormat, priceIntegerFormat } from '@/utils/format';
+import { getAfterSaleTitle } from '@/model/modules/order/afterSale';
 import API_GOODS from '@/apis/goods';
 import API_CART from '@/apis/cart';
-import { shoppingCartAddParams } from '@/apis/cart/types';
-import { ISku, IInitialSku } from '@/components/Sku/types';
+// components
 import Coupons from './components/Coupons.vue';
 import Reputations from './components/Reputations.vue';
-import { decimalFormat, priceIntegerFormat } from '@/utils/format';
-import { debounce } from '@/utils';
-import { getAfterSaleTitle } from '@/model/modules/order/afterSale';
-
+// store
 import { useOrderStore } from '@/store/modules/order';
+// hooks
 import { usePage } from '@/hooks/shared/usePage';
 
 onMounted(() => {

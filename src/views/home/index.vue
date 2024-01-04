@@ -5,8 +5,8 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { onMounted, ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { onMounted, reactive, ref } from 'vue';
 import API_GOODS from '@/apis/goods';
 import API_BANNER from '@/apis/banner';
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/good.png';

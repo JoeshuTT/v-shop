@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import type { PropType } from 'vue';
-import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
-import Price from '@/components/Price/index.vue';
+import { useRouter } from 'vue-router';
 import { decimalFormat } from '@/utils/format';
-
+import Price from '@/components/Price/index.vue';
+// store
 import { useOrderStore } from '@/store/modules/order';
 
 defineProps({
-  item: { type: Object as PropType<Recordable>, default: () => {} },
+  item: { type: Object, default: () => {} },
   index: { type: Number, default: 0 },
 });
 const emit = defineEmits(['delete']);
