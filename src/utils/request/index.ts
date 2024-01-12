@@ -18,7 +18,7 @@ const instance: AxiosInstance = axios.create({
   // 基础接口地址
   baseURL: getAPI(),
   // 请求超时事件
-  timeout: 1000 * 5,
+  timeout: 5 * 1000,
   // 使用 form-urlencoded 格式，即伪表单
   headers: {
     'Content-Type': ContentTypeEnum.FORM_URLENCODED,

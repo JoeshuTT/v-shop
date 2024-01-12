@@ -22,7 +22,7 @@ export function serviceErrorHandle(res: ServiceResult) {
     if (requestOptions.errorMessageMode === 'message') {
       showToast({
         message: msg || 'Result Error',
-        duration: 1000 * 3,
+        duration: 3 * 1000,
       });
     }
   }
@@ -70,7 +70,7 @@ export function httpErrorHandle(error: AxiosError) {
     if (requestOptions.networkErrorMessageMode === 'message') {
       showToast({
         message: errMessage,
-        duration: 1000 * 3,
+        duration: 3 * 1000,
       });
     }
   }
