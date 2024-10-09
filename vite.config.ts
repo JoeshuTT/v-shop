@@ -73,9 +73,12 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       chunkSizeWarningLimit: 1500,
       rollupOptions: {
         output: {
-          entryFileNames: `${assetsDir}/[name].${appVersion}.js`,
-          chunkFileNames: `${assetsDir}/[name].${appVersion}.js`,
-          assetFileNames: `${assetsDir}/[ext]/[name].${appVersion}.[ext]`,
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) return 'vendor';
+          },
+          entryFileNames: `${assetsDir}/js/[name].[hash].js`,
+          chunkFileNames: `${assetsDir}/js/[name].[hash].js`,
+          assetFileNames: `${assetsDir}/[ext]/[name].[hash].[ext]`,
         },
       },
     },
