@@ -110,10 +110,11 @@ export default {
         return;
       }
 
-      if (isEmpty(this.form.province)) {
+      if (isEmpty(this.form.provinceCode)) {
         showToast('所在地不能为空');
         return;
       }
+
       if (isEmpty(this.form.address)) {
         showToast('详细地址不能为空');
         return;
