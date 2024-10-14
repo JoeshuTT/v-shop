@@ -1,30 +1,19 @@
-/* Visit https://aka.ms/tsconfig to read more about this file */
 {
   "compilerOptions": {
-    /* Projects */
-    //  ...
+    /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Language and Environment */
     "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "jsx": "preserve",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
 
     /* Modules */
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"]
     },
     "types": ["node", "vite/client"],
-    "resolveJsonModule": true,
-
-    /* JavaScript Support */
-    // ...
-
-    /* Emit */
-    "sourceMap": true,
-    "removeComments": true,
 
     /* Interop Constraints */
     "esModuleInterop": true,
@@ -33,22 +22,10 @@
     /* Type Checking */
     "strict": true,
     "noImplicitAny": false,
-    "strictFunctionTypes": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
 
     /* Completeness */
     "skipLibCheck": true
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "build/**/*.ts",
-    "build/**/*.d.ts",
-    "mock/**/*.ts",
-    "vite.config.*"
-  ],
-  "exclude": ["node_modules", "dist", "**/*.js"]
+  "include": ["mock/*.ts", "src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "types/*.d.ts", "vite.config.*"],
+  "exclude": ["dist", "**/*.js", "node_modules"]
 }

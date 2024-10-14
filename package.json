@@ -1,10 +1,9 @@
 {
   "name": "v-shop",
-  "version": "3.5.1",
+  "version": "3.6.1",
   "private": true,
   "engines": {
-    "node": ">= 16",
-    "pnpm": ">= 8"
+    "node": ">= 18"
   },
   "scripts": {
     "dev": "vite",
@@ -12,8 +11,8 @@
     "build:test": "vite build --mode test",
     "preview": "vite preview",
     "type:check": "vue-tsc --noEmit --skipLibCheck",
-    "lint:eslint": "eslint --cache --max-warnings 0  \"{src,mock}/**/*.{vue,js,jsx,ts,tsx}\" --fix",
-    "lint:prettier": "prettier --write  \"src/**/*.{js,jsx,json,tsx,css,less,scss,vue,html,md}\""
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "@vant/area-data": "^1.3.1",
@@ -33,32 +32,29 @@
     "vue-router": "^4.1.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.10",
-    "@babel/eslint-parser": "^7.18.9",
-    "@types/node": "^18.7.5",
+    "@babel/core": "^7.22.9",
+    "@babel/eslint-parser": "^7.22.9",
+    "@types/node": "^18",
     "@types/qs": "^6.9.7",
-    "@typescript-eslint/eslint-plugin": "^5.33.1",
-    "@typescript-eslint/parser": "^5.33.1",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
     "@vitejs/plugin-legacy": "^4.0.2",
     "@vitejs/plugin-vue": "^4.1.0",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
-    "@vue/eslint-config-typescript": "^11.0.0",
+    "@vue/eslint-config-typescript": "^11.0.2",
     "autoprefixer": "^10.4.8",
-    "eslint": "^8.22.0",
-    "eslint-config-alloy": "^4.6.2",
-    "eslint-define-config": "^1.6.0",
-    "eslint-plugin-vue": "^9.3.0",
+    "eslint": "^8.45.0",
+    "eslint-config-alloy": "^5.1.2",
+    "eslint-plugin-vue": "^9.28.0",
     "less": "^4.1.3",
     "postcss": "^8.4.16",
-    "postcss-mobile-forever": "^3.3.2",
     "postcss-px-to-viewport": "^1.1.1",
     "prettier": "^2.7.1",
-    "terser": "^5.16.9",
-    "typescript": "^4.7.4",
+    "typescript": "^5",
     "unplugin-vue-components": "^0.22.9",
-    "vite": "^4.2.1",
+    "vite": "^4.2.1", 
     "vite-plugin-html": "^3.2.0",
-    "vue-eslint-parser": "^9.0.3",
-    "vue-tsc": "^0.31.4"
+    "vue-eslint-parser": "^9.4.3",
+    "vue-tsc": "^1.2.0"
   }
 }

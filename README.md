@@ -13,13 +13,12 @@ v-shop 是一个前端免费开源的企业级移动端（H5）商城，使用 `
 - 🍭 使用 [TypeScript](https://github.com/microsoft/TypeScript) 开发
 - 🍭 使用 [AlloyTeam ESLint](https://github.com/AlloyTeam/eslint-config-alloy) 规则， 规范项目代码
 - 🍭 支持页面栈导航体验，使用 [vue-page-stack-router](https://github.com/JoeshuTT/vue-page-stack-router)实现
-- 🍭 使用 [postcss-mobile-forever](https://github.com/wswmsword/postcss-mobile-forever) 限制视口单位最大值，提升桌面端可访问性
 - 🎨 支持动态切换主题，支持动态加载移动端调试面板（vconsole、eruda），支持获取设备信息
 
 ## 🔥 预览
 
-- :tada: v2 [Vue 2 + Vue CLI 4.5](https://v-shop.shuzp.top/v2/)
-- :rocket: v3 [Vue 3 + Vite 2](https://v-shop.shuzp.top/)
+- :rocket: v3 [Vue 3 + Vite 4](https://v-shop.shuzp.top/) （推荐，长期更新）
+- :tada: v2 [Vue 2 + Vue CLI 4.5](https://v-shop.shuzp.top/v2/)（不推荐，仅存档）
 
 ## 🛠️ 产品
 
@@ -51,7 +50,7 @@ v-shop 是一个前端免费开源的企业级移动端（H5）商城，使用 `
 
 ## 🔨 使用
 
-> [Node.js](https://nodejs.org/) 版本需要在 `16.x` 以上
+> [Node.js](https://nodejs.org/) 版本需要在 `18.x` 以上
 
 获取项目代码
 

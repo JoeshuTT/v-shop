@@ -2,6 +2,20 @@
 
 > 记录下重大改动
 
+## v3.5.1(2024-10)
+
+主要改动
+
+- 项目运行需要 [Node.js](https://nodejs.org/) 版本 18+
+- `typescript` 升级到 5.x 版本
+  - types 目录调整
+  - tsconfig.json 配置调整
+- 项目配置文件调整
+- `eslint-config-alloy` 升级到 5.x 版本， 更新相关依赖包版本
+- todo:
+- 优化代码逻辑和其他细节完善
+- 修复一些 bug
+
 ## v3.5.1(2023-05-17)
 
 主要改动

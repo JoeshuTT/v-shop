@@ -1,23 +1,16 @@
 {
   // editor
+  "editor.tabSize": 2,
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.inlayHints.enabled": "off",
-  "volar.inlayHints.eventArgumentInInlineHandlers": false,
-  // eslint
-  "eslint.validate": ["javascript", "javascriptreact", "vue", "typescript", "typescriptreact"],
-  // typescript
-  "typescript.tsdk": "node_modules/typescript/lib",
-  // 内联参数显示提示
+  // inlayHints
   "javascript.inlayHints.parameterNames.enabled": "all",
   "typescript.inlayHints.parameterNames.enabled": "all",
-  //
-
-  //
+  // spell check
   "cSpell.words": [
     "avic",
     "browserslist",
@@ -48,5 +41,13 @@
     "vitejs",
     "vueuse",
     "vuex"
+  ],
+  "cSpell.ignorePaths": [
+    "pnpm-lock.yaml",
+    "node_modules",
+    "vscode-extension",
+    ".git/objects",
+    ".vscode",
+    ".vscode-insiders"
   ]
 }

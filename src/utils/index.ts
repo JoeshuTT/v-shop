@@ -51,7 +51,7 @@ export function getURLParameters(url: string): Record<string, string> {
   const matchList = href.match(reg) || [];
   const obj = {};
 
-  matchList.forEach((v) => {
+  matchList.forEach((v: any) => {
     obj[v.slice(0, v.indexOf('='))] = decodeURIComponent(v.slice(v.indexOf('=') + 1));
   });
 
