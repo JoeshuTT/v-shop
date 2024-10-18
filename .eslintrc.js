@@ -15,19 +15,16 @@ module.exports = {
   },
   env: {
     browser: true,
-    node: true,
   },
   globals: {
-    uni: true,
     wx: true,
   },
   rules: {
-    // 自定义你的规则
+    // eslint
     'no-console': 'off',
-    // js 和 ts 的规则重合
-    'no-undef': 'off',
     // @typescript-eslint
     '@typescript-eslint/prefer-optional-chain': 'off',
+    '@typescript-eslint/consistent-type-assertions': 'off',
     // vue
     'vue/no-duplicate-attributes': [
       'error',

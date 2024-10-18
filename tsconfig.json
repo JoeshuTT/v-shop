@@ -2,11 +2,10 @@
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
-    /* Language and Environment */
     "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-
-    /* Modules */
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "baseUrl": "./",
@@ -14,18 +13,11 @@
       "@/*": ["./src/*"]
     },
     "types": ["node", "vite/client"],
-
-    /* Interop Constraints */
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-
-    /* Type Checking */
     "strict": true,
-    "noImplicitAny": false,
-
-    /* Completeness */
     "skipLibCheck": true
   },
-  "include": ["mock/*.ts", "src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "types/*.d.ts", "vite.config.*"],
+  "include": ["mock/*.ts", "vite.config.*", "src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "types/*.d.ts"],
   "exclude": ["dist", "**/*.js", "node_modules"]
 }

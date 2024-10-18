@@ -7,10 +7,7 @@
     "source.fixAll.stylelint": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  // inlayHints
-  "javascript.inlayHints.parameterNames.enabled": "all",
-  "typescript.inlayHints.parameterNames.enabled": "all",
-  // spell check
+  // cSpell
   "cSpell.words": [
     "avic",
     "browserslist",
