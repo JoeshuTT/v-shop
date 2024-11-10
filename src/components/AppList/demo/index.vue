@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 onMounted(() => {
   loadList();
@@ -35,7 +35,9 @@ function loadList() {
           </div>
         </AppList>
       </van-tab>
-      <van-tab title="滚动加载"> ... </van-tab>
+      <van-tab title="滚动加载">
+        ...
+      </van-tab>
     </van-tabs>
   </div>
 </template>

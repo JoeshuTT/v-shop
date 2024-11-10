@@ -10,7 +10,7 @@ defineProps({
 const emit = defineEmits(['update:show', 'success']);
 
 const popupStyle = {
-  display: 'flex',
+  'display': 'flex',
   'flex-direction': 'column',
   'align-items': 'stretch',
   'font-size': '14px',
@@ -37,12 +37,18 @@ defineExpose({
 
 <template>
   <van-popup :show="show" round closeable position="bottom" :style="popupStyle" @update:show="updateShow">
-    <div class="steps-header">订单跟踪</div>
+    <div class="steps-header">
+      订单跟踪
+    </div>
     <div class="steps-body">
       <van-steps direction="vertical" :active="list.length - 1">
         <van-step v-for="(item, index) in list" :key="index">
-          <div class="steps-item-label">{{ item.typeStr }}</div>
-          <div class="steps-item-time">{{ item.dateAdd }}</div>
+          <div class="steps-item-label">
+            {{ item.typeStr }}
+          </div>
+          <div class="steps-item-time">
+            {{ item.dateAdd }}
+          </div>
         </van-step>
       </van-steps>
     </div>

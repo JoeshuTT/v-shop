@@ -1,27 +1,22 @@
-<script lang="ts">
-export default {
-  name: 'GoodDetail',
-};
-</script>
-
 <script setup lang="ts">
-import { showConfirmDialog, showToast } from 'vant';
-import { useRoute, useRouter } from 'vue-router';
-import { computed, onMounted, ref, unref } from 'vue';
 import type { shoppingCartAddParams } from '@/apis/cart/types';
-import type { ISku, IInitialSku } from '@/components/Sku/types';
+import type { IInitialSku, ISku } from '@/components/Sku/types';
+import API_CART from '@/apis/cart';
+import API_GOODS from '@/apis/goods';
+import { usePage } from '@/hooks/shared/usePage';
+import { getAfterSaleTitle } from '@/model/modules/order/afterSale';
+import { useOrderStore } from '@/store/modules/order';
 import { debounce } from '@/utils';
 import { decimalFormat, priceIntegerFormat } from '@/utils/format';
-import { getAfterSaleTitle } from '@/model/modules/order/afterSale';
-import API_GOODS from '@/apis/goods';
-import API_CART from '@/apis/cart';
-// components
+import { showConfirmDialog, showToast } from 'vant';
+import { computed, onMounted, ref, unref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import Coupons from './components/Coupons.vue';
 import Reputations from './components/Reputations.vue';
-// store
-import { useOrderStore } from '@/store/modules/order';
-// hooks
-import { usePage } from '@/hooks/shared/usePage';
+
+defineOptions({
+  name: 'GoodDetail',
+});
 
 onMounted(() => {
   getGoodsDetail();
@@ -245,7 +240,9 @@ function addCartHandle() {
       </div>
       <div class="desc">
         <div class="desc-hd">
-          <div class="desc-title van-multi-ellipsis--l2">{{ basicInfo.name }}</div>
+          <div class="desc-title van-multi-ellipsis--l2">
+            {{ basicInfo.name }}
+          </div>
           <div v-if="basicInfo.characteristic" class="desc-brief">
             {{ basicInfo.characteristic }}
           </div>
@@ -257,29 +254,39 @@ function addCartHandle() {
         {{ goodDeliveryTitle }}
       </div>
       <!-- <div class="stock-item">购买：{{ basicInfo.numberSells }}</div> -->
-      <div class="stock-item">剩余 {{ basicInfo.stores }}</div>
+      <div class="stock-item">
+        剩余 {{ basicInfo.stores }}
+      </div>
     </div>
     <Coupons title="领券" />
     <van-cell>
       <template #title>
         <div class="cell-bar">
-          <div class="cell-bar-title">服务</div>
-          <div class="cell-bar-text">{{ afterSaleTitle }}</div>
+          <div class="cell-bar-title">
+            服务
+          </div>
+          <div class="cell-bar-text">
+            {{ afterSaleTitle }}
+          </div>
         </div>
       </template>
     </van-cell>
     <van-cell v-if="hasSku" :border="false" is-link @click="onSkuShow">
       <template #title>
         <div class="cell-bar">
-          <div class="cell-bar-title">{{ initialSku.selectedPropList.length ? '已选' : '选择' }}</div>
-          <div class="cell-bar-text">{{ goodSelectedSkuTitle }}</div>
+          <div class="cell-bar-title">
+            {{ initialSku.selectedPropList.length ? '已选' : '选择' }}
+          </div>
+          <div class="cell-bar-text">
+            {{ goodSelectedSkuTitle }}
+          </div>
         </div>
       </template>
     </van-cell>
     <Reputations v-if="basicInfo.id" class="mt10" :goods-id="basicInfo.id" />
     <Plate title="商品详情" class="mt10" />
-    <div class="goods-content" v-html="content"></div>
-    <div class="action-bar-perch"></div>
+    <div class="goods-content" v-html="content" />
+    <div class="action-bar-perch" />
     <!-- 商品导航栏 -->
     <van-action-bar>
       <van-action-bar-icon icon="thumb-circle-o" text="首页" to="/home" replace />

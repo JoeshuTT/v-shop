@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { reactive, unref, watch } from 'vue';
-import { showToast } from 'vant';
 import API_VERIFICATION from '@/apis/verification';
-import { sms } from '@/constants/modules/user';
-import { isMobile } from '@/utils/validate';
-import { useCountDown } from '@/hooks/shared/useCountDown';
 import { app as appConfig } from '@/constants/modules/app';
+import { sms } from '@/constants/modules/user';
+import { useCountDown } from '@/hooks/shared/useCountDown';
+import { isMobile } from '@/utils/validate';
+import { showToast } from 'vant';
+import { reactive, unref, watch } from 'vue';
 
 const props = defineProps({
   mobile: [String, Number],

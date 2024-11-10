@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { showToast } from 'vant';
-import { useRoute, useRouter } from 'vue-router';
-import { computed, ref, unref } from 'vue';
+import { loginProviderType } from '@/constants/modules/user';
+import { useUserStore } from '@/store/modules/user';
 import { getClientInfo } from '@/utils';
 import { isMobile } from '@/utils/validate';
-import { loginProviderType } from '@/constants/modules/user';
-// store
-import { useUserStore } from '@/store/modules/user';
+import { showToast } from 'vant';
+import { computed, ref, unref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const route = useRoute();
@@ -85,11 +84,17 @@ function onSubmit() {
 <template>
   <div class="container">
     <div class="main">
-      <div class="h2">{{ loginProvider.h2 }}</div>
-      <div class="safe-tips">为了你的帐号安全，请用手机号登录</div>
+      <div class="h2">
+        {{ loginProvider.h2 }}
+      </div>
+      <div class="safe-tips">
+        为了你的帐号安全，请用手机号登录
+      </div>
       <form class="form">
         <div class="form-item">
-          <div class="form-item-country">中国 +86</div>
+          <div class="form-item-country">
+            中国 +86
+          </div>
           <van-field
             v-model="mobile"
             class="form-field"
@@ -99,7 +104,7 @@ function onSubmit() {
             autocomplete="username"
             clearable
           />
-          <input type="text" hidden autocomplete="username" />
+          <input type="text" hidden autocomplete="username">
         </div>
         <div v-if="loginType === 'system'" class="form-item">
           <PwdField
@@ -131,8 +136,9 @@ function onSubmit() {
           loading-text="登录中..."
           type="primary"
           @click="onSubmit"
-          >登录</van-button
         >
+          登录
+        </van-button>
       </form>
       <div class="check-type">
         <div class="check-type-hd">
@@ -150,9 +156,7 @@ function onSubmit() {
     <div class="footer">
       <div class="footer-agreement">
         <van-checkbox v-model="agree" icon-size="16px" />
-        <span> 阅读并同意</span><a href="javascript:void(0);">《用户协议》</a>和<a href="javascript:void(0);"
-          >《隐私政策》</a
-        >
+        <span> 阅读并同意</span><a href="javascript:void(0);">《用户协议》</a>和<a href="javascript:void(0);">《隐私政策》</a>
       </div>
     </div>
   </div>

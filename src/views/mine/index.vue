@@ -1,26 +1,19 @@
 <script lang="ts">
-export default {
-  name: 'Mine',
-};
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, unref } from 'vue';
-import { countPair } from '@/utils/format';
-import { assets } from '@/constants';
-import API_USER from '@/apis/user';
 import API_DISCOUNTS from '@/apis/discounts';
 import API_ORDER from '@/apis/order';
-// components
-import { showClientInfoPopup } from '@/components/AppClientInfoPopup';
-import MineSvgWaveBg from '@/components/MineSvgWaveBg/index.vue';
-// store
-import { useUserStore } from '@/store/modules/user';
-// hooks
-import { usePage } from '@/hooks/shared/usePage';
-// assets
+import API_USER from '@/apis/user';
 import ICON_ART from '@/assets/images/icon_art.png';
 import ICON_DEVICE from '@/assets/images/icon_device.png';
+import { showClientInfoPopup } from '@/components/AppClientInfoPopup';
+import MineSvgWaveBg from '@/components/MineSvgWaveBg/index.vue';
+import { assets } from '@/constants';
+import { usePage } from '@/hooks/shared/usePage';
+import { useUserStore } from '@/store/modules/user';
+import { countPair } from '@/utils/format';
+import { computed, onMounted, ref, unref } from 'vue';
 
 onMounted(() => {
   if (unref(hasLogin)) {
@@ -135,7 +128,9 @@ function getCounts() {
   <div class="container">
     <div class="header">
       <div v-if="hasLogin" class="header-inner" @click="goPage('/profile')">
-        <div class="header-tag">个人资料</div>
+        <div class="header-tag">
+          个人资料
+        </div>
         <van-image class="header-avatar" :src="userInfo.avatarUrl || assets.avatar" alt="" @click.stop="onEasterEgg" />
         <div class="header-info">
           <div class="header-nick van-ellipsis mb10">
@@ -154,7 +149,9 @@ function getCounts() {
       <div v-else class="header-inner" @click="goLogin">
         <van-image class="header-avatar" :src="assets.avatar" alt="" @click.stop="onEasterEgg" />
         <div class="header-info">
-          <div class="header-nick">登录/注册</div>
+          <div class="header-nick">
+            登录/注册
+          </div>
         </div>
       </div>
       <div class="header-bg">
@@ -164,28 +161,42 @@ function getCounts() {
       </div>
     </div>
     <div class="main">
-      <div class="group"></div>
+      <div class="group" />
       <!-- 我的钱包 -->
       <div class="group">
         <div class="count-list">
           <div class="count-list-item" @click="goPage('/integral')">
-            <div class="count-list-item-value">{{ countPair(score, 0) }}</div>
-            <div class="count-list-item-label">积分</div>
+            <div class="count-list-item-value">
+              {{ countPair(score, 0) }}
+            </div>
+            <div class="count-list-item-label">
+              积分
+            </div>
           </div>
           <div class="count-list-item" @click="goPage('/coupon')">
-            <div class="count-list-item-value">{{ countPair(couponCanUse, 0) }}</div>
-            <div class="count-list-item-label">优惠券</div>
+            <div class="count-list-item-value">
+              {{ countPair(couponCanUse, 0) }}
+            </div>
+            <div class="count-list-item-label">
+              优惠券
+            </div>
           </div>
           <div class="count-list-item" @click="goPage('/wallet')">
-            <div class="count-list-item-value">{{ countPair(balance) }}</div>
-            <div class="count-list-item-label">余额</div>
+            <div class="count-list-item-value">
+              {{ countPair(balance) }}
+            </div>
+            <div class="count-list-item-label">
+              余额
+            </div>
           </div>
         </div>
       </div>
       <!-- 订单 -->
       <div class="group">
         <div class="group-header van-hairline--bottom" @click="goPage('/order/list')">
-          <div class="group-header-hd">我的订单</div>
+          <div class="group-header-hd">
+            我的订单
+          </div>
           <div class="group-header-bd">
             <span class="group-header-txt">查看全部订单</span>
             <van-icon class="group-header-arrow" name="arrow" />
@@ -194,19 +205,25 @@ function getCounts() {
         <div class="order-list">
           <div v-for="(item, index) in orderList" :key="index" class="order-list-item" @click="goPage(item.path)">
             <van-icon class="order-list-item-icon" :name="item.icon" :badge="item.count" />
-            <div class="order-list-item-title">{{ item.label }}</div>
+            <div class="order-list-item-title">
+              {{ item.label }}
+            </div>
           </div>
         </div>
       </div>
       <!-- 常用功能 -->
       <div class="group">
         <div class="group-header van-hairline--bottom">
-          <div class="group-header-hd">常用功能</div>
+          <div class="group-header-hd">
+            常用功能
+          </div>
         </div>
         <div class="tool-list">
           <div v-for="(item, index) in toolList" :key="index" class="tool-list-item" @click="onToolClicked(item)">
             <van-icon class="tool-list-item-icon" :name="item.icon" :badge="item.count" />
-            <div class="tool-list-item-title">{{ item.title }}</div>
+            <div class="tool-list-item-title">
+              {{ item.title }}
+            </div>
           </div>
         </div>
       </div>

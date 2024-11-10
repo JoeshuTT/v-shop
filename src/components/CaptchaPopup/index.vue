@@ -1,13 +1,8 @@
-<script lang="ts">
-export default {
-  name: 'Captcha',
-};
-</script>
 <script setup lang="ts">
-import { computed, ref, unref, watch } from 'vue';
-import { showToast } from 'vant';
-import { rpx2px, throttle } from '@/utils';
 import API_VERIFICATION from '@/apis/verification';
+import { rpx2px, throttle } from '@/utils';
+import { showToast } from 'vant';
+import { computed, ref, unref, watch } from 'vue';
 
 const props = defineProps({
   show: {
@@ -19,7 +14,7 @@ const props = defineProps({
 const emit = defineEmits(['confirm', 'update:show']);
 
 const popupStyle = {
-  width: '80%',
+  'width': '80%',
   'border-radius': '4px',
 };
 const requestId = ref('');
@@ -87,7 +82,9 @@ defineExpose({
       <van-icon class="captcha-popup-close-icon" name="cross" />
     </div>
     <div class="captcha-container">
-      <div class="captcha-header van-hairline--bottom">请完成安全验证</div>
+      <div class="captcha-header van-hairline--bottom">
+        请完成安全验证
+      </div>
       <div class="captcha-body">
         <div class="captcha-code">
           <van-field
@@ -98,16 +95,17 @@ defineExpose({
             class="captcha-field"
             type="text"
             focus
-          >
-          </van-field>
+          />
           <img
             class="captcha-img"
-            :style="[{ width: codeWidth + 'px', background: '#eee' }]"
+            :style="[{ width: `${codeWidth}px`, background: '#eee' }]"
             :src="pic"
             @click="onRefresh"
-          />
+          >
         </div>
-        <div class="tips" @click="onRefresh">看不清，换一张</div>
+        <div class="tips" @click="onRefresh">
+          看不清，换一张
+        </div>
         <div class="captcha-footer">
           <van-button class="captcha-btn" block :disabled="!submitted" type="primary" @click="onSubmit">
             确认发送

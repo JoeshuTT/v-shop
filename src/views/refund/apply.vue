@@ -1,84 +1,6 @@
-<template>
-  <div class="container">
-    <div v-if="refundApplyInfo.baseInfo" class="header">
-      <div class="header-title">{{ refundApplyInfo.baseInfo.statusStr }}</div>
-    </div>
-    <div class="main">
-      <van-radio-group v-model="type">
-        <van-cell-group title="选择服务类型">
-          <van-cell
-            v-for="(item, index) in typeItems"
-            :key="index"
-            :title="item.name"
-            @click="onChangeType(item.value)"
-          >
-            <van-radio :name="item.value" />
-          </van-cell>
-        </van-cell-group>
-      </van-radio-group>
-      <van-radio-group v-model="logisticsStatus" class="mb20">
-        <van-cell-group title="选择货物状态">
-          <van-cell
-            v-for="(item, index) in logisticsStatusItems"
-            :key="index"
-            :title="item.name"
-            @click="onChangeType(item.value)"
-          >
-            <van-radio :name="item.value" />
-          </van-cell>
-        </van-cell-group>
-      </van-radio-group>
-      <van-field
-        readonly
-        clickable
-        label="售后原因"
-        :model-value="reason"
-        placeholder="退换货原因"
-        @click="showPicker = true"
-      />
-      <van-field v-if="type !== 2" v-model="amount" type="number" label="退款金额" />
-      <van-field v-model="remark" label="售后说明" type="textarea" placeholder="请输入退款说明" rows="1" autosize />
-      <!-- 上传图片(空间有限省略) -->
-      <div class="affix-bar">
-        <div class="affix-bar__bar">
-          <template v-if="refundApplyInfo.baseInfo">
-            <van-button v-if="refundApplyInfo.baseInfo.status === 0" block type="primary" @click="onRefundApplyCancel">
-              撤回本次申请
-            </van-button>
-            <van-button v-if="refundApplyInfo.baseInfo.status === 1" block type="primary" @click="onRefundApplySubmit">
-              申请售后
-            </van-button>
-            <van-button
-              v-if="refundApplyInfo.baseInfo.status === 2"
-              square
-              size="large"
-              type="primary"
-              @click="onRefundApplySubmit"
-            >
-              再次申请，或联系客服
-            </van-button>
-            <van-button v-if="refundApplyInfo.baseInfo.status === 3" square size="large" type="info" disabled>
-              等待处理
-            </van-button>
-            <van-button v-if="refundApplyInfo.baseInfo.status === 4" square size="large" type="primary" disabled>
-              处理完毕
-            </van-button>
-          </template>
-          <template v-else>
-            <van-button square block type="primary" @click="onRefundApplySubmit">立即申请售后</van-button>
-          </template>
-        </div>
-      </div>
-      <van-popup v-model:show="showPicker" position="bottom">
-        <van-picker show-toolbar :columns="reasonItems" @cancel="showPicker = false" @confirm="onConfirm" />
-      </van-popup>
-    </div>
-  </div>
-</template>
-
 <script>
-import { showToast, showConfirmDialog } from 'vant';
 import API_ORDER from '@/apis/order';
+import { showConfirmDialog, showToast } from 'vant';
 
 export default {
   data() {
@@ -202,6 +124,88 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="container">
+    <div v-if="refundApplyInfo.baseInfo" class="header">
+      <div class="header-title">
+        {{ refundApplyInfo.baseInfo.statusStr }}
+      </div>
+    </div>
+    <div class="main">
+      <van-radio-group v-model="type">
+        <van-cell-group title="选择服务类型">
+          <van-cell
+            v-for="(item, index) in typeItems"
+            :key="index"
+            :title="item.name"
+            @click="onChangeType(item.value)"
+          >
+            <van-radio :name="item.value" />
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
+      <van-radio-group v-model="logisticsStatus" class="mb20">
+        <van-cell-group title="选择货物状态">
+          <van-cell
+            v-for="(item, index) in logisticsStatusItems"
+            :key="index"
+            :title="item.name"
+            @click="onChangeType(item.value)"
+          >
+            <van-radio :name="item.value" />
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
+      <van-field
+        readonly
+        clickable
+        label="售后原因"
+        :model-value="reason"
+        placeholder="退换货原因"
+        @click="showPicker = true"
+      />
+      <van-field v-if="type !== 2" v-model="amount" type="number" label="退款金额" />
+      <van-field v-model="remark" label="售后说明" type="textarea" placeholder="请输入退款说明" rows="1" autosize />
+      <!-- 上传图片(空间有限省略) -->
+      <div class="affix-bar">
+        <div class="affix-bar__bar">
+          <template v-if="refundApplyInfo.baseInfo">
+            <van-button v-if="refundApplyInfo.baseInfo.status === 0" block type="primary" @click="onRefundApplyCancel">
+              撤回本次申请
+            </van-button>
+            <van-button v-if="refundApplyInfo.baseInfo.status === 1" block type="primary" @click="onRefundApplySubmit">
+              申请售后
+            </van-button>
+            <van-button
+              v-if="refundApplyInfo.baseInfo.status === 2"
+              square
+              size="large"
+              type="primary"
+              @click="onRefundApplySubmit"
+            >
+              再次申请，或联系客服
+            </van-button>
+            <van-button v-if="refundApplyInfo.baseInfo.status === 3" square size="large" type="info" disabled>
+              等待处理
+            </van-button>
+            <van-button v-if="refundApplyInfo.baseInfo.status === 4" square size="large" type="primary" disabled>
+              处理完毕
+            </van-button>
+          </template>
+          <template v-else>
+            <van-button square block type="primary" @click="onRefundApplySubmit">
+              立即申请售后
+            </van-button>
+          </template>
+        </div>
+      </div>
+      <van-popup v-model:show="showPicker" position="bottom">
+        <van-picker show-toolbar :columns="reasonItems" @cancel="showPicker = false" @confirm="onConfirm" />
+      </van-popup>
+    </div>
+  </div>
+</template>
 
 <style lang="less" scoped>
 .van-radio {

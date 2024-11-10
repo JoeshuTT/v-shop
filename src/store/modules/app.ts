@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia';
-import { store } from '@/store';
-import { theme, tabBar } from '@/constants/modules/app';
 import type { ITheme } from '@/constants/modules/app/types';
-import { goodStorage, getClientInfo, deepClone, fromCamelCase } from '@/utils';
+import { tabBar, theme } from '@/constants/modules/app';
+import { store } from '@/store';
+import { deepClone, fromCamelCase, getClientInfo, goodStorage } from '@/utils';
 import { appendStyle } from '@/utils/web';
+import { defineStore } from 'pinia';
 
 export interface AppStore {
   theme: NonNullable<ITheme>;
@@ -17,8 +17,8 @@ export const useAppStore = defineStore({
     tabBar,
   }),
   getters: {
-    getTheme: (state) => state.theme,
-    getTabBar: (state) => state.tabBar,
+    getTheme: state => state.theme,
+    getTabBar: state => state.tabBar,
   },
   actions: {
     async updateTheme(payload: Recordable = {}) {
@@ -36,10 +36,10 @@ export const useAppStore = defineStore({
 
       // 生成主题变量
       const colorVarList = Object.keys(myTheme.colors).map(
-        (key) => `--color-${fromCamelCase(key, '-')}: ${myTheme.colors[key]};`,
+        key => `--color-${fromCamelCase(key, '-')}: ${myTheme.colors[key]};`,
       );
       const vanVarList = Object.keys(myTheme.vanThemeOverrides).map(
-        (key) =>
+        key =>
           `--van-${fromCamelCase(key, '-')}: ${
             myTheme.colors[myTheme.vanThemeOverrides[key]] ?? myTheme.vanThemeOverrides[key]
           };`,

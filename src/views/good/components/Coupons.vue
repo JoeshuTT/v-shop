@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { showToast, showLoadingToast, closeToast } from 'vant';
-import { onMounted, ref, unref } from 'vue';
 import API_DISCOUNTS from '@/apis/discounts';
+import { closeToast, showLoadingToast, showToast } from 'vant';
+import { onMounted, ref, unref } from 'vue';
 
 defineProps({
   title: { type: String },
@@ -90,16 +90,24 @@ defineExpose({
     <van-cell v-if="couponList.length" class="mb10" :title="title" is-link @click="open" />
     <!-- 弹层 -->
     <van-popup v-model:show="show" round closeable position="bottom">
-      <div class="coupons-header van-hairline--bottom">优惠券</div>
+      <div class="coupons-header van-hairline--bottom">
+        优惠券
+      </div>
       <div class="coupons-body">
         <div class="coupon-list">
           <div v-for="(item, index) in couponList" :key="item.id" class="coupon-list-item">
             <div class="coupon-list-item-hd">
-              <div class="coupon-list-item-money"><span class="fz12">¥</span>{{ item.moneyMin }}</div>
-              <div class="coupon-list-item-moneyHreshold">满{{ item.moneyHreshold }}元可用</div>
+              <div class="coupon-list-item-money">
+                <span class="fz12">¥</span>{{ item.moneyMin }}
+              </div>
+              <div class="coupon-list-item-moneyHreshold">
+                满{{ item.moneyHreshold }}元可用
+              </div>
             </div>
             <div class="coupon-list-item-bd">
-              <div class="coupon-list-item-name">{{ item.moneyMin }}元券</div>
+              <div class="coupon-list-item-name">
+                {{ item.moneyMin }}元券
+              </div>
               <div v-if="item.dateEndType === 0" class="coupon-list-item-dateEndDays">
                 领取后 {{ item.dateEnd.slice(0, 10) }} 到期
               </div>
@@ -107,12 +115,16 @@ defineExpose({
                 领取后 {{ item.dateEndDays }} 天后到期
               </div>
             </div>
-            <div class="coupon-list-item-btn" @click="onItemClicked(index)">立即领取</div>
+            <div class="coupon-list-item-btn" @click="onItemClicked(index)">
+              立即领取
+            </div>
           </div>
         </div>
       </div>
       <div class="coupons-footer" @click="close">
-        <van-button type="primary" round block @click="close">完成</van-button>
+        <van-button type="primary" round block @click="close">
+          完成
+        </van-button>
       </div>
     </van-popup>
   </div>

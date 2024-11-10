@@ -1,4 +1,4 @@
-import { nextTick, onMounted, onActivated } from 'vue';
+import { nextTick, onActivated, onMounted } from 'vue';
 
 /**
  * 注册一个回调函数，在组件 `onMounted` 或者 `onActivated` 之后执行 (只会执行一次)

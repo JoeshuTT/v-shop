@@ -13,7 +13,7 @@
       stroke-width="0"
       fill="#ffffffff"
       class="transition-all duration-300 ease-in-out delay-150 path-0"
-    ></path>
+    />
   </svg>
 </template>
 

@@ -1,5 +1,5 @@
-import { createApp, reactive, getCurrentInstance } from 'vue';
 import type { ComponentPublicInstance } from 'vue';
+import { createApp, getCurrentInstance, reactive } from 'vue';
 import Popup from './index.vue';
 
 // types
@@ -52,11 +52,11 @@ function initInstance() {
   // };
 }
 
-export const closeClientInfoPopup = () => {
+export function closeClientInfoPopup() {
   if (instance) {
     instance.toggle(false);
   }
-};
+}
 
 export function showClientInfoPopup() {
   if (!instance) {

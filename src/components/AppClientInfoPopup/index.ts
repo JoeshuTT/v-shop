@@ -2,4 +2,4 @@ import AppClientInfoPopup from './index.vue';
 
 export default AppClientInfoPopup;
 
-export { showClientInfoPopup, closeClientInfoPopup } from './functionCall';
+export { closeClientInfoPopup, showClientInfoPopup } from './functionCall';

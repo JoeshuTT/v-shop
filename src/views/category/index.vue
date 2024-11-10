@@ -1,14 +1,12 @@
-<script lang="ts">
-export default {
-  name: 'Category',
-};
-</script>
-
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { onMounted, reactive, ref, unref } from 'vue';
 import API_GOODS from '@/apis/goods';
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/good.png';
+import { onMounted, reactive, ref, unref } from 'vue';
+import { useRouter } from 'vue-router';
+
+defineOptions({
+  name: 'Category',
+});
 
 onMounted(() => {
   getCategoryList();
@@ -79,7 +77,9 @@ function onGoodClicked(id: number) {
               <div class="list-item" @click="onGoodClicked(item.id)">
                 <van-image class="list-item-photo" :src="item.pic" :alt="item.name" />
                 <div class="list-item-info">
-                  <div class="list-item-title">{{ item.name }}</div>
+                  <div class="list-item-title">
+                    {{ item.name }}
+                  </div>
                   <div class="list-item-price">
                     <div class="price">
                       <div class="price-current">

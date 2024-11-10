@@ -1,36 +1,8 @@
-<template>
-  <div class="container">
-    <div class="group">
-      <van-field v-model="form.name" label="收货人" placeholder="收货人姓名" clearable />
-      <van-field v-model="form.mobile" type="tel" label="手机号码" placeholder="收货人手机号" clearable />
-      <AreaField :model-value="form.areaStr" :code="areaCode" @change="onAreaChange" />
-      <van-field
-        v-model="form.address"
-        label="详细地址"
-        placeholder="街道门牌、楼层房间号等信息"
-        rows="1"
-        autosize
-        type="textarea"
-        clearable
-      />
-    </div>
-    <div class="group">
-      <van-cell center title="设为默认收货地址">
-        <template #right-icon>
-          <van-switch v-model="form.isDefault" size="24px" />
-        </template>
-      </van-cell>
-    </div>
-    <van-button class="btn-submit" block type="primary" round @click="onSubmit">保存</van-button>
-    <van-button v-if="form.id" class="btn-submit" block type="default" round @click="onDelete">删除收货地址</van-button>
-  </div>
-</template>
-
 <script>
 import API_USER from '@/apis/user';
-import { isEmpty, isMobile } from '@/utils/validate';
 import AreaField from '@/components/AreaField/index.vue';
-import { showToast, showLoadingToast } from 'vant';
+import { isEmpty, isMobile } from '@/utils/validate';
+import { showLoadingToast, showToast } from 'vant';
 
 export default {
   components: {
@@ -178,6 +150,38 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="container">
+    <div class="group">
+      <van-field v-model="form.name" label="收货人" placeholder="收货人姓名" clearable />
+      <van-field v-model="form.mobile" type="tel" label="手机号码" placeholder="收货人手机号" clearable />
+      <AreaField :model-value="form.areaStr" :code="areaCode" @change="onAreaChange" />
+      <van-field
+        v-model="form.address"
+        label="详细地址"
+        placeholder="街道门牌、楼层房间号等信息"
+        rows="1"
+        autosize
+        type="textarea"
+        clearable
+      />
+    </div>
+    <div class="group">
+      <van-cell center title="设为默认收货地址">
+        <template #right-icon>
+          <van-switch v-model="form.isDefault" size="24px" />
+        </template>
+      </van-cell>
+    </div>
+    <van-button class="btn-submit" block type="primary" round @click="onSubmit">
+      保存
+    </van-button>
+    <van-button v-if="form.id" class="btn-submit" block type="default" round @click="onDelete">
+      删除收货地址
+    </van-button>
+  </div>
+</template>
 
 <style lang="less" scoped>
 .container {

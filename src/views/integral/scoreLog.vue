@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
 import API_SCORE from '@/apis/score';
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/good.png';
+import { reactive, ref } from 'vue';
 
 const list = ref<Recordable[]>([]);
 const pagination = reactive({
@@ -36,10 +36,14 @@ function getDataList() {
       <div class="list">
         <div v-for="(item, index) in list" :key="index" class="list-item van-hairline--bottom">
           <div class="list-item-hd">
-            <div class="list-item-title">{{ item.typeStr }}</div>
-            <div class="list-item-txt">{{ item.dateAdd }}</div>
+            <div class="list-item-title">
+              {{ item.typeStr }}
+            </div>
+            <div class="list-item-txt">
+              {{ item.dateAdd }}
+            </div>
           </div>
-          <div :class="['list-item-bd', item.behavior ? 'c-red' : 'c-green']">
+          <div class="list-item-bd" :class="[item.behavior ? 'c-red' : 'c-green']">
             <span>{{ item.behavior ? '' : '+' }}</span>
             <span>{{ item.score }}</span>
           </div>

@@ -1,9 +1,9 @@
-import { showLoadingToast, showConfirmDialog } from 'vant';
-import { defineStore } from 'pinia';
-import { store } from '@/store';
-import { router } from '@/router';
-import { goodStorage } from '@/utils';
 import API_ORDER from '@/apis/order';
+import { router } from '@/router';
+import { store } from '@/store';
+import { goodStorage } from '@/utils';
+import { defineStore } from 'pinia';
+import { showConfirmDialog, showLoadingToast } from 'vant';
 
 export interface OrderState {
   tradeGoods: NonNullable<ITradeGoods>;
@@ -36,12 +36,12 @@ export const useOrderStore = defineStore({
             logisticsId: v.logisticsId,
             propertyList: v.sku?.length
               ? v.sku.map((v: any) => ({
-                  id: v.optionId,
-                  name: v.optionName,
-                  childId: v.optionValueId,
-                  childName: v.optionValueName,
-                  propIds: `${v.optionId}:${v.optionValueId}`,
-                }))
+                id: v.optionId,
+                name: v.optionName,
+                childId: v.optionValueId,
+                childName: v.optionValueName,
+                propIds: `${v.optionId}:${v.optionValueId}`,
+              }))
               : [],
           });
         });
@@ -116,8 +116,9 @@ export interface ITradeGoodItem {
   pic: string;
   price: number;
   logisticsId: number;
-  propertyList: Array<any>;
+  propertyList: any[];
 }
+
 export interface ITradeGoods {
   origin: string;
   list: ITradeGoodItem[];

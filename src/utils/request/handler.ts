@@ -1,8 +1,9 @@
 import type { AxiosError } from 'axios';
-import { ServiceResultCodeEnum, ServiceResult } from './types';
+import type { ServiceResult } from './types';
 import { useUserStoreWithOut } from '@/store/modules/user';
-import { showToast, closeToast } from 'vant';
+import { closeToast, showToast } from 'vant';
 import { requestOptions } from './index';
+import { ServiceResultCodeEnum } from './types';
 
 /**
  * 业务错误

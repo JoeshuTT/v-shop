@@ -13,7 +13,3 @@ export const loginProviderType = {
 export const sms = {
   count: 60 * 1,
 };
-
-/**
- * 随机昵称:用户1234
- */

@@ -82,14 +82,14 @@ export function getBrowserInfo(): Readonly<BrowserInfo> {
     }
   } else if (isAndroid) {
     osname = 'Android';
-    // eslint-disable-next-line no-useless-escape
+     
     const osversionFind = ua.match(/Android[\s/]([\w\.]+)[;\s]/);
     if (osversionFind) {
       osversion = osversionFind[1];
     }
     const infoFind = ua.match(/\((.+?)\)/);
     const infos = infoFind ? infoFind[1].split(';') : ua.split(' ');
-    // eslint-disable-next-line no-useless-escape
+     
     const otherInfo = [
       /\bAndroid\b/i,
       /\bLinux\b/i,

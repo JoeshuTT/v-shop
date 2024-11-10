@@ -1,23 +1,22 @@
 <script lang="ts">
-export default {
-  name: 'OrderSubmit',
-};
 </script>
 
 <script setup lang="ts">
-import NP from 'number-precision';
-import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
-import { useRouter } from 'vue-router';
-import { computed, onMounted, ref, unref } from 'vue';
-import API_USER from '@/apis/user';
-import API_ORDER from '@/apis/order';
 import API_CART from '@/apis/cart';
-import { decimalFormat, mobileShow } from '@/utils/format';
-// components
-import SelectAddress from './components/SelectAddress.vue';
+import API_ORDER from '@/apis/order';
+import API_USER from '@/apis/user';
 import GoodCard from '@/components/GoodCard/index.vue';
-// store
 import { useOrderStore } from '@/store/modules/order';
+import { decimalFormat, mobileShow } from '@/utils/format';
+import NP from 'number-precision';
+import { closeToast, showConfirmDialog, showLoadingToast, showToast } from 'vant';
+import { computed, onMounted, ref, unref } from 'vue';
+import { useRouter } from 'vue-router';
+import SelectAddress from './components/SelectAddress.vue';
+
+defineOptions({
+  name: 'OrderSubmit',
+});
 
 onMounted(() => {
   if (unref(isNeedLogistics)) {
@@ -111,10 +110,10 @@ function onSubmit() {
  * 创建订单
  */
 async function createOrder() {
-  const goods = unref(goodList).map((item) => ({
+  const goods = unref(goodList).map(item => ({
     goodsId: item.goodsId,
     number: item.number,
-    propertyChildIds: item.propertyList.map((v) => v.propIds).join(','),
+    propertyChildIds: item.propertyList.map(v => v.propIds).join(','),
   }));
 
   const params: Recordable = {
@@ -195,8 +194,12 @@ function cartEmptyHandle() {
         <div class="address-sub van-ellipsis">
           {{ formatAreaStr(addressInfo.provinceStr, addressInfo.cityStr, addressInfo.areaStr) }}
         </div>
-        <div class="address-title van-ellipsis">{{ addressInfo.address }}</div>
-        <div class="address-sub van-ellipsis">{{ addressInfo.linkMan }} {{ mobileShow(addressInfo.mobile) }}</div>
+        <div class="address-title van-ellipsis">
+          {{ addressInfo.address }}
+        </div>
+        <div class="address-sub van-ellipsis">
+          {{ addressInfo.linkMan }} {{ mobileShow(addressInfo.mobile) }}
+        </div>
         <van-icon class="address-arrow" name="arrow" />
       </div>
       <van-cell
@@ -206,8 +209,8 @@ function cartEmptyHandle() {
         icon="add-square"
         is-link
         @click="onAddressClicked"
-      ></van-cell>
-      <van-cell title="配送方式" value="快递"></van-cell>
+      />
+      <van-cell title="配送方式" value="快递" />
       <SelectAddress v-model="addressPopupShow" @select="onAddressSelected" />
     </div>
     <!-- 商品列表 -->
@@ -240,19 +243,21 @@ function cartEmptyHandle() {
         autosize
       />
     </div>
-    <!-- 付款方式 默认钱包支付-->
+    <!-- 付款方式 默认钱包支付 -->
     <div class="section">
       <div class="section-header van-hairline--bottom">
         <span class="section-header-title">付款方式</span>
       </div>
       <van-cell title="余额" center>
-        <template #label> 账户余额：{{ decimalFormat(balance) }} </template>
+        <template #label>
+          账户余额：{{ decimalFormat(balance) }}
+        </template>
         <template #right-icon>
-          <van-checkbox :model-value="balanceSwitch"> </van-checkbox>
+          <van-checkbox :model-value="balanceSwitch" />
         </template>
       </van-cell>
     </div>
-    <!--提交订单栏 -->
+    <!-- 提交订单栏 -->
     <div class="submit-bar-wrap">
       <div class="submit-bar">
         <div class="submit-bar-hd">

@@ -11,13 +11,13 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     return () =>
-      props.loading ? (
-        <van-loading size={`24px`} align={`center`} style={{ padding: '15px 0' }}>
-          加载中...
-        </van-loading>
-      ) : (
-        slots.default?.()
-      );
+      props.loading
+        ? (
+            <van-loading size="24px" align="center" style={{ padding: '15px 0' }}>
+              加载中...
+            </van-loading>
+          )
+        : slots.default?.();
   },
 });
 </script>

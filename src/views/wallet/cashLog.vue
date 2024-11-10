@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { countPair } from '@/utils/format';
 import API_USER from '@/apis/user';
 import IMAGE_EMPTY_TRADE from '@/assets/images/empty/trade.png';
+import { countPair } from '@/utils/format';
+import { reactive, ref } from 'vue';
 
 const list = ref<Recordable[]>([]);
 const pagination = reactive({
@@ -37,10 +37,14 @@ function getDataList() {
       <div class="list">
         <div v-for="item in list" :key="item.id" class="list-item van-hairline--bottom">
           <div class="list-item-hd">
-            <div class="list-item-title">{{ item.typeStr }}</div>
-            <div class="list-item-txt">{{ item.dateAdd }}</div>
+            <div class="list-item-title">
+              {{ item.typeStr }}
+            </div>
+            <div class="list-item-txt">
+              {{ item.dateAdd }}
+            </div>
           </div>
-          <div :class="['list-item-bd', item.behavior ? 'c-red' : 'c-green']">
+          <div class="list-item-bd" :class="[item.behavior ? 'c-red' : 'c-green']">
             <span>{{ item.behavior ? '-' : '+' }}</span>
             <span>{{ countPair(item.amount) }}</span>
           </div>

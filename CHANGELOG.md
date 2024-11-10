@@ -2,6 +2,44 @@
 
 > 记录下重大改动
 
+## v3.6.1(2024-11)
+
+> 翻译翻译什么叫最佳实践
+
+feat: release v3.6.1
+
+- 从头开始进行代码审查，保证代码质量
+- 要求`node`版本在18.x以上，在`package.json`文件中增加选项
+
+```json
+"engines": {
+  "node": ">= 18",
+  "pnpm": ">= 9"
+},
+```
+
+- 一律使用esm写法，在`package.json`文件中增加选项
+
+```json
+type: "module"
+```
+
+更新应用依赖大版本
+
+```text
+"axios": "^0.21.4" -> ^1.7.7
+"@vueuse/core": "^7.7.1" -> ^11.2.0
+```
+
+- 弃用`AlloyTeam ESLint`方案，使用`@antfu/eslint-config`
+- 使用`StyleLint`来做CSS代码检查(linter)
+- `typescript`升级到 5.x、参考 [vue官方-搭配 TypeScript 使用 Vue](https://cn.vuejs.org/guide/typescript/overview.html) 配置`tsconfig.json`
+
+应用迭代
+
+- 支付结果页改成简单显示
+- 下单页面增加优惠券选择
+
 ## v3.5.1(2023-05-17)
 
 主要改动

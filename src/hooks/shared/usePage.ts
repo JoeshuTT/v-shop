@@ -1,8 +1,8 @@
+import { useAppStore } from '@/store/modules/app';
+import { useUserStore } from '@/store/modules/user';
+
 import { computed, unref } from 'vue';
 import { useRouter } from 'vue-router';
-
-import { useUserStore } from '@/store/modules/user';
-import { useAppStore } from '@/store/modules/app';
 import { onMountedOrActivated } from '../core/onMountedOrActivated';
 
 export function usePage() {

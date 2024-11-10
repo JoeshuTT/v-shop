@@ -1,6 +1,6 @@
+import type { ServiceResult } from '@/utils/request/types';
+import type { shoppingCartAddParams, shoppingCartResult } from './types';
 import { request } from '@/utils/request';
-import { ServiceResult } from '@/utils/request/types';
-import { shoppingCartAddParams, shoppingCartResult } from './types';
 
 /**
  * 加入购物车

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import IMAGE_RELOAD from '@/assets/images/exception/reload.png';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -11,9 +11,13 @@ function onReload() {
 
 <template>
   <div class="container">
-    <img :src="IMAGE_RELOAD" class="image" />
-    <div class="title">页面加载异常或服务器开小差了</div>
-    <div class="action van-haptics-feedback" @click="onReload">重新加载</div>
+    <img :src="IMAGE_RELOAD" class="image">
+    <div class="title">
+      页面加载异常或服务器开小差了
+    </div>
+    <div class="action van-haptics-feedback" @click="onReload">
+      重新加载
+    </div>
   </div>
 </template>
 

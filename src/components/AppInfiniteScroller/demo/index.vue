@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 onMounted(() => {
   loadList();
@@ -55,7 +55,9 @@ function loadMore() {
             <van-cell v-for="item in list" :key="item.id" :title="item.title" />
             <div class="list-bottom">
               <template v-if="loading">
-                <van-loading size="24px" color="#999">加载中...</van-loading>
+                <van-loading size="24px" color="#999">
+                  加载中...
+                </van-loading>
               </template>
               <template v-if="noMore">
                 <span>没有更多了</span>

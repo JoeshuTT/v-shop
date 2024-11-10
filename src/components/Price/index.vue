@@ -13,7 +13,6 @@ export default defineComponent({
   setup(props) {
     function getInteger(n: any) {
       if (Number.isNaN(Number(n))) {
-        // eslint-disable-next-line no-param-reassign
         n = 0;
       }
       const numArr: string[] = Number(n).toFixed(2).split('.');
@@ -22,7 +21,6 @@ export default defineComponent({
 
     function getDecimal(n: any) {
       if (Number.isNaN(Number(n))) {
-        // eslint-disable-next-line no-param-reassign
         n = 0;
       }
       const numArr: string[] = Number(n).toFixed(2).split('.');

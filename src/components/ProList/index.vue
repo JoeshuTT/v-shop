@@ -1,8 +1,9 @@
 <script lang="ts">
+import type { useListOptions, UseListPagination } from '@/hooks/shared/useList';
 import type { PropType } from 'vue';
-import { defineComponent, computed } from 'vue';
+import { useList } from '@/hooks/shared/useList';
+import { computed, defineComponent } from 'vue';
 import AppList from '../AppList';
-import { useListOptions, UseListPagination, useList } from '@/hooks/shared/useList';
 
 export default defineComponent({
   name: 'ProList',
@@ -78,6 +79,6 @@ export default defineComponent({
     @load-more="loadMore"
     @click-error="onError"
   >
-    <slot></slot>
+    <slot />
   </AppList>
 </template>

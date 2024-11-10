@@ -1,5 +1,4 @@
 import type { Router } from 'vue-router';
-// store
 import { useAppStoreWithOut } from '@/store/modules/app';
 import { createPageTitleGuard } from './pageTitleGuard';
 import { createPermissionGuard } from './permissionGuard';

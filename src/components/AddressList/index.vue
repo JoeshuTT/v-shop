@@ -34,11 +34,11 @@ function onDetail(index: number) {
   router.push({
     path: '/address/edit',
     query: {
-      id: id,
+      id,
     },
   });
 }
-// eslint-disable-next-line max-params
+
 function formatAddress(provinceStr: string, cityStr: string, areaStr: string, address: string) {
   let str = provinceStr;
 

@@ -1,22 +1,7 @@
-<template>
-  <div class="container">
-    <SpainList v-model:loading="listLoading">
-      <AddressList v-if="list.length" :list="list" />
-      <van-empty v-else class="empty" :description="listEmptyText"> </van-empty>
-    </SpainList>
-    <AffixBar>
-      <van-button class="submit-bar-button" type="primary" round @click="onAdd">
-        <van-icon name="plus" />
-        新建收货地址
-      </van-button>
-    </AffixBar>
-  </div>
-</template>
-
 <script>
 import API_USER from '@/apis/user';
-import SpainList from '@/components/SpainList/index.vue';
 import AddressList from '@/components/AddressList/index.vue';
+import SpainList from '@/components/SpainList/index.vue';
 
 export default {
   components: { SpainList, AddressList },
@@ -41,7 +26,7 @@ export default {
     onAdd() {
       this.$router.push({ path: '/address/edit' });
     },
-    // eslint-disable-next-line max-params
+
     formatAddress(provinceStr, cityStr, areaStr, address) {
       let str = provinceStr;
 
@@ -55,7 +40,7 @@ export default {
       this.$router.push({
         path: '/address/edit',
         query: {
-          id: id,
+          id,
         },
       });
     },
@@ -73,6 +58,21 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="container">
+    <SpainList v-model:loading="listLoading">
+      <AddressList v-if="list.length" :list="list" />
+      <van-empty v-else class="empty" :description="listEmptyText" />
+    </SpainList>
+    <AffixBar>
+      <van-button class="submit-bar-button" type="primary" round @click="onAdd">
+        <van-icon name="plus" />
+        新建收货地址
+      </van-button>
+    </AffixBar>
+  </div>
+</template>
 
 <style lang="less" scoped>
 .container {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { ref } from 'vue';
-import { getClientInfo } from '@/utils';
 import { useUserStore } from '@/store/modules/user';
+import { getClientInfo } from '@/utils';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -26,8 +26,10 @@ function onLogout() {
     <van-cell title="主题风格" is-link to="/theme" />
     <van-cell title="我的设备" :value="myDeviceTitle" is-link @click="myDevicePopupShow = true" />
     <van-cell title="关于" :value="versionTitle" />
-    <div class="mb10"></div>
-    <van-button class="btn" block @click="onLogout">退出登录</van-button>
+    <div class="mb10" />
+    <van-button class="btn" block @click="onLogout">
+      退出登录
+    </van-button>
     <!-- 版权 -->
     <Copyright />
     <!-- 我的设备 -->

@@ -1,16 +1,17 @@
+import type { ConfigEnv, UserConfig } from 'vite';
+import process from 'node:process';
 import { fileURLToPath, URL } from 'node:url';
-import type { UserConfig, ConfigEnv } from 'vite';
-import { defineConfig, loadEnv } from 'vite';
-import dayjs from 'dayjs';
+import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import legacy from '@vitejs/plugin-legacy';
+import dayjs from 'dayjs';
 import AutoComponents from 'unplugin-vue-components/vite';
+import { defineConfig, loadEnv } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import pkg from './package.json';
 
 /** 工作目录 */
-const root: string = process.cwd();
+const root = process.cwd();
 
 /** 静态资源目录 */
 const assetsDir = 'assets';
@@ -61,18 +62,20 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
           target: `https://${env.VITE_APP_API_HOST}/${env.VITE_APP_SUB_DOMAIN}`, // https://api.it120.cc/xiaochengxu
           changeOrigin: true,
           secure: false,
-          rewrite: (path) => path.replace(/^\/dev-api/, ''),
+          rewrite: path => path.replace(/^\/dev-api/, ''),
         },
       },
     },
     build: {
-      assetsDir: assetsDir,
+      assetsDir,
       sourcemap: false,
       chunkSizeWarningLimit: 1500,
       rollupOptions: {
         output: {
           manualChunks: (id) => {
-            if (id.includes('node_modules')) return 'vendor';
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
           },
           entryFileNames: `${assetsDir}/js/[name].[hash].js`,
           chunkFileNames: `${assetsDir}/js/[name].[hash].js`,

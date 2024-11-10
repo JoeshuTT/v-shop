@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { onMounted, reactive, ref, unref } from 'vue';
 import API_DISCOUNTS from '@/apis/discounts';
-// components
-import ExchangeCoupon from './components/ExchangeCoupon/index.vue';
-// assets
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/coupon.png';
+import { onMounted, reactive, ref, unref } from 'vue';
+import { useRouter } from 'vue-router';
+import ExchangeCoupon from './components/ExchangeCoupon/index.vue';
 
 const router = useRouter();
 
@@ -95,12 +93,18 @@ function onExchangeSuccess() {
               <span class="list-item-price">{{ item.money }}</span>
               <span class="list-item-price-unit">元</span>
             </div>
-            <div class="list-item-desc van-ellipsis">{{ thresholdTitle(item.moneyHreshold) }}</div>
+            <div class="list-item-desc van-ellipsis">
+              {{ thresholdTitle(item.moneyHreshold) }}
+            </div>
           </div>
           <div class="list-item-bd">
             <div class="list-item-bd-inner">
-              <div class="list-item-bd-title van-ellipsis">{{ item.name }}</div>
-              <div class="list-item-bd-txt">{{ dateFormat(item.dateStart) }}至{{ dateFormat(item.dateEnd) }}</div>
+              <div class="list-item-bd-title van-ellipsis">
+                {{ item.name }}
+              </div>
+              <div class="list-item-bd-txt">
+                {{ dateFormat(item.dateStart) }}至{{ dateFormat(item.dateEnd) }}
+              </div>
             </div>
             <div v-if="active === 0" class="list-item-bd-action" @click="onCouponClicked">
               {{ tabList[active] ? tabList[active].buttonTxt : '' }}
@@ -110,14 +114,14 @@ function onExchangeSuccess() {
       </div>
       <template #empty>
         <van-empty class="empty" :image="listMeta.emptyImage" :description="listMeta.emptyText">
-          <van-button v-if="active === 0" class="empty-btn" round plain type="primary" @click="goHome"
-            >进店逛逛</van-button
-          >
+          <van-button v-if="active === 0" class="empty-btn" round plain type="primary" @click="goHome">
+            进店逛逛
+          </van-button>
         </van-empty>
       </template>
     </AppList>
 
-    <!-- 兑换优惠口令-->
+    <!-- 兑换优惠口令 -->
     <ExchangeCoupon v-model:show="exchangeShow" @success="onExchangeSuccess" />
   </div>
 </template>

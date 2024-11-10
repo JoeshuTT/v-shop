@@ -1,9 +1,9 @@
-import { defineComponent, computed, unref } from 'vue';
-
 import type { PropType } from 'vue';
-import type { ListMeta } from './types';
 
-import { Loading, Empty } from 'vant';
+import type { ListMeta } from './types';
+import { Empty, Loading } from 'vant';
+
+import { computed, defineComponent, unref } from 'vue';
 import AppInfiniteScroller from '../AppInfiniteScroller';
 
 // styles
@@ -69,54 +69,62 @@ export default defineComponent({
     }));
 
     function renderLoading() {
-      return slots.loading ? (
-        slots.loading()
-      ) : (
-        <Loading class="app-list__loading" type="spinner">
-          {unref(mergeMeta).loadingText}
-        </Loading>
-      );
+      return slots.loading
+        ? (
+            slots.loading()
+          )
+        : (
+            <Loading class="app-list__loading" type="spinner">
+              {unref(mergeMeta).loadingText}
+            </Loading>
+          );
     }
 
     function renderEmpty() {
-      return slots.empty ? (
-        slots.empty()
-      ) : (
-        <Empty class="app-list__empty" image={unref(mergeMeta).emptyImage} description={unref(mergeMeta).emptyText} />
-      );
+      return slots.empty
+        ? (
+            slots.empty()
+          )
+        : (
+            <Empty class="app-list__empty" image={unref(mergeMeta).emptyImage} description={unref(mergeMeta).emptyText} />
+          );
     }
     /**
      * 首次请求加载失败和加载更多数据请求占位目前用同一个
      */
     function renderError() {
-      return slots.error ? (
-        slots.error()
-      ) : (
-        <div
-          class="app-list__error"
-          onClick={() => {
-            emit('clickError');
-          }}
-        >
-          {unref(mergeMeta).errorText}
-        </div>
-      );
+      return slots.error
+        ? (
+            slots.error()
+          )
+        : (
+            <div
+              class="app-list__error"
+              onClick={() => {
+                emit('clickError');
+              }}
+            >
+              {unref(mergeMeta).errorText}
+            </div>
+          );
     }
 
     function renderBottom() {
-      return slots.bottom ? (
-        slots.bottom()
-      ) : (
-        <div class="app-list__bottom">
-          {props.loadingMore && (
-            <Loading size="24px" color="#999">
-              {unref(mergeMeta).loadingMoreText}
-            </Loading>
-          )}
-          {props.noMore && unref(mergeMeta).noMoreText}
-          {props.error && renderError()}
-        </div>
-      );
+      return slots.bottom
+        ? (
+            slots.bottom()
+          )
+        : (
+            <div class="app-list__bottom">
+              {props.loadingMore && (
+                <Loading size="24px" color="#999">
+                  {unref(mergeMeta).loadingMoreText}
+                </Loading>
+              )}
+              {props.noMore && unref(mergeMeta).noMoreText}
+              {props.error && renderError()}
+            </div>
+          );
     }
 
     return () => {
@@ -125,25 +133,27 @@ export default defineComponent({
       }
 
       const Content = slots.default?.();
-      const wrapperContainer =
-        props.mode === 'infinite' ? (
-          <AppInfiniteScroller
-            class="app-list"
-            loading={props.loadingMore}
-            noMore={props.noMore}
-            onUpdate:loading={(value: boolean) => {
-              emit('update:loadingMore', value);
-            }}
-            onLoadMore={() => {
-              emit('loadMore');
-            }}
-          >
-            {Content}
-            {renderBottom()}
-          </AppInfiniteScroller>
-        ) : (
-          <div class="app-list">{Content}</div>
-        );
+      const wrapperContainer
+        = props.mode === 'infinite'
+          ? (
+              <AppInfiniteScroller
+                class="app-list"
+                loading={props.loadingMore}
+                noMore={props.noMore}
+                onUpdate:loading={(value: boolean) => {
+                  emit('update:loadingMore', value);
+                }}
+                onLoadMore={() => {
+                  emit('loadMore');
+                }}
+              >
+                {Content}
+                {renderBottom()}
+              </AppInfiniteScroller>
+            )
+          : (
+              <div class="app-list">{Content}</div>
+            );
 
       return props.loading ? renderLoading() : props.hasData ? wrapperContainer : renderEmpty();
     };

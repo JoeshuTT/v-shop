@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { showToast } from 'vant';
-import { onMounted, ref } from 'vue';
-import { countPair } from '@/utils/format';
 import API_USER from '@/apis/user';
 import { usePage } from '@/hooks/shared/usePage';
+import { countPair } from '@/utils/format';
+import { showToast } from 'vant';
+import { onMounted, ref } from 'vue';
 
 onMounted(() => {
   getDetail();
@@ -31,7 +31,9 @@ function getDetail() {
         <span class="header-count-value">{{ countPair(detail.score, 0) }}</span>
         <span class="header-count-label">可用积分</span>
       </div>
-      <div class="header-tag" @click="goPage('/integral/rule')">积分规则</div>
+      <div class="header-tag" @click="goPage('/integral/rule')">
+        积分规则
+      </div>
     </div>
     <van-cell title="交易记录" class="cell" is-link @click="goPage('/integral/scoreLog')">
       <template #icon>

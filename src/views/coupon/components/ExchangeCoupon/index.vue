@@ -1,13 +1,7 @@
-<script lang="ts">
-export default {
-  name: 'ExchangeCoupon',
-};
-</script>
-
 <script setup lang="ts">
-import { showToast, showLoadingToast, closeToast } from 'vant';
-import { computed, ref, unref } from 'vue';
 import API_DISCOUNTS from '@/apis/discounts';
+import { closeToast, showLoadingToast, showToast } from 'vant';
+import { computed, ref, unref } from 'vue';
 
 defineProps({
   show: { type: Boolean },
@@ -16,7 +10,7 @@ defineProps({
 const emit = defineEmits(['update:show', 'success']);
 
 const popupStyle = {
-  width: '80%',
+  'width': '80%',
   'border-radius': '4px',
 };
 const code = ref('');
@@ -87,7 +81,9 @@ defineExpose({
     <div class="exchange-popup-close" @click="close">
       <van-icon class="exchange-popup-close-icon" name="cross" />
     </div>
-    <div class="exchange-header van-hairline--bottom">兑换优惠口令</div>
+    <div class="exchange-header van-hairline--bottom">
+      兑换优惠口令
+    </div>
     <div class="exchange-body">
       <van-field
         v-model="code"
@@ -96,10 +92,9 @@ defineExpose({
         placeholder="请输入口令（例如v-shop，2022）"
         class="exchange-field"
         type="text"
-      >
-      </van-field>
+      />
       <div
-        :class="['van-haptics-feedback', 'exchange-btn', submitted ? 'active' : 'gray']"
+        class="van-haptics-feedback exchange-btn" :class="[submitted ? 'active' : 'gray']"
         type="primary"
         @click="onSubmit"
       >

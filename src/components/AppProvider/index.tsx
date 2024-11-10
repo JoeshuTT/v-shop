@@ -1,8 +1,8 @@
-import { computed, defineComponent, unref } from 'vue';
 import type { ConfigProviderThemeVars } from 'vant';
 import { useAppStore } from '@/store/modules/app';
-import AppWindowBar from '../AppWindowBar/index.vue';
+import { computed, defineComponent, unref } from 'vue';
 import { useRoute } from 'vue-router';
+import AppWindowBar from '../AppWindowBar/index.vue';
 
 export default defineComponent({
   name: 'AppProvider',

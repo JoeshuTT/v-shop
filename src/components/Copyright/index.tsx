@@ -1,5 +1,5 @@
-import { defineComponent } from 'vue';
 import dayjs from 'dayjs';
+import { defineComponent } from 'vue';
 
 // styles
 import styles from './index.module.less';
@@ -14,7 +14,11 @@ export default defineComponent({
         <div class={styles.copyright}>
           <div class={styles.copyrightP}>
             <a href="https://github.com/JoeshuTT/v-shop" target="_blank">
-              Copyright © 2019-{nowYear} | v{__APP_INFO__.pkg.version}
+              Copyright © 2019-
+              {nowYear}
+              {' '}
+              | v
+              {__APP_INFO__.pkg.version}
             </a>
           </div>
           {/* <div class={styles.copyrightP}>

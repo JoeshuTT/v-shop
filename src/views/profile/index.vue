@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { computed, onMounted, ref, unref } from 'vue';
-import { showToast, showLoadingToast, closeToast } from 'vant';
-import { isEmpty } from '@/utils/validate';
-import { assets } from '@/constants';
 import API_USER from '@/apis/user';
-// store
+import { assets } from '@/constants';
 import { useUserStore } from '@/store/modules/user';
+import { isEmpty } from '@/utils/validate';
+import { closeToast, showLoadingToast, showToast } from 'vant';
+import { computed, onMounted, ref, unref } from 'vue';
+import { useRouter } from 'vue-router';
 
 onMounted(() => {
   avatarUrl.value = unref(userInfo).avatarUrl ?? '';
@@ -46,10 +45,10 @@ function onAreaChange({ selectedOptions }) {
 
 function onSubmit() {
   if (
-    unref(avatarUrl) === unref(userInfo).avatarUrl &&
-    unref(nick) === unref(userInfo).nick &&
-    unref(province) === unref(userInfo).province &&
-    unref(city) === unref(userInfo).city
+    unref(avatarUrl) === unref(userInfo).avatarUrl
+    && unref(nick) === unref(userInfo).nick
+    && unref(province) === unref(userInfo).province
+    && unref(city) === unref(userInfo).city
   ) {
     showToast('您没有修改任何东西哦');
     return;
@@ -95,13 +94,17 @@ function onSubmit() {
       <UploadAvatar @success="onFileSuccess">
         <div class="avatar">
           <van-image class="avatar-img" :src="avatarUrl || assets.avatar" />
-          <div class="avatar-title">点击更换头像</div>
+          <div class="avatar-title">
+            点击更换头像
+          </div>
         </div>
       </UploadAvatar>
     </div>
     <div class="main">
       <div class="nick">
-        <div class="nick-label">昵称</div>
+        <div class="nick-label">
+          昵称
+        </div>
         <van-field v-model="nick" placeholder="12个字以内" />
       </div>
       <AreaField

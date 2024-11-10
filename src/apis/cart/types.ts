@@ -8,8 +8,8 @@ export interface shoppingCartAddParams {
 export interface shoppingCartResult {
   goodsStatus: Recordable[];
   items: Recordable[];
-  number: Number;
-  price: Number;
-  score: Number;
+  number: number;
+  price: number;
+  score: number;
   shopList: Recordable[];
 }

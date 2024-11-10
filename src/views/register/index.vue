@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { showToast } from 'vant';
-import { useRoute, useRouter } from 'vue-router';
-import { computed, ref, unref } from 'vue';
-import { isMobile, isPassWord, isSame } from '@/utils/validate';
 import { fakeNickName } from '@/model';
-// store
 import { useUserStore } from '@/store/modules/user';
+import { isMobile, isPassWord, isSame } from '@/utils/validate';
+import { showToast } from 'vant';
+import { computed, ref, unref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 
@@ -70,10 +69,14 @@ function onSubmit() {
 <template>
   <div class="container">
     <div class="main">
-      <div class="h2">{{ title }}</div>
+      <div class="h2">
+        {{ title }}
+      </div>
       <form class="form">
         <div class="form-item">
-          <div class="form-item-country">中国 +86</div>
+          <div class="form-item-country">
+            中国 +86
+          </div>
           <van-field
             v-model="mobile"
             class="form-field"
@@ -125,16 +128,15 @@ function onSubmit() {
           loading-text="注册中..."
           type="primary"
           @click="onSubmit"
-          >确定</van-button
         >
+          确定
+        </van-button>
       </form>
     </div>
     <div class="footer">
       <div class="footer-agreement">
         <van-checkbox v-model="agree" icon-size="16px" />
-        <span> 阅读并同意</span><a href="javascript:void(0);">《用户协议》</a>和<a href="javascript:void(0);"
-          >《隐私政策》</a
-        >
+        <span> 阅读并同意</span><a href="javascript:void(0);">《用户协议》</a>和<a href="javascript:void(0);">《隐私政策》</a>
       </div>
     </div>
   </div>

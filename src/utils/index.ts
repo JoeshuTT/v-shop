@@ -1,3 +1,5 @@
+import { getBrowserInfo } from './web/getBrowserInfo';
+
 export * from './file';
 export * from './format';
 export * from './goodStorage';
@@ -5,7 +7,6 @@ export * from './is';
 export * from './lodash';
 export * from './mobileConsole';
 export * from './validate';
-import { getBrowserInfo } from './web/getBrowserInfo';
 
 const clientInfo = getBrowserInfo();
 
@@ -21,13 +22,15 @@ const clientInfo = getBrowserInfo();
  * getQueryString('name', 'http://www.baidu.com?name=1&age=2'); // 1
  * ```
  */
-export function getQueryString(key: string, url: string) {
+export function getQueryString(key: string, url: string): string {
   const reg = new RegExp(`([?&]+)${key}=([^&#]*)`);
   const href = url || window.location.href;
   const results = href.substring(1).match(reg);
 
-  if (!results) return null;
-  if (!results[2]) return '';
+  if (!results)
+    return null;
+  if (!results[2])
+    return '';
 
   return decodeURIComponent(results[2]);
 }
@@ -92,7 +95,7 @@ export function getClientInfo() {
  * @param {number} n
  * @param {number} [destWidth] 设计稿基准屏幕宽度
  */
-export function rpx2px(n: number, destWidth = 375) {
+export function rpx2px(n: number, destWidth: number = 375) {
   const ratio = document.documentElement.clientWidth / destWidth;
 
   return (n * ratio).toFixed(2);

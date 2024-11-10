@@ -1,6 +1,6 @@
 import type { App } from 'vue';
-import { createPageStackRouter } from 'vue-page-stack-router';
 import { router } from '@/router';
+import { createPageStackRouter } from 'vue-page-stack-router';
 
 export const pageStackRouter = createPageStackRouter({
   router,

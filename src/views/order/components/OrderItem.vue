@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import Price from '@/components/Price/index.vue';
+import { useOrderStore } from '@/store/modules/order';
+import { decimalFormat } from '@/utils/format';
 import { showToast } from 'vant';
 import { useRouter } from 'vue-router';
-import { decimalFormat } from '@/utils/format';
-import Price from '@/components/Price/index.vue';
-// store
-import { useOrderStore } from '@/store/modules/order';
 
 defineProps({
   item: { type: Object, default: () => {} },
@@ -60,7 +59,7 @@ function onOrderDelete(item: Recordable, index: number) {
       <div class="list-item-header-hd">
         <span class="title">订单编号：{{ item.orderNumber }}</span>
       </div>
-      <div :class="['list-item-header-state', item.status !== -1 ? 'text-primary-color' : '']">
+      <div class="list-item-header-state" :class="[item.status !== -1 ? 'text-primary-color' : '']">
         {{ item.statusStr }}
       </div>
     </div>
@@ -69,16 +68,26 @@ function onOrderDelete(item: Recordable, index: number) {
         <van-image fit="contain" class="good-card-pic" :src="item.goodsInfo.pic" />
         <div class="good-card-content">
           <div class="good-card-content-hd">
-            <div class="good-card-title">{{ item.goodsInfo.goodsName }}</div>
-            <div v-if="item.goodsInfo.property" class="good-card-prop">{{ item.goodsInfo.property }}</div>
+            <div class="good-card-title">
+              {{ item.goodsInfo.goodsName }}
+            </div>
+            <div v-if="item.goodsInfo.property" class="good-card-prop">
+              {{ item.goodsInfo.property }}
+            </div>
           </div>
           <div class="good-card-content-bd">
-            <div class="good-card-price">¥{{ decimalFormat(item.goodsInfo.amount) }}</div>
-            <div class="good-card-number">x{{ item.goodsInfo.number }}</div>
+            <div class="good-card-price">
+              ¥{{ decimalFormat(item.goodsInfo.amount) }}
+            </div>
+            <div class="good-card-number">
+              x{{ item.goodsInfo.number }}
+            </div>
           </div>
         </div>
       </div>
-      <div v-if="item.goodsNumber > 1" class="list-item-more">查看全部{{ item.goodsNumber }}件商品</div>
+      <div v-if="item.goodsNumber > 1" class="list-item-more">
+        查看全部{{ item.goodsNumber }}件商品
+      </div>
       <div class="list-item-total van-hairline--top">
         <span class="list-item-total-number">共{{ item.goodsNumber }}件商品</span>
         <div class="list-item-total-price">
@@ -90,10 +99,14 @@ function onOrderDelete(item: Recordable, index: number) {
     <!-- ▼ 操作按钮组（一行最好不要超过3个） -->
     <div class="list-item-footer van-hairline--top">
       <template v-if="item.status === -1 || item.status === 3 || item.status === 4">
-        <van-button class="list-item-action-btn" round @click.stop="onOrderDelete(item, index)"> 删除订单 </van-button>
+        <van-button class="list-item-action-btn" round @click.stop="onOrderDelete(item, index)">
+          删除订单
+        </van-button>
       </template>
       <template v-if="item.status === 0">
-        <van-button class="list-item-action-btn" round plain @click.stop="onOrderCancel(item)"> 取消订单 </van-button>
+        <van-button class="list-item-action-btn" round plain @click.stop="onOrderCancel(item)">
+          取消订单
+        </van-button>
         <van-button class="list-item-action-btn" round plain type="primary" @click.stop="onOrderClicked(item)">
           去支付
         </van-button>
@@ -104,10 +117,14 @@ function onOrderDelete(item: Recordable, index: number) {
         </van-button>
       </template>
       <template v-if="item.status === 2">
-        <van-button class="list-item-action-btn" round @click.stop="onOrderClicked(item)">确认收货</van-button>
+        <van-button class="list-item-action-btn" round @click.stop="onOrderClicked(item)">
+          确认收货
+        </van-button>
       </template>
       <template v-if="item.status === 3">
-        <van-button class="list-item-action-btn" round @click.stop="onOrderClicked(item)">评价</van-button>
+        <van-button class="list-item-action-btn" round @click.stop="onOrderClicked(item)">
+          评价
+        </van-button>
       </template>
     </div>
     <!-- ▲ 操作按钮组 -->

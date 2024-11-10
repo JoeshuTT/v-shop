@@ -1,23 +1,18 @@
-<script lang="ts">
-export default {
-  name: 'Cart',
-};
-</script>
-
 <script setup lang="ts">
-import NP from 'number-precision';
-import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
-import { useDebounceFn } from '@vueuse/core';
-import { computed, onMounted, ref, unref } from 'vue';
-import { decimalFormat } from '@/utils/format';
 import API_CART from '@/apis/cart';
-// store
-import { useOrderStore } from '@/store/modules/order';
-// hooks
-import { usePage } from '@/hooks/shared/usePage';
-// assets
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/cart.png';
 import ICON_SHOPPING_CART from '@/assets/videos/shopping-cart.mp4';
+import { usePage } from '@/hooks/shared/usePage';
+import { useOrderStore } from '@/store/modules/order';
+import { decimalFormat } from '@/utils/format';
+import { useDebounceFn } from '@vueuse/core';
+import NP from 'number-precision';
+import { closeToast, showConfirmDialog, showLoadingToast, showToast } from 'vant';
+import { computed, onMounted, ref, unref } from 'vue';
+
+defineOptions({
+  name: 'Cart',
+});
 
 onMounted(() => {
   if (unref(hasLogin)) {
@@ -42,11 +37,11 @@ const listEmptyImage = IMAGE_LIST_EMPTY;
 const cartVideoSrc = ICON_SHOPPING_CART;
 
 function propTitle(list: Recordable[]) {
-  return list.map((v) => v.optionValueName).join(',');
+  return list.map(v => v.optionValueName).join(',');
 }
 
 const selectedList = computed(() => {
-  return unref(list).filter((v) => v.selected);
+  return unref(list).filter(v => v.selected);
 });
 
 const totalGoodCount = computed(() => {
@@ -98,7 +93,7 @@ function onDelete() {
   const message = type === 'empty' ? `确定要清空购物车吗？` : `确定要删除这${unref(selectedList).length}个商品吗？`;
 
   showConfirmDialog({
-    message: message,
+    message,
   })
     .then(() => {
       if (type === 'empty') {
@@ -141,7 +136,7 @@ function cartEmptyHandle() {
 
 function cartRemoveHandle() {
   const keyStr = unref(selectedList)
-    .map((v) => v.key)
+    .map(v => v.key)
     .join(',');
   API_CART.shoppingCartRemove({ key: keyStr })
     .then((res) => {
@@ -161,7 +156,7 @@ function onSubmit() {
     return;
   }
 
-  if (unref(selectedList).some((v) => v.status === 1)) {
+  if (unref(selectedList).some(v => v.status === 1)) {
     showToast({
       message: '请删除掉失效商品',
       duration: 1500,
@@ -191,7 +186,7 @@ function onSubmit() {
                 muted
                 loop
                 type="video/mp4"
-              ></video>
+              />
               <span>购物车</span>
             </div>
             <div class="goods-header-bd" @click="onEditStatusChange">
@@ -201,7 +196,7 @@ function onSubmit() {
           <div class="list">
             <div v-for="(item, index) in list" :key="item.key" class="list-item">
               <div class="list-item-selected">
-                <van-checkbox v-model="item.selected"></van-checkbox>
+                <van-checkbox v-model="item.selected" />
               </div>
               <van-image fit="contain" class="list-item-pic" :src="item.pic" />
               <div class="list-item-content">
@@ -210,7 +205,9 @@ function onSubmit() {
                   {{ item.name }}
                 </div>
                 <div class="list-item-desc">
-                  <div v-if="item.sku && item.sku.length" class="list-item-prop">{{ propTitle(item.sku) }}</div>
+                  <div v-if="item.sku && item.sku.length" class="list-item-prop">
+                    {{ propTitle(item.sku) }}
+                  </div>
                 </div>
                 <div class="list-item-bottom">
                   <div class="list-item-price">
@@ -233,23 +230,37 @@ function onSubmit() {
       </template>
       <van-empty v-else class="empty" :image="listEmptyImage">
         <template v-if="hasLogin">
-          <div class="empty-title">购物车快饿瘪了 T.T</div>
-          <div class="empty-txt">快给我挑点宝贝</div>
-          <van-button class="empty-btn" round plain type="primary" @click="goHome">去逛逛</van-button>
+          <div class="empty-title">
+            购物车快饿瘪了 T.T
+          </div>
+          <div class="empty-txt">
+            快给我挑点宝贝
+          </div>
+          <van-button class="empty-btn" round plain type="primary" @click="goHome">
+            去逛逛
+          </van-button>
         </template>
         <template v-else>
-          <div class="empty-title">登录后才能看到您的购物车</div>
-          <van-button class="empty-btn" type="primary" round @click="goLogin">去登录</van-button>
+          <div class="empty-title">
+            登录后才能看到您的购物车
+          </div>
+          <van-button class="empty-btn" type="primary" round @click="goLogin">
+            去登录
+          </van-button>
         </template>
       </van-empty>
     </SpainList>
-    <!--结算栏 -->
+    <!-- 结算栏 -->
     <div class="submit-bar-wrap">
       <div v-if="list.length" class="submit-bar">
-        <van-checkbox v-model="selectedAll">全选</van-checkbox>
+        <van-checkbox v-model="selectedAll">
+          全选
+        </van-checkbox>
         <template v-if="editStatus === 2">
-          <div class="submit-bar-hd"></div>
-          <van-button class="submit-bar-button" round plain @click="onDelete">删除</van-button>
+          <div class="submit-bar-hd" />
+          <van-button class="submit-bar-button" round plain @click="onDelete">
+            删除
+          </van-button>
         </template>
         <template v-else>
           <div class="submit-bar-hd">
@@ -259,9 +270,9 @@ function onSubmit() {
               <span class="submit-bar-price-integer">{{ decimalFormat(totalPrice) }}</span>
             </div>
           </div>
-          <van-button class="submit-bar-button" round type="primary" @click="onSubmit"
-            >去结算({{ totalGoodCount }})</van-button
-          >
+          <van-button class="submit-bar-button" round type="primary" @click="onSubmit">
+            去结算({{ totalGoodCount }})
+          </van-button>
         </template>
       </div>
     </div>

@@ -1,56 +1,7 @@
-<template>
-  <div class="container">
-    <ProList
-      v-model:dataSource="list"
-      mode="infinite"
-      :api="getDataList"
-      :afterFetch="listAfterFetch"
-      :pagination="pagination"
-      :meta="listMeta"
-      immediate
-    >
-      <div class="list">
-        <div v-for="(item, index) in list" :key="index" class="list-item">
-          <div class="list-item-header van-hairline--bottom">
-            <div class="list-item-header-hd">
-              <span class="title">订单编号：{{ item.orderInfo.orderNumber }}</span>
-            </div>
-            <div :class="['list-item-header-state', item.status !== -1 ? 'text-primary-color' : '']">
-              {{ item.orderInfo.statusStr }}
-            </div>
-          </div>
-          <div class="list-item-body" @click="onOrderClicked(item)">
-            <div v-if="item" class="good-card">
-              <van-image fit="contain" class="good-card-pic" :src="item.pic" />
-              <div class="good-card-content">
-                <div class="good-card-title">{{ item.goodsName }}</div>
-                <div v-if="item.property" class="good-card-prop">{{ item.property }}</div>
-                <div class="good-card-number">数量：{{ item.number }}</div>
-              </div>
-            </div>
-          </div>
-          <!-- ▼ 操作按钮组（一行最好不要超过3个） -->
-          <div class="list-item-footer van-hairline--top">
-            <template v-if="item.afterSale">
-              <van-button class="list-item-action-btn" round plain type="primary" @click="onOrderClicked(item)">
-                申请售后
-              </van-button>
-            </template>
-            <template v-else>
-              <span>不支持售后退换服务</span>
-            </template>
-          </div>
-          <!-- ▲ 操作按钮组 -->
-        </div>
-      </div>
-    </ProList>
-  </div>
-</template>
-
 <script lang="ts">
-import NP from 'number-precision';
 import API_ORDER from '@/apis/order';
 import { orderAfterSaleListModel } from '@/model/modules/order/afterSale';
+import NP from 'number-precision';
 
 export default {
   data() {
@@ -86,7 +37,7 @@ export default {
         query: {
           orderId: orderInfo.id,
           orderGoodsId: id,
-          afterSale: afterSale,
+          afterSale,
           amount: NP.times(amountSingle, number),
         },
       });
@@ -94,6 +45,61 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="container">
+    <ProList
+      v-model:dataSource="list"
+      mode="infinite"
+      :api="getDataList"
+      :afterFetch="listAfterFetch"
+      :pagination="pagination"
+      :meta="listMeta"
+      immediate
+    >
+      <div class="list">
+        <div v-for="(item, index) in list" :key="index" class="list-item">
+          <div class="list-item-header van-hairline--bottom">
+            <div class="list-item-header-hd">
+              <span class="title">订单编号：{{ item.orderInfo.orderNumber }}</span>
+            </div>
+            <div class="list-item-header-state" :class="[item.status !== -1 ? 'text-primary-color' : '']">
+              {{ item.orderInfo.statusStr }}
+            </div>
+          </div>
+          <div class="list-item-body" @click="onOrderClicked(item)">
+            <div v-if="item" class="good-card">
+              <van-image fit="contain" class="good-card-pic" :src="item.pic" />
+              <div class="good-card-content">
+                <div class="good-card-title">
+                  {{ item.goodsName }}
+                </div>
+                <div v-if="item.property" class="good-card-prop">
+                  {{ item.property }}
+                </div>
+                <div class="good-card-number">
+                  数量：{{ item.number }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ▼ 操作按钮组（一行最好不要超过3个） -->
+          <div class="list-item-footer van-hairline--top">
+            <template v-if="item.afterSale">
+              <van-button class="list-item-action-btn" round plain type="primary" @click="onOrderClicked(item)">
+                申请售后
+              </van-button>
+            </template>
+            <template v-else>
+              <span>不支持售后退换服务</span>
+            </template>
+          </div>
+          <!-- ▲ 操作按钮组 -->
+        </div>
+      </div>
+    </ProList>
+  </div>
+</template>
 
 <style lang="less" scoped>
 .search {

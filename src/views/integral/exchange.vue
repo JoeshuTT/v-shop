@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { showToast, showLoadingToast, closeToast } from 'vant';
-import { onMounted, ref, unref } from 'vue';
-import API_USER from '@/apis/user';
 import API_SCORE from '@/apis/score';
-import { countPair } from '@/utils/format';
+import API_USER from '@/apis/user';
 import { scoreDeductionRuleModel } from '@/model/modules/score/deductionRule';
+import { countPair } from '@/utils/format';
+import { closeToast, showLoadingToast, showToast } from 'vant';
+import { onMounted, ref, unref } from 'vue';
 
 onMounted(() => {
   getDetail();
@@ -65,7 +65,9 @@ function onSubmit() {
       </div>
     </div>
     <van-field v-model="scoreNumber" type="digit" label="兑换现金" placeholder="你希望用多少积分来兑换余额" />
-    <div v-if="rule.desc" class="tips">规则：{{ rule.desc }}</div>
+    <div v-if="rule.desc" class="tips">
+      规则：{{ rule.desc }}
+    </div>
 
     <!-- 立即兑换 -->
     <AffixBar size="medium" text="立即兑换" @click-btn="onSubmit" />

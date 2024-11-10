@@ -1,10 +1,11 @@
-import type { AxiosRequestConfig, AxiosInstance, AxiosResponse, AxiosError } from 'axios';
+import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { CustomRequestConfig, RequestOptions, ServiceResult } from './types';
+import { useUserStoreWithOut } from '@/store/modules/user';
+import { getAPI } from '@/utils';
 import axios from 'axios';
 import qs from 'qs';
-import { getAPI } from '@/utils';
-import { RequestOptions, CustomRequestConfig, ServiceResultCodeEnum, ServiceResult, ContentTypeEnum } from './types';
 import { httpErrorHandle, serviceErrorHandle } from './handler';
-import { useUserStoreWithOut } from '@/store/modules/user';
+import { ContentTypeEnum, ServiceResultCodeEnum } from './types';
 
 /**
  * 扩展请求配置项，下面的选项都可以在独立的接口请求中覆盖

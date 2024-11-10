@@ -24,27 +24,27 @@ export const theme: ITheme = {
    * 主题基础颜色变量
    */
   colors: {
-    black: '#000',
-    white: '#fff',
-    primary: '#1ba784',
-    vice: '#d9f6ef',
+    'black': '#000',
+    'white': '#fff',
+    'primary': '#1ba784',
+    'vice': '#d9f6ef',
 
-    red: '#ee0a24',
-    blue: '#1989fa',
-    orange: '#ff976a',
+    'red': '#ee0a24',
+    'blue': '#1989fa',
+    'orange': '#ff976a',
     'orange-dark': '#ed6a0c',
     'orange-light': '#fffbe8',
-    green: '#07c160',
+    'green': '#07c160',
   },
   /**
    *  覆盖Vant 的基础变量
    */
   vanThemeOverrides: {
-    black: 'black',
-    white: 'white',
+    'black': 'black',
+    'white': 'white',
     'gray-1': '#f7f8fa',
     'gray-2': '#f2f3f5',
-    blue: 'primary',
+    'blue': 'primary',
   },
 };
 
@@ -71,7 +71,7 @@ export const darkTheme: ITheme = {
     'text-color-3': 'rgba(255, 255, 255, 0.5)',
     'border-color': '#3a3a3c',
     'active-color': '#3a3a3c',
-    background: '#17171a',
+    'background': '#17171a',
     'background-2': '#232324',
     'background-3': '#2a2a2b',
   },

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
 import API_SCORE from '@/apis/score';
 import { scoreDeductionRuleModel } from '@/model/modules/score/deductionRule';
+import { onMounted, ref } from 'vue';
 
 onMounted(() => {
   getDetail();
@@ -20,30 +20,44 @@ function getDetail() {
 
 <template>
   <div class="container container-full">
-    <div class="header">积分规则</div>
+    <div class="header">
+      积分规则
+    </div>
     <div class="content">
       <div class="section">
-        <div class="section-h2">积分该怎么花？</div>
+        <div class="section-h2">
+          积分该怎么花？
+        </div>
         <div class="section-body">
           <div v-if="list.length" class="consume">
-            <div class="consume-header"><span>使用积分兑换商品</span></div>
+            <div class="consume-header">
+              <span>使用积分兑换商品</span>
+            </div>
             <div class="consume-list">
               <div v-for="item in list" :key="item.type" class="consume-list-item">
-                <img :src="item.icon" class="consume-list-item-icon" />
+                <img :src="item.icon" class="consume-list-item-icon">
                 <div class="consume-list-item-content">
-                  <div class="consume-list-item-title">{{ item.label }}</div>
-                  <div class="consume-list-item-desc">{{ item.desc }}</div>
+                  <div class="consume-list-item-title">
+                    {{ item.label }}
+                  </div>
+                  <div class="consume-list-item-desc">
+                    {{ item.desc }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="section-h2">常见问题</div>
+        <div class="section-h2">
+          常见问题
+        </div>
         <div class="section-body">
           <div class="help">
             <div class="help-list">
               <div class="help-list-item">
-                <div class="help-list-item-title">1. 积分状态</div>
+                <div class="help-list-item-title">
+                  1. 积分状态
+                </div>
                 <div class="help-list-item-content">
                   <p>积分分为收入，支出2个状态。</p>
                   <p>收入：指的是通过所有渠道获得的积分</p>
@@ -51,8 +65,12 @@ function getDetail() {
                 </div>
               </div>
               <div class="help-list-item">
-                <div class="help-list-item-title">2. 积分有效期</div>
-                <div class="help-list-item-content">永久有效</div>
+                <div class="help-list-item-title">
+                  2. 积分有效期
+                </div>
+                <div class="help-list-item-content">
+                  永久有效
+                </div>
               </div>
             </div>
           </div>

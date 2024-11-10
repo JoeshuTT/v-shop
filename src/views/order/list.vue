@@ -1,22 +1,23 @@
 <script lang="ts">
-export default {
-  name: 'OrderList',
-};
 </script>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-import { onMounted, reactive, ref, unref } from 'vue';
-import { orderListModel } from '@/model/modules/order/list';
 import API_ORDER from '@/apis/order';
+import { orderListModel } from '@/model/modules/order/list';
+import { onMounted, reactive, ref, unref } from 'vue';
+import { useRoute } from 'vue-router';
 import OrderItem from './components/OrderItem.vue';
+
+export default {
+  name: 'OrderList',
+};
 
 const route = useRoute();
 
 onMounted(() => {
   const { status } = route.query;
   if (status) {
-    active.value = unref(tabList).findIndex((item) => item.status === status);
+    active.value = unref(tabList).findIndex(item => item.status === status);
   }
 
   listRef.value?.loadData();
@@ -68,7 +69,7 @@ function getOrderList() {
   };
 
   if (unref(keyword)) {
-    params['orderNumber'] = unref(keyword); // 订单编号
+    params.orderNumber = unref(keyword); // 订单编号
   }
 
   listMeta.emptyText = unref(listQueryType) === 'search' ? '未找到符合条件数据' : '暂无订单';
@@ -96,7 +97,9 @@ function listAfterFetch(data) {
             @search="onSearch"
           >
             <template #action>
-              <div v-if="keyword" @click="onSearch">搜索</div>
+              <div v-if="keyword" @click="onSearch">
+                搜索
+              </div>
             </template>
           </van-search>
         </form>

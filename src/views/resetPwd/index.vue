@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { showToast } from 'vant';
-import { useRouter } from 'vue-router';
-import { computed, ref, unref } from 'vue';
-import { isMobile, isPassWord, isSame } from '@/utils/validate';
 import API_USER from '@/apis/user';
+import { isMobile, isPassWord, isSame } from '@/utils/validate';
+import { showToast } from 'vant';
+import { computed, ref, unref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -61,10 +61,14 @@ function onSubmit() {
 <template>
   <div class="container">
     <div class="main">
-      <div class="h2">{{ title }}</div>
+      <div class="h2">
+        {{ title }}
+      </div>
       <form class="form">
         <div class="form-item">
-          <div class="form-item-country">中国 +86</div>
+          <div class="form-item-country">
+            中国 +86
+          </div>
           <van-field
             v-model="mobile"
             class="form-field"
@@ -116,8 +120,9 @@ function onSubmit() {
           loading-text="重置中..."
           type="primary"
           @click="onSubmit"
-          >确定</van-button
         >
+          确定
+        </van-button>
       </form>
     </div>
   </div>

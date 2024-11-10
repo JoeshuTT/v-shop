@@ -1,6 +1,6 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { decimalFormat } from '@/utils/format';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'GoodCard',
@@ -12,7 +12,7 @@ export default defineComponent({
   },
   setup() {
     function propTitle(list: Recordable[]) {
-      return list.map((v) => v.childName).join(',');
+      return list.map(v => v.childName).join(',');
     }
     return {
       decimalFormat,
@@ -26,7 +26,9 @@ export default defineComponent({
   <div class="good-card">
     <van-image fit="contain" class="good-card-pic" :src="good.pic" />
     <div class="good-card-content">
-      <div class="good-card-title">{{ good.name }}</div>
+      <div class="good-card-title">
+        {{ good.name }}
+      </div>
       <div class="good-card-desc">
         <div v-if="good.propertyList && good.propertyList.length" class="good-card-prop">
           {{ propTitle(good.propertyList) }}
@@ -37,7 +39,9 @@ export default defineComponent({
           <span class="good-card-price-symbol">¥</span>
           <span class="good-card-price-integer">{{ decimalFormat(good.price) }}</span>
         </div>
-        <div class="good-card-number">x{{ good.number }}</div>
+        <div class="good-card-number">
+          x{{ good.number }}
+        </div>
       </div>
     </div>
   </div>

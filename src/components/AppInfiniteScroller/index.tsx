@@ -1,6 +1,6 @@
-import { defineComponent, ref, nextTick, onUpdated } from 'vue';
+import { defineComponent, nextTick, onUpdated, ref } from 'vue';
 // Composable
-import { useRect, useScrollParent, useEventListener } from '@vant/use';
+import { useEventListener, useRect, useScrollParent } from '@vant/use';
 
 // styles
 import './index.less';

@@ -1,6 +1,7 @@
-import { Ref, nextTick } from 'vue';
-import { unref, reactive, toRefs, onMounted } from 'vue';
-import { ListMeta } from '@/components/AppList/types';
+import type { ListMeta } from '@/components/AppList/types';
+import type { Ref } from 'vue';
+
+import { nextTick, onMounted, reactive, toRefs, unref } from 'vue';
 
 export function useList(options: Partial<useListOptions> = {}, list: Ref<any[]>, pagination?: UseListPagination) {
   const {

@@ -12,10 +12,12 @@ function onBtnClicked() {
 </script>
 
 <template>
-  <div :class="['affix-bar', `affix-bar--${size}`]">
+  <div class="affix-bar" :class="[`affix-bar--${size}`]">
     <div class="affix-bar-action">
       <slot>
-        <van-button class="affix-bar-button" type="primary" @click="onBtnClicked">{{ text }}</van-button>
+        <van-button class="affix-bar-button" type="primary" @click="onBtnClicked">
+          {{ text }}
+        </van-button>
       </slot>
     </div>
   </div>

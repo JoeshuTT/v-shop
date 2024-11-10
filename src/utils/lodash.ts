@@ -54,7 +54,7 @@ export function debounce(fn: any, delay: number) {
  */
 export function deepClone<T = any>(source: {}): T {
   const target: any = Array.isArray(source) ? [] : {};
-  // eslint-disable-next-line guard-for-in
+
   for (const key in source) {
     target[key] = source[key] !== null && typeof source[key] === 'object' ? deepClone(source[key]) : source[key];
   }
@@ -81,8 +81,8 @@ export const randomIntegerInRange = function (m: number, n: number) {
  */
 export function fromCamelCase(str: string, separator = '_') {
   return str
-    .replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2')
-    .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2')
+    .replace(/([a-z\d])([A-Z])/g, `$1${separator}$2`)
+    .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, `$1${separator}$2`)
     .toLowerCase();
 }
 

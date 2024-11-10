@@ -6,7 +6,9 @@ defineProps({
 
 <template>
   <div class="plate">
-    <div class="plate-title">{{ title }}</div>
+    <div class="plate-title">
+      {{ title }}
+    </div>
   </div>
 </template>
 

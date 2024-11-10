@@ -1,11 +1,11 @@
-import ICON_SCORE from '@/assets/images/e0586113a5c7e7f6673deef204af033c.png';
 import ICON_MONEY from '@/assets/images/74351043305a48e90e17c26d215e6dc5.png';
+import ICON_SCORE from '@/assets/images/e0586113a5c7e7f6673deef204af033c.png';
 
 /**
  * 积分兑换规则
  */
 export function scoreDeductionRuleModel(item: Recordable) {
-  const typeEnum = {
+  const typeMap: Recordable = {
     0: {
       value: 0,
       label: '抵扣下单金额',
@@ -26,8 +26,9 @@ export function scoreDeductionRuleModel(item: Recordable) {
     },
   };
 
-  const type = typeEnum[item.type];
-  const pattern = /\{\{\s*(.*?)\s*\}\}/g;
+  const type = typeMap[item.type];
+  const pattern = /\{\{(.*?)\}\}/g;
+
   if (type) {
     item.label = type.label;
     item.desc = type.desc.replace(pattern, (_match: any, p1: string) => item[p1]);

@@ -1,7 +1,7 @@
 <script lang="ts">
+import { useAppStore } from '@/store/modules/app';
 import { computed, defineComponent, ref, unref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useAppStore } from '@/store/modules/app';
 
 export default defineComponent({
   name: 'Tabbar',
@@ -18,7 +18,7 @@ export default defineComponent({
       active.value = route.path;
     });
 
-    function onTabClicked(index) {
+    function onTabClicked(index: number) {
       const { pagePath } = unref(tabList)[index];
 
       router.replace({

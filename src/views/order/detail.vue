@@ -1,23 +1,22 @@
 <script lang="ts">
-export default {
-  name: 'OrderDetail',
-};
 </script>
 
 <script setup lang="ts">
-import dayjs from 'dayjs';
-import { showConfirmDialog, showToast, showLoadingToast, closeToast } from 'vant';
-import { useRoute, useRouter } from 'vue-router';
-import { onMounted, ref, unref, watchEffect } from 'vue';
-import { makePhoneCall, setClipboardData } from '@/utils/web';
 import API_ORDER from '@/apis/order';
-// components
-import OrderSteps from './components/OrderSteps.vue';
-import OrderRate from './components/OrderRate.vue';
 import Price from '@/components/Price/index.vue';
-import { decimalFormat } from '@/utils/format';
-// store
 import { useOrderStore } from '@/store/modules/order';
+import { decimalFormat } from '@/utils/format';
+import { makePhoneCall, setClipboardData } from '@/utils/web';
+import dayjs from 'dayjs';
+import { closeToast, showConfirmDialog, showLoadingToast, showToast } from 'vant';
+import { onMounted, ref, unref, watchEffect } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import OrderRate from './components/OrderRate.vue';
+import OrderSteps from './components/OrderSteps.vue';
+
+defineOptions({
+  name: 'OrderDetail',
+});
 
 onMounted(() => {
   getDetail();
@@ -165,8 +164,10 @@ watchEffect(() => {
   <div class="container">
     <van-pull-refresh v-model="isLoading" :disabled="pullRefreshDisabled" @refresh="onRefresh">
       <div class="header">
-        <div :class="['order-status', `order-status--${orderInfo.status}`]">
-          <div class="order-status-title">{{ orderInfo.statusStr }}</div>
+        <div class="order-status" :class="[`order-status--${orderInfo.status}`]">
+          <div class="order-status-title">
+            {{ orderInfo.statusStr }}
+          </div>
           <template v-if="orderInfo.status === 0 && closeTime > 0">
             <div class="order-status-desc">
               请于<van-count-down
@@ -189,17 +190,25 @@ watchEffect(() => {
           <div class="address-hd">
             <div class="address-inner">
               <van-icon name="location-o" class="address-inner-icon" />
-              <div class="address-inner-title">收货人：{{ logistics.linkMan }}</div>
-              <div class="address-inner-title">{{ logistics.mobile }}</div>
+              <div class="address-inner-title">
+                收货人：{{ logistics.linkMan }}
+              </div>
+              <div class="address-inner-title">
+                {{ logistics.mobile }}
+              </div>
             </div>
-            <div class="address-inner-bottom">收货地址：{{ logistics.address }}</div>
+            <div class="address-inner-bottom">
+              收货地址：{{ logistics.address }}
+            </div>
           </div>
         </div>
         <van-cell title="物流信息" class="cell">
           <template v-if="logistics.trackingNumber">
             {{ logistics.shipperName }} {{ logistics.trackingNumber }}
           </template>
-          <template v-else>无</template>
+          <template v-else>
+            无
+          </template>
         </van-cell>
       </template>
       <!-- 商品列表 -->
@@ -212,7 +221,9 @@ watchEffect(() => {
           <div v-for="(item, index) in goods" :key="index" class="list-item" @click="onGoodClicked(item.goodsId)">
             <van-image fit="contain" class="list-item-pic" :src="item.pic" />
             <div class="list-item-content">
-              <div class="list-item-title">{{ item.goodsName }}</div>
+              <div class="list-item-title">
+                {{ item.goodsName }}
+              </div>
               <div class="list-item-desc">
                 <div v-if="item.property" class="list-item-prop">
                   {{ item.property }}
@@ -223,7 +234,9 @@ watchEffect(() => {
                   <span class="list-item-price-symbol">¥</span>
                   <span class="list-item-price-integer">{{ decimalFormat(item.amountSingle) }}</span>
                 </div>
-                <div class="list-item-number">x{{ item.number }}</div>
+                <div class="list-item-number">
+                  x{{ item.number }}
+                </div>
               </div>
             </div>
           </div>
@@ -243,12 +256,20 @@ watchEffect(() => {
       <!-- 金额统计信息 -->
       <div class="section">
         <div class="amount">
-          <div class="amount-hd">商品金额</div>
-          <div class="amount-bd">¥ {{ decimalFormat(orderInfo.amount) }}</div>
+          <div class="amount-hd">
+            商品金额
+          </div>
+          <div class="amount-bd">
+            ¥ {{ decimalFormat(orderInfo.amount) }}
+          </div>
         </div>
         <div v-if="orderInfo.isNeedLogistics" class="amount">
-          <div class="amount-hd">运费</div>
-          <div class="amount-bd">+ {{ decimalFormat(orderInfo.amountLogistics) }}</div>
+          <div class="amount-hd">
+            运费
+          </div>
+          <div class="amount-bd">
+            + {{ decimalFormat(orderInfo.amountLogistics) }}
+          </div>
         </div>
         <div class="amount amount-total-price">
           <span class="amount-total-price-label">{{ orderInfo.status === 0 ? '需付款：' : '实付款：' }}</span>
@@ -295,7 +316,9 @@ watchEffect(() => {
       <div class="action-bar">
         <!-- ▼ 操作按钮组（一行最好不要超过3个） -->
         <template v-if="orderInfo.status === -1 || orderInfo.status === 3 || orderInfo.status === 4">
-          <van-button class="action-bar-btn" round @click.stop="onOrderDelete(orderInfo.id)"> 删除订单 </van-button>
+          <van-button class="action-bar-btn" round @click.stop="onOrderDelete(orderInfo.id)">
+            删除订单
+          </van-button>
         </template>
         <template v-if="orderInfo.status === 0">
           <div class="action-bar-hd">
@@ -313,13 +336,19 @@ watchEffect(() => {
           </van-button>
         </template>
         <template v-if="orderInfo.status === 1">
-          <van-button icon="service" class="action-bar-btn" round @click.stop="onConcatService"> 联系客服 </van-button>
+          <van-button icon="service" class="action-bar-btn" round @click.stop="onConcatService">
+            联系客服
+          </van-button>
         </template>
         <template v-if="orderInfo.status === 2">
-          <van-button class="action-bar-btn" round @click.stop="onOrderDelivery(orderInfo.id)">确认收货</van-button>
+          <van-button class="action-bar-btn" round @click.stop="onOrderDelivery(orderInfo.id)">
+            确认收货
+          </van-button>
         </template>
         <template v-if="orderInfo.status === 3">
-          <van-button class="action-bar-btn" round @click.stop="onOrderReputation">评价</van-button>
+          <van-button class="action-bar-btn" round @click.stop="onOrderReputation">
+            评价
+          </van-button>
         </template>
         <!-- ▲ 操作按钮组 -->
       </div>

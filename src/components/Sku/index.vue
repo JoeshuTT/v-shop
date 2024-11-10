@@ -1,14 +1,9 @@
-<script lang="ts">
-export default {
-  name: 'Sku',
-};
-</script>
 <script setup lang="ts">
 import type { PropType } from 'vue';
-import { computed, unref } from 'vue';
-import { IInitialSku, ISku, ISelectedSkuComb, ISelectedPropItem } from './types';
+import type { IInitialSku, ISelectedPropItem, ISelectedSkuComb, ISku } from './types';
 import { priceIntegerFormat } from '@/utils/format';
 import { showToast } from 'vant';
+import { computed, unref } from 'vue';
 
 const props = defineProps({
   show: { type: Boolean, default: false },
@@ -19,7 +14,7 @@ const props = defineProps({
 const emit = defineEmits(['update:show', 'confirm']);
 
 const popupStyle = {
-  display: 'flex',
+  'display': 'flex',
   'flex-direction': 'column',
   'align-items': 'stretch',
   'max-height': '80%',
@@ -41,7 +36,7 @@ const skuValue = computed((): Recordable | undefined => {
       propertyChildIds += `${key}:${props.initialSku.selectedProps[key]},`;
     });
 
-    return skuList.find((v) => v.propertyChildIds === propertyChildIds);
+    return skuList.find(v => v.propertyChildIds === propertyChildIds);
   }
 
   return undefined;
@@ -55,9 +50,9 @@ const selectedPropTitle = computed(() => {
     return unref(skuValue)
       ? `已选 ${selectedPropList.reduce((acc, cur) => `${acc} ${cur.childName}`, '')}`
       : `请选择 ${propList.reduce(
-          (acc, cur) => `${acc}${selectedPropList.some((v) => v.id === cur.id) ? '' : cur.name}`,
-          '',
-        )}`;
+        (acc, cur) => `${acc}${selectedPropList.some(v => v.id === cur.id) ? '' : cur.name}`,
+        '',
+      )}`;
   } else {
     return '';
   }
@@ -100,14 +95,14 @@ function onPropClicked(index: number, i: number) {
 
   props.sku.propList.forEach((item) => {
     item.childsCurGoods.forEach((v: Recordable) => {
-      props.initialSku.selectedProps[item.id] === v.id &&
-        selectedPropList.push({
-          id: item.id,
-          name: item.name,
-          childId: v.id,
-          childName: v.name,
-          propIds: `${item.id}:${v.id}`,
-        });
+      props.initialSku.selectedProps[item.id] === v.id
+      && selectedPropList.push({
+        id: item.id,
+        name: item.name,
+        childId: v.id,
+        childName: v.name,
+        propIds: `${item.id}:${v.id}`,
+      });
     });
   });
 
@@ -164,7 +159,9 @@ defineExpose({
     <div v-if="sku.goodInfo" class="sku-header van-hairline--bottom">
       <van-image class="sku-header-pic" :src="sku.goodInfo.pic" fit="cover" />
       <div class="sku-header-good-info">
-        <div class="sku-header-good-name van-multi-ellipsis--l2">{{ sku.goodInfo.name }}</div>
+        <div class="sku-header-good-name van-multi-ellipsis--l2">
+          {{ sku.goodInfo.name }}
+        </div>
         <div class="sku-header-good-info-bd">
           <div class="sku-header-good-price">
             <span class="sku-header-good-price-symbol">¥</span>
@@ -176,7 +173,9 @@ defineExpose({
             剩余 <span class="sku-header-good-stock-num">{{ selectedSkuComb.stock }}</span>
             {{ sku.goodInfo.unit || '件' }}
           </div>
-          <div v-if="selectedPropTitle" class="sku-header-item">{{ selectedPropTitle }}</div>
+          <div v-if="selectedPropTitle" class="sku-header-item">
+            {{ selectedPropTitle }}
+          </div>
         </div>
       </div>
     </div>
@@ -189,7 +188,7 @@ defineExpose({
           <div
             v-for="(v, i) in item.childsCurGoods"
             :key="v.id"
-            :class="['sku-group-list-item', initialSku.selectedProps[item.id] === v.id ? 'active' : '']"
+            class="sku-group-list-item" :class="[initialSku.selectedProps[item.id] === v.id ? 'active' : '']"
             @click="onPropClicked(index, i)"
           >
             <span class="sku-group-list-item-name">{{ v.name }}</span>
@@ -197,13 +196,17 @@ defineExpose({
         </div>
       </div>
       <div class="sku-num">
-        <div class="sku-num-title">购买数量</div>
+        <div class="sku-num-title">
+          购买数量
+        </div>
         <!-- eslint-disable-next-line vue/no-mutating-props -->
         <van-stepper v-model="initialSku.selectedNum" class="sku-num-stepper" />
       </div>
     </div>
     <div class="sku-actions">
-      <van-button type="primary" round block @click="onSubmit">确定</van-button>
+      <van-button type="primary" round block @click="onSubmit">
+        确定
+      </van-button>
     </div>
   </van-popup>
 </template>

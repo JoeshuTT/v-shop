@@ -1,10 +1,3 @@
-<template>
-  <AppProvider>
-    <PageStackRouterView v-if="showPageStack" />
-    <RouterView v-else />
-  </AppProvider>
-</template>
-
 <script setup lang="ts">
 import { onMounted } from 'vue';
 
@@ -15,3 +8,10 @@ onMounted(() => {
   console.log(`${name} onMounted`);
 });
 </script>
+
+<template>
+  <AppProvider>
+    <PageStackRouterView v-if="showPageStack" />
+    <RouterView v-else />
+  </AppProvider>
+</template>

@@ -1,16 +1,11 @@
-<script lang="ts">
-export default {
-  name: 'Home',
-};
-</script>
-
 <script setup lang="ts">
-import { onMounted, ref, reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import API_GOODS from '@/apis/goods';
+import type { UseListPagination } from '@/hooks/shared/useList';
 import API_BANNER from '@/apis/banner';
+import API_GOODS from '@/apis/goods';
 import IMAGE_LIST_EMPTY from '@/assets/images/empty/good.png';
-import { UseListPagination, useList } from '@/hooks/shared/useList';
+import { useList } from '@/hooks/shared/useList';
+import { onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 onMounted(() => {
   getBannerList();
@@ -109,10 +104,14 @@ function onGoodClicked(id: number) {
         <div class="list">
           <div v-for="item in list" :key="item.id" class="list-col">
             <div class="list-item" @click="onGoodClicked(item.id)">
-              <div v-if="item.recommendStatus" class="list-item-badge">推荐</div>
+              <div v-if="item.recommendStatus" class="list-item-badge">
+                推荐
+              </div>
               <van-image class="list-item-photo" :src="item.pic" :alt="item.name" />
               <div class="list-item-info">
-                <div class="list-item-title">{{ item.name }}</div>
+                <div class="list-item-title">
+                  {{ item.name }}
+                </div>
                 <div class="list-item-price">
                   <div class="price">
                     <div class="price-current">
@@ -124,7 +123,9 @@ function onGoodClicked(id: number) {
                       <span class="price-origin-integer">{{ item.originalPrice }}</span>
                     </div>
                   </div>
-                  <van-button type="primary" plain class="buy-btn">购买</van-button>
+                  <van-button type="primary" plain class="buy-btn">
+                    购买
+                  </van-button>
                 </div>
               </div>
             </div>

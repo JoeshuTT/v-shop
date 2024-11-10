@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { showToast, showLoadingToast, closeToast } from 'vant';
 import type { PropType } from 'vue';
-import { ref, unref } from 'vue';
-import { reputation2Rate } from '@/model/modules/good/reputation';
 import API_ORDER from '@/apis/order';
-// hooks
 import { usePage } from '@/hooks/shared/usePage';
+import { reputation2Rate } from '@/model/modules/good/reputation';
+import { closeToast, showLoadingToast, showToast } from 'vant';
+import { ref, unref } from 'vue';
 
 const props = defineProps({
   show: { type: Boolean },
@@ -18,7 +17,7 @@ const emit = defineEmits(['update:show', 'success']);
 const { token } = usePage();
 
 const popupStyle = {
-  display: 'flex',
+  'display': 'flex',
   'flex-direction': 'column',
   'align-items': 'stretch',
   'font-size': '14px',
@@ -78,9 +77,11 @@ defineExpose({
 
 <template>
   <van-popup :show="show" round closeable position="bottom" :style="popupStyle" @update:show="updateShow">
-    <div class="rate-header">发表评价</div>
+    <div class="rate-header">
+      发表评价
+    </div>
     <div class="rate-body">
-      <van-cell title="请选择您的评分" :border="false"></van-cell>
+      <van-cell title="请选择您的评分" :border="false" />
       <div class="rate-box">
         <van-rate v-model="rateValue" :size="24" :gutter="8" />
       </div>
@@ -96,7 +97,9 @@ defineExpose({
       />
     </div>
     <div class="rate-actions">
-      <van-button type="primary" round block @click="onSubmit">提交评价</van-button>
+      <van-button type="primary" round block @click="onSubmit">
+        提交评价
+      </van-button>
     </div>
   </van-popup>
 </template>

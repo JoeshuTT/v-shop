@@ -1,17 +1,13 @@
 <script lang="ts">
-export default {
-  name: 'OrderPayResult',
-};
 </script>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
-import { onMounted, ref } from 'vue';
-import { decimalFormat } from '@/utils/format';
 import API_ORDER from '@/apis/order';
-// components
-import IconPaySuccess from '@/components/icons/IconPaySuccess.vue';
 import IconPayFail from '@/components/icons/IconPayFail.vue';
+import IconPaySuccess from '@/components/icons/IconPaySuccess.vue';
+import { decimalFormat } from '@/utils/format';
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 onMounted(() => {
   getDetail();
@@ -58,20 +54,30 @@ function getDetail() {
           </template>
         </div>
         <div class="result-status">
-          <div class="result-title">{{ orderInfo.isPay ? '支付成功' : '支付失败' }}</div>
-          <div class="result-title-sub">{{ orderInfo.isPay ? '感谢您的支持' : '再试试支付吧' }}</div>
+          <div class="result-title">
+            {{ orderInfo.isPay ? '支付成功' : '支付失败' }}
+          </div>
+          <div class="result-title-sub">
+            {{ orderInfo.isPay ? '感谢您的支持' : '再试试支付吧' }}
+          </div>
         </div>
       </div>
       <div v-if="orderInfo.amountReal" class="result-bd">
-        <div class="result-merchant">付款给商家</div>
+        <div class="result-merchant">
+          付款给商家
+        </div>
         <div class="result-amount">
           <span class="result-amount-unit">¥</span>
           <span class="result-amount-value"> {{ decimalFormat(orderInfo.amountReal) }}</span>
         </div>
       </div>
       <div class="result-action">
-        <van-button class="result-action-btn" @click="goOrder">查看订单</van-button>
-        <van-button class="result-action-btn" plain @click="goHome">返回首页</van-button>
+        <van-button class="result-action-btn" @click="goOrder">
+          查看订单
+        </van-button>
+        <van-button class="result-action-btn" plain @click="goHome">
+          返回首页
+        </van-button>
       </div>
     </div>
   </div>

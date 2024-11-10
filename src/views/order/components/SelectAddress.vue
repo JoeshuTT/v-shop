@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { onMounted, ref, unref } from 'vue';
 import API_USER from '@/apis/user';
 import AddressList from '@/components/AddressList/index.vue';
+import { onMounted, ref, unref } from 'vue';
+import { useRouter } from 'vue-router';
 
 defineProps({
   modelValue: Boolean,
@@ -13,7 +13,7 @@ const emit = defineEmits(['update:modelValue', 'select']);
 const router = useRouter();
 
 const popupStyle = {
-  display: 'flex',
+  'display': 'flex',
   'flex-direction': 'column',
   'align-items': 'stretch',
   'max-height': '80%',
@@ -76,7 +76,9 @@ defineExpose({
 
 <template>
   <van-popup :show="modelValue" round closeable position="bottom" :style="popupStyle" @update:show="updateShow">
-    <div class="address-header">选择收货地址</div>
+    <div class="address-header">
+      选择收货地址
+    </div>
     <div class="address-body">
       <AddressList
         v-if="list.length"
@@ -88,7 +90,9 @@ defineExpose({
       />
     </div>
     <div class="address-actions">
-      <van-button type="primary" round block @click="onSubmit">新增地址</van-button>
+      <van-button type="primary" round block @click="onSubmit">
+        新增地址
+      </van-button>
     </div>
   </van-popup>
 </template>

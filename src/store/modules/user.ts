@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia';
-import { store } from '@/store';
-import { router } from '@/router';
-import { loginProviderType } from '@/constants/modules/user';
-import { goodStorage } from '@/utils';
 import API_USER from '@/apis/user';
+import { loginProviderType } from '@/constants/modules/user';
+import { router } from '@/router';
+import { store } from '@/store';
+import { goodStorage } from '@/utils';
+import { defineStore } from 'pinia';
 
 export interface UserState {
   token: string;

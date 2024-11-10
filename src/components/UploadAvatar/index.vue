@@ -1,67 +1,63 @@
-<script lang="ts">
-import { defineComponent } from 'vue';
-import { showLoadingToast, closeToast, UploaderFileListItem } from 'vant';
-import Compressor from 'compressorjs';
+<script setup lang="ts">
+import type { UploaderFileListItem } from 'vant';
 import API_DFS from '@/apis/dfs';
 import { blobToFile } from '@/utils/file';
+import Compressor from 'compressorjs';
+import { closeToast, showLoadingToast } from 'vant';
 
-export default defineComponent({
-  name: 'UploadAvatar',
-  emits: ['success', 'error'],
-  setup(_props, { emit }) {
-    function beforeRead(file: File): Promise<any> {
-      return new Promise((resolve) => {
-        // eslint-disable-next-line no-new
-        new Compressor(file, {
-          quality: 0.8,
-          maxWidth: 1024,
-          success: async (result) => {
-            const resultFile = blobToFile(result, file.name);
+const emit = defineEmits(['success', 'error']);
+function beforeRead(file: File | File[]): undefined | Promise<File | File[] | undefined> {
+  if (Array.isArray(file))
+    return;
 
-            resolve(resultFile);
-          },
-          error: (error) => {
-            console.error(`[Compressor error]`, error);
-            emit('error', error);
-          },
-        });
-      });
-    }
+  // eslint-disable-next-line no-new
+  new Compressor(file, {
+    quality: 0.8,
+    maxWidth: 1024,
+    success: (result) => {
+      const resultFile = blobToFile(result, file.name);
 
-    async function afterRead(file: UploaderFileListItem) {
-      const uploadFile = file.file as File;
+      return Promise.resolve(resultFile);
+    },
+    error: (err) => {
+      console.error(`[Compressor error]`, err);
+      emit('error', err);
+    },
+  });
+};
 
-      const formData = new FormData();
-      formData.append('upfile', uploadFile);
+function afterRead(file: UploaderFileListItem | UploaderFileListItem[]) {
+  if (Array.isArray(file))
+    return;
 
-      showLoadingToast({
-        forbidClick: true,
-        message: '上传中...',
-        duration: 0,
-      });
+  const uploadFile = file.file as File;
 
-      API_DFS.dfsUploadFile(formData)
-        .then((res) => {
-          closeToast();
+  const formData = new FormData();
+  formData.append('upfile', uploadFile);
 
-          emit('success', res);
-        })
-        .catch((err) => {
-          console.error(err);
-          closeToast();
+  showLoadingToast({
+    forbidClick: true,
+    message: '上传中...',
+    duration: 0,
+  });
 
-          emit('error', err);
-        });
-    }
+  API_DFS.dfsUploadFile(formData)
+    .then((res) => {
+      closeToast();
 
-    return {
-      beforeRead,
-      afterRead,
-    };
-  },
-});
+      emit('success', res);
+    })
+    .catch((err) => {
+      console.error(err);
+      closeToast();
+
+      emit('error', err);
+    });
+}
 </script>
 
 <template>
-  <van-uploader :before-read="beforeRead" :after-read="afterRead"> <slot /> </van-uploader>
+  <van-uploader :before-read="beforeRead" :after-read="afterRead">
+    <slot />
+  </van-uploader>
 </template>

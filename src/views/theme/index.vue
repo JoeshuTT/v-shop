@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { computed, ref, unref } from 'vue';
-import { getAssetsUrl } from '@/utils';
 import { palettes } from '@/constants/modules/app';
-// store
-import { useAppStore } from '@/store/modules/app';
-// hooks
 import { usePage } from '@/hooks/shared/usePage';
+import { useAppStore } from '@/store/modules/app';
+import { getAssetsUrl } from '@/utils';
+import { computed, ref, unref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -37,13 +35,13 @@ function onThemeModeChange(value: string) {
 }
 
 const list = ref<Recordable[]>(
-  palettes.map((v) => ({
+  palettes.map(v => ({
     ...v,
     colorList: [v.colors.primary, v.colors.vice, '#fff'],
   })),
 );
 const active = ref(-1);
-active.value = unref(list).findIndex((v) => v.value === unref(theme).colors.primary);
+active.value = unref(list).findIndex(v => v.value === unref(theme).colors.primary);
 const current = computed(() => unref(list)[unref(active)] || {});
 
 function onThemeColorChange(index: number) {
@@ -59,36 +57,42 @@ function onSubmit() {
 
 <template>
   <div class="container">
-    <div class="h2">选择主题</div>
+    <div class="h2">
+      选择主题
+    </div>
     <div class="mode-list">
       <div
         v-for="(item, index) in modeList"
         :key="index"
-        :class="['mode-item', theme.mode === item.value ? 'active' : '']"
+        class="mode-item" :class="[theme.mode === item.value ? 'active' : '']"
         @click="onThemeModeChange(item.value)"
       >
-        <img class="mode-item-pic" :src="item.pic" :alt="item.label" />
+        <img class="mode-item-pic" :src="item.pic" :alt="item.label">
         <span class="mode-item-title">
           {{ item.label }}
         </span>
       </div>
     </div>
-    <div class="h2">选择配色</div>
+    <div class="h2">
+      选择配色
+    </div>
     <div class="color-list">
       <van-cell v-for="(item, index) in list" :key="index" :title="item.label" @click="onThemeColorChange(index)">
         <template #label>
-          <div :class="['color', active === index ? 'active' : '']">
+          <div class="color" :class="[active === index ? 'active' : '']">
             <div
               v-for="(color, colorIndex) in item.colorList"
               :key="colorIndex"
               class="color-item"
               :style="{ background: color }"
-            ></div>
+            />
           </div>
         </template>
       </van-cell>
       <div class="tips">
-        <div class="tips-h2">tips：</div>
+        <div class="tips-h2">
+          tips：
+        </div>
         <div>1. 商品详情页面可查看最佳效果。</div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { goodReputationModel } from '@/model/modules/good/reputation';
 import API_GOODS from '@/apis/goods';
+import { goodReputationModel } from '@/model/modules/good/reputation';
+import { onMounted, ref } from 'vue';
 
 const props = defineProps({
   goodsId: { type: [String, Number] },
@@ -31,9 +31,9 @@ function getGoodsReputation() {
   <div class="reputation">
     <van-cell
       v-if="reputationList.length"
-      :to="'/good/reputation?goodsId=' + goodsId"
+      :to="`/good/reputation?goodsId=${goodsId}`"
       class="mb10"
-      :title="'评价(' + reputationTotal + ')'"
+      :title="`评价(${reputationTotal})`"
       value="全部评价"
       is-link
     />
@@ -41,7 +41,9 @@ function getGoodsReputation() {
     <div v-for="(item, index) in reputationList" :key="index" class="reputation-inner">
       <div class="reputation-inner-hd">
         <van-image class="reputation-inner-media" :src="item.avatarUrl" />
-        <div class="reputation-inner-name">{{ item.nickName }}</div>
+        <div class="reputation-inner-name">
+          {{ item.nickName }}
+        </div>
         <div class="reputation-inner-stars">
           <van-rate v-model="item.rate" :size="14" color="#f44" void-icon="star" void-color="#eee" readonly />
         </div>
@@ -52,7 +54,9 @@ function getGoodsReputation() {
       <!-- </div> -->
       <div class="reputation-inner-ft">
         <div>{{ item.remark }}</div>
-        <div class="reputation-inner-prop">{{ item.property }}</div>
+        <div class="reputation-inner-prop">
+          {{ item.property }}
+        </div>
       </div>
     </div>
   </div>

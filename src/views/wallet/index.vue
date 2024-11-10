@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { gsap } from 'gsap';
-import { useRouter } from 'vue-router';
-import { onMounted, ref, unref } from 'vue';
-import { countPair } from '@/utils/format';
 import API_USER from '@/apis/user';
+import { countPair } from '@/utils/format';
+import { gsap } from 'gsap';
+import { onMounted, ref, unref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
@@ -29,20 +29,34 @@ function getDetail() {
 <template>
   <div class="container">
     <div class="header">
-      <div class="header-bg"></div>
-      <div class="header-hd">钱包余额(元)</div>
+      <div class="header-bg" />
+      <div class="header-hd">
+        钱包余额(元)
+      </div>
       <div class="amount">
         <div class="amount-item">
-          <div class="amount-item-label">可用余额</div>
-          <div class="amount-item-value">{{ countPair(detailInfo.balance) }}</div>
+          <div class="amount-item-label">
+            可用余额
+          </div>
+          <div class="amount-item-value">
+            {{ countPair(detailInfo.balance) }}
+          </div>
         </div>
         <div class="amount-item">
-          <div class="amount-item-label">冻结余额</div>
-          <div class="amount-item-value">{{ countPair(detailInfo.freeze) }}</div>
+          <div class="amount-item-label">
+            冻结余额
+          </div>
+          <div class="amount-item-value">
+            {{ countPair(detailInfo.freeze) }}
+          </div>
         </div>
         <div class="amount-item">
-          <div class="amount-item-label">累计消费</div>
-          <div class="amount-item-value">{{ countPair(detailInfo.totleConsumed) }}</div>
+          <div class="amount-item-label">
+            累计消费
+          </div>
+          <div class="amount-item-value">
+            {{ countPair(detailInfo.totleConsumed) }}
+          </div>
         </div>
       </div>
     </div>
